@@ -1,12 +1,24 @@
-# Sanity + Next.js Boilerplate
+# 🚀 Sanity + Next.js Advanced Boilerplate
 
 **🇫🇷 [Documentation en Français](#documentation-française) | 🇬🇧 [English Documentation](#english-documentation)**
 
 ---
 
-A production-ready, enterprise-grade boilerplate for building dynamic websites and web applications with **Sanity CMS** and **Next.js**. This boilerplate implements a **block-based page builder** architecture that allows content managers to create rich, dynamic pages without writing code.
+## ✨ **Boilerplate Professionnel & Évolutif**
 
-Un boilerplate prêt pour la production pour créer des sites web dynamiques avec **Sanity CMS** et **Next.js**. Ce boilerplate implémente une architecture de **constructeur de pages par blocs** qui permet aux gestionnaires de contenu de créer des pages riches et dynamiques sans écrire de code.
+Un boilerplate **prêt pour la production** et de **niveau entreprise** pour créer des sites web et applications dynamiques avec **Sanity CMS** et **Next.js 15**. 
+
+### 🎯 **Fonctionnalités Clés**
+
+- 🏗️ **Architecture par blocs modulaires** (Hero, FeatureGrid, TextBlock, etc.)
+- 🎨 **Page Builder visuel** avec drag & drop dans Sanity Studio
+- 🌐 **Mode Preview** intégré pour prévisualiser le contenu avant publication
+- 📱 **100% Responsive** avec design adaptatif mobile-first
+- ⚡ **Performance optimisée** avec Next.js 15 App Router
+- 🎭 **Styled Components** pour un styling moderne et maintenable
+- 🔧 **TypeScript** pour une meilleure expérience développeur
+- 📊 **SEO avancé** avec métadonnées par page
+- 🎪 **Système de thèmes** avec couleurs et styles personnalisables
 
 ---
 
@@ -29,20 +41,47 @@ Il s'agit d'une **solution CMS headless** qui sépare la gestion du contenu de l
 
 ---
 
-## 📋 Référence Rapide des Paramètres
+## 🧩 **Blocs Disponibles**
 
-### Paramètres du Site (Configuration Globale)
+### 🦸 **Hero Block**
+Bannière principale avec titre, sous-titre, CTA et image de fond
+- **8 tailles** : petit, moyen, grand, plein écran
+- **3 styles de boutons** : primary, secondary, ghost
+- **Alignements** : horizontal et vertical configurables
+- **Superposition** : couleur personnalisable sur image
+
+### 🎯 **FeatureGrid Block**
+Grille de fonctionnalités avec icônes et descriptions
+- **8 layouts** : 2-col, 3-col, 4-col, 2x2, asymétriques, masonry, liste
+- **5 styles de cartes** : minimal, bordure, ombre, coloré, glassmorphism
+- **4 styles d'icônes** : simple, cercle, carré, dégradé
+- **28 icônes emoji** : ⭐ ❤️ ⚡ 🛡️ 🚀 🌍 👥 ⚙️ et plus
+
+### 📝 **TextBlock**
+Bloc de contenu riche avec Portable Text
+- **Éditeur WYSIWYG** : gras, italique, listes, liens
+- **Images intégrées** avec légendes
+- **3 alignements** : gauche, centre, droite
+- **Largeurs** : étroite, normale, large, pleine
+
+## 📋 **Référence Rapide des Paramètres**
+
+### Paramètres Header (Document headerSettings)
 
 | Paramètre | Type | Utilité | Valeur par défaut |
 |-----------|------|---------|-------------------|
-| **Header** |
-| `logo` | Image | Logo de votre site | - |
-| `layout` | split/center/left | Disposition des éléments | `split` |
+| `logoType` | image/text | Type de logo (image ou texte) | `image` |
+| `logo` | Image | Logo image de votre site | - |
+| `logoText` | String | Texte du logo (si logoType=text) | - |
 | `navigationMenu` | Array | Menu principal de navigation | - |
 | `cta` | Object | Bouton d'appel à l'action | - |
 | `backgroundColor` | HEX | Couleur de fond du header | `#ffffff` |
 | `textColor` | HEX | Couleur du texte du header | `#000000` |
-| **Footer** |
+
+### Paramètres Footer (Document footerSettings)
+
+| Paramètre | Type | Utilité | Valeur par défaut |
+|-----------|------|---------|-------------------|
 | `text` | Text | Texte descriptif du footer | - |
 | `columns` | Array | Colonnes de liens organisés | - |
 | `socialLinks` | Object | Liens réseaux sociaux | - |
@@ -73,13 +112,36 @@ Il s'agit d'une **solution CMS headless** qui sépare la gestion du contenu de l
 
 | Bloc | Description | Options Principales |
 |------|-------------|-------------------|
+| **HeroBlock** | Bannière principale avec CTA | 4 tailles, 3 styles boutons, alignements, image fond |
+| **FeatureGridBlock** | Grille de fonctionnalités | 8 layouts, 5 styles cartes, 28 icônes emoji |
 | **TextBlock** | Contenu riche avec éditeur visuel | Alignement, Largeur, Couleur fond, Espacement |
+
+## 🌐 **Mode Preview Intégré**
+
+Prévisualisez vos modifications avant publication !
+
+### Configuration
+```bash
+# Variables d'environnement requises
+SANITY_API_READ_TOKEN=sk_test_xxx  # Token avec permissions de lecture
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
+
+### Utilisation
+1. **Dans Sanity Studio** : Cliquez sur "Aperçu" sur n'importe quel document
+2. **URL générée** : `http://localhost:3000/api/preview?slug=ma-page&secret=mon-secret`
+3. **Mode activé** : Bannière de preview apparaît avec lien de sortie
+4. **Contenu live** : Voir les brouillons et modifications en temps réel
+
+### API Routes
+- `/api/preview` : Active le mode preview
+- `/api/exit-preview` : Désactive le mode preview
 
 ### 💡 Exemples d'Utilisation Pratiques
 
 #### Créer un Menu de Navigation avec Sous-menu
 ```javascript
-// Dans Sanity Studio → Paramètres du site → Header → Navigation Menu
+// Dans Sanity Studio → Header Settings → Navigation Menu
 {
   title: "Services",
   link: "/services",
@@ -110,6 +172,51 @@ backgroundColor: "#1e3a8a"  // Bleu foncé
 paddingSize: "large"
 
 // Le texte sera centré, large, avec fond bleu et espacement généreux
+```
+
+#### Créer un Hero Block Impactant
+```javascript
+// Configuration Hero Block
+title: "Transformez votre présence digitale"
+subtitle: "Créez des sites web modernes qui convertissent vos visiteurs en clients"
+cta: {
+  text: "Commencer maintenant",
+  link: "/contact",
+  style: "primary"
+}
+height: "large"
+textAlignment: "center"
+backgroundImage: [Image haute résolution]
+backgroundOverlay: { enabled: true, color: "rgba(0, 0, 0, 0.4)" }
+```
+
+#### Configurer une FeatureGrid 3 Colonnes
+```javascript
+// Configuration FeatureGrid
+title: "Pourquoi nous choisir ?"
+gridLayout: "3-balanced"
+cardStyle: "shadow"
+iconStyle: "circle"
+features: [
+  {
+    icon: "rocket",      // 🚀
+    title: "Performance",
+    description: "Sites ultra-rapides optimisés pour le SEO",
+    iconColor: "#3b82f6"
+  },
+  {
+    icon: "shield",      // 🛡️
+    title: "Sécurité",
+    description: "Protection avancée contre les menaces",
+    iconColor: "#10b981"
+  },
+  {
+    icon: "users",       // 👥
+    title: "Support 24/7",
+    description: "Équipe dédiée à votre succès",
+    iconColor: "#f59e0b"
+  }
+]
 ```
 
 #### Empêcher l'Indexation d'une Page de Test
@@ -194,7 +301,11 @@ sanity-boilerplate/
 │   │   ├── schemas/            # Schémas de contenu
 │   │   │   ├── page.ts         # Schéma document de page
 │   │   │   ├── blocks/         # Schémas de blocs
-│   │   │   │   └── textBlock.ts
+│   │   │   │   ├── textBlock.ts
+│   │   │   │   ├── heroBlock.ts
+│   │   │   │   ├── featureGridBlock.ts
+│   │   │   │   ├── headerBlock.ts
+│   │   │   │   └── footerBlock.ts
 │   │   │   └── settings/       # Paramètres globaux
 │   │   │       ├── headerSettings.ts
 │   │   │       └── footerSettings.ts
@@ -249,8 +360,8 @@ Ce boilerplate utilise une **Architecture Basée sur les Blocs** où :
          ↓ (Renders specific component)
 ┌─────────────────┐
 │  TextBlock      │ ← Displays content
-│  HeroBlock      │
-│  ImageBlock     │
+│  HeroBlock      │ ← Hero banners
+│  FeatureGrid    │ ← Feature grids
 └─────────────────┘
 ```
 
@@ -309,14 +420,24 @@ npm install
 
 Créer un fichier `.env.local` :
 ```bash
+# Configuration Sanity (Obligatoire)
 NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
 NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_API_VERSION=2025-10-30
+
+# Mode Preview (Optionnel mais recommandé)
+SANITY_API_READ_TOKEN=sk_test_xxxxx  # Token avec permissions de lecture
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+
+# Production (Optionnel)
+NEXT_PUBLIC_SITE_URL=https://yoursite.com
 ```
 
-Obtenir votre ID de projet depuis :
-- Tableau de bord Sanity : https://www.sanity.io/manage
-- Ou exécuter : `npx sanity init` dans votre projet
+**Obtenir votre configuration Sanity :**
+- **Projet ID** : Tableau de bord Sanity → https://www.sanity.io/manage
+- **Read Token** : Sanity Dashboard → API → Tokens → "Add API token"
+  - Nom : "Preview Token"  
+  - Permissions : "Viewer"
 
 4. **Lancer le serveur de développement**
 ```bash
@@ -354,63 +475,50 @@ npm run dev
 
 ### ✅ Content Models (Schemas)
 
-#### 1. **Paramètres du Site** (`src/sanity/schemas/siteSettings.ts`)
-Document singleton pour la configuration globale du site (Header & Footer).
+#### 1. **Header Settings** (`src/sanity/schemas/settings/headerSettings.ts`)
+Document pour la configuration de l'en-tête du site.
 
-##### Section Header
-- **`logo`** (Image)
-  - Logo affiché dans l'en-tête
-  - Support hotspot pour recadrage intelligent
+- **`logoType`** (Choix: image | text)
+  - Type de logo à afficher
   
-- **`layout`** (Choix: split | center | left)
-  - `split`: Logo à gauche, menu à droite (par défaut)
-  - `center`: Tous les éléments centrés
-  - `left`: Tous les éléments alignés à gauche
+- **`logo`** (Image - si logoType=image)
+  - Logo image avec support hotspot
+  
+- **`logoText`** (String - si logoType=text)
+  - Texte du logo comme alternative à l'image
   
 - **`navigationMenu`** (Array d'objets)
   - **`title`**: Texte du lien (requis)
-  - **`link`**: URL ou slug (ex: `/about`) (requis)
-  - **`submenu`**: Menu déroulant optionnel (array d'objets)
-    - **`title`**: Texte du sous-lien
-    - **`link`**: URL du sous-lien
+  - **`link`**: URL ou slug (requis)
+  - **`submenu`**: Menu déroulant optionnel
   
 - **`cta`** (Objet - optionnel)
   - **`text`**: Texte du bouton d'action
   - **`link`**: URL du bouton
   
-- **`backgroundColor`** (String HEX)
-  - Couleur de fond du header (défaut: `#ffffff`)
-  
-- **`textColor`** (String HEX)
-  - Couleur du texte du header (défaut: `#000000`)
+- **`backgroundColor`** / **`textColor`** (String HEX)
+  - Couleurs personnalisables
 
-##### Section Footer
+#### 2. **Footer Settings** (`src/sanity/schemas/settings/footerSettings.ts`)
+Document pour la configuration du pied de page.
+
 - **`text`** (Texte)
-  - Description ou texte principal du footer
+  - Description principale du footer
   
 - **`columns`** (Array de colonnes)
   - **`title`**: Titre de la colonne
-  - **`links`**: Array de liens
-    - **`title`**: Texte du lien
-    - **`link`**: URL du lien
+  - **`links`**: Array de liens avec titre et URL
   
 - **`socialLinks`** (Objet)
-  - **`facebook`**: URL Facebook
-  - **`twitter`**: URL Twitter/X
-  - **`instagram`**: URL Instagram
-  - **`linkedin`**: URL LinkedIn
-  - **`youtube`**: URL YouTube
+  - Liens vers réseaux sociaux (Facebook, Twitter, Instagram, LinkedIn, YouTube)
   
 - **`copyrightText`** (String)
-  - Texte de copyright (ex: "© 2025 Tous droits réservés")
+  - Texte de copyright
   
-- **`backgroundColor`** (String HEX)
-  - Couleur de fond du footer (défaut: `#111827`)
-  
-- **`textColor`** (String HEX)
-  - Couleur du texte du footer (défaut: `#ffffff`)
+- **`backgroundColor`** / **`textColor`** (String HEX)
+  - Couleurs personnalisables
 
-#### 2. **Page Schema** (`src/sanity/schemas/page.ts`)
+#### 3. **Page Schema** (`src/sanity/schemas/page.ts`)
 Document principal pour créer des pages dynamiques avec constructeur de blocs.
 
 ##### Onglet Contenu
@@ -935,20 +1043,20 @@ export const Title = styled.h1`
 #### Configuration Initiale du Site
 
 1. **Accéder au Studio**: Allez sur `/studio`
-2. **Paramètres du Site**: Cliquez sur "Paramètres du site"
-3. **Configurer le Header**:
-   - Uploadez votre logo
-   - Choisissez la disposition (split/center/left)
+2. **Configurer le Header**: Cliquez sur "Header Settings"
+   - Choisissez le type de logo (image ou texte)
+   - Uploadez votre logo ou saisissez le texte
    - Ajoutez les liens de navigation avec `+` dans "Menu de navigation"
    - (Optionnel) Ajoutez un bouton CTA
    - Personnalisez les couleurs de fond et texte
-4. **Configurer le Footer**:
+   - Cliquez sur "Publish"
+3. **Configurer le Footer**: Cliquez sur "Footer Settings"
    - Rédigez le texte descriptif
    - Organisez vos liens en colonnes
    - Ajoutez les URLs de réseaux sociaux
    - Définissez le texte de copyright
    - Personnalisez les couleurs
-5. **Publier**: Cliquez sur "Publish"
+   - Cliquez sur "Publish"
 
 #### Créer une Nouvelle Page
 
@@ -1191,18 +1299,22 @@ This is a **headless CMS solution** that separates content management from prese
 
 ## 📋 Quick Parameters Reference
 
-### Site Settings (Global Configuration)
+### Header Settings (headerSettings document)
 
 | Parameter | Type | Purpose | Default Value |
 |-----------|------|---------|---------------|
-| **Header** |
-| `logo` | Image | Your website logo | - |
-| `layout` | split/center/left | Elements layout | `split` |
+| `logoType` | image/text | Logo type (image or text) | `image` |
+| `logo` | Image | Logo image | - |
+| `logoText` | String | Logo text (if logoType=text) | - |
 | `navigationMenu` | Array | Main navigation menu | - |
 | `cta` | Object | Call-to-action button | - |
 | `backgroundColor` | HEX | Header background color | `#ffffff` |
 | `textColor` | HEX | Header text color | `#000000` |
-| **Footer** |
+
+### Footer Settings (footerSettings document)
+
+| Parameter | Type | Purpose | Default Value |
+|-----------|------|---------|---------------|
 | `text` | Text | Footer descriptive text | - |
 | `columns` | Array | Organized link columns | - |
 | `socialLinks` | Object | Social media links | - |
@@ -1239,7 +1351,7 @@ This is a **headless CMS solution** that separates content management from prese
 
 #### Create Navigation Menu with Submenu
 ```javascript
-// In Sanity Studio → Site Settings → Header → Navigation Menu
+// In Sanity Studio → Header Settings → Navigation Menu
 {
   title: "Services",
   link: "/services",
@@ -1320,20 +1432,20 @@ noIndex: true  // Activates <meta name="robots" content="noindex">
 #### Initial Site Configuration
 
 1. **Access Studio**: Go to `/studio`
-2. **Site Settings**: Click on "Site Settings"
-3. **Configure Header**:
-   - Upload your logo
-   - Choose layout (split/center/left)
+2. **Configure Header**: Click on "Header Settings"
+   - Choose logo type (image or text)
+   - Upload your logo or enter text
    - Add navigation links with `+` in "Navigation Menu"
    - (Optional) Add a CTA button
    - Customize background and text colors
-4. **Configure Footer**:
+   - Click "Publish"
+3. **Configure Footer**: Click on "Footer Settings"
    - Write descriptive text
    - Organize your links in columns
    - Add social media URLs
    - Define copyright text
    - Customize colors
-5. **Publish**: Click "Publish"
+   - Click "Publish"
 
 #### Create a New Page
 

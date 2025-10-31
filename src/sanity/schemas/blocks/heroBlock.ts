@@ -4,6 +4,8 @@ export default defineType({
   name: 'heroBlock',
   title: 'Hero',
   type: 'object',
+  icon: () => '🦸',
+  description: 'Bannière principale avec titre, CTA et image de fond',
   fields: [
     defineField({
       name: 'title',
@@ -153,7 +155,7 @@ export default defineType({
       subtitle: 'subtitle',
       media: 'backgroundImage',
     },
-    prepare({ title, subtitle, media }) {
+    prepare({ title, subtitle, media }: { title?: string; subtitle?: string; media?: any }) {
       return {
         title: title || 'Hero sans titre',
         subtitle: subtitle || 'Aucune description',

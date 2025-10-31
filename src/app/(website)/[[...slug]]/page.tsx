@@ -14,11 +14,8 @@ import {
   PageMessage 
 } from './PageComponents'
 
-type Block = {
-  _type: string
-  _key: string
-  [key: string]: any
-}
+// Import des types du BlockRenderer pour éviter les conflits
+import type { Block } from '@/components/BlockRenderer'
 
 type Page = {
   _id: string
@@ -87,6 +84,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
   }
 }
+
+// Configuration ISR : revalidation toutes les 60 secondes
+export const revalidate = 60
 
 export default async function DynamicPage({ params }: Props) {
   const slug = params.slug?.join('/') || 'home'
