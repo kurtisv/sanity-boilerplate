@@ -49,7 +49,56 @@ export const pageSlugsQuery = groq`
   }
 `
 
-// Récupérer les paramètres du header
+// Récupérer les paramètres unifiés du site
+export const siteSettingsQuery = groq`
+  *[_type == "siteSettings"][0] {
+    header {
+      logo {
+        asset->{
+          _id,
+          url
+        }
+      },
+      layout,
+      navigationMenu[] {
+        title,
+        link,
+        submenu[] {
+          title,
+          link
+        }
+      },
+      cta {
+        text,
+        link
+      },
+      backgroundColor,
+      textColor
+    },
+    footer {
+      text,
+      columns[] {
+        title,
+        links[] {
+          title,
+          link
+        }
+      },
+      socialLinks {
+        facebook,
+        twitter,
+        instagram,
+        linkedin,
+        youtube
+      },
+      copyrightText,
+      backgroundColor,
+      textColor
+    }
+  }
+`
+
+// Récupérer les paramètres du header (legacy - pour compatibilité)
 export const headerSettingsQuery = groq`
   *[_type == "headerSettings"][0] {
     logoType,
@@ -60,8 +109,6 @@ export const headerSettingsQuery = groq`
       }
     },
     logoText,
-    backgroundColor,
-    textColor,
     navigationMenu[] {
       title,
       link,
@@ -70,11 +117,13 @@ export const headerSettingsQuery = groq`
         link
       }
     },
-    cta
+    cta,
+    backgroundColor,
+    textColor
   }
 `
 
-// Récupérer les paramètres du footer
+// Récupérer les paramètres du footer (legacy - pour compatibilité)
 export const footerSettingsQuery = groq`
   *[_type == "footerSettings"][0] {
     text,

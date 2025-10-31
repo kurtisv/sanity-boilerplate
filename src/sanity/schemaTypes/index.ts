@@ -4,6 +4,7 @@ import { type SchemaTypeDefinition } from 'sanity'
 import page from '../schemas/page'
 
 // Settings (Paramètres du site)
+import siteSettings from '../schemas/siteSettings'
 import headerSettings from '../schemas/settings/headerSettings'
 import footerSettings from '../schemas/settings/footerSettings'
 
@@ -17,6 +18,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     page,
     
     // Settings
+    siteSettings,
     headerSettings,
     footerSettings,
     
