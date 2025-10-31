@@ -1,21 +1,31 @@
 # Sanity + Next.js Boilerplate
 
+**🇫🇷 [Documentation en Français](#documentation-française) | 🇬🇧 [English Documentation](#english-documentation)**
+
+---
+
 A production-ready, enterprise-grade boilerplate for building dynamic websites and web applications with **Sanity CMS** and **Next.js**. This boilerplate implements a **block-based page builder** architecture that allows content managers to create rich, dynamic pages without writing code.
 
-## 🎯 What Is This Boilerplate?
+Un boilerplate prêt pour la production pour créer des sites web dynamiques avec **Sanity CMS** et **Next.js**. Ce boilerplate implémente une architecture de **constructeur de pages par blocs** qui permet aux gestionnaires de contenu de créer des pages riches et dynamiques sans écrire de code.
 
-This is a **headless CMS solution** that separates content management from presentation:
+---
 
-- **Sanity Studio**: A customizable CMS for content managers to create and edit content
-- **Next.js Frontend**: A modern React framework that renders the content
-- **Block System**: A modular architecture where pages are built from reusable content blocks
+# Documentation Française
 
-### Built For:
+## 🎯 Qu'est-ce que ce Boilerplate?
 
-- **Marketing teams** who need to create landing pages, blog posts, and marketing content
-- **Developers** who want a scalable, maintainable codebase with clear patterns
-- **Agencies** building client websites with non-technical content editors
-- **Startups** needing rapid iteration on content without code deployments
+Il s'agit d'une **solution CMS headless** qui sépare la gestion du contenu de la présentation :
+
+- **Sanity Studio** : Un CMS personnalisable pour créer et éditer du contenu
+- **Frontend Next.js** : Un framework React moderne qui affiche le contenu
+- **Système de blocs** : Une architecture modulaire où les pages sont construites à partir de blocs de contenu réutilisables
+
+### Conçu pour :
+
+- **Équipes marketing** qui ont besoin de créer des landing pages, articles de blog et contenu marketing
+- **Développeurs** qui veulent une base de code évolutive et maintenable avec des patterns clairs
+- **Agences** qui construisent des sites clients avec des éditeurs non techniques
+- **Startups** nécessitant une itération rapide sur le contenu sans déploiements de code
 
 ---
 
@@ -111,9 +121,9 @@ noIndex: true  // Active <meta name="robots" content="noindex">
 
 ---
 
-## 🏗️ Architecture Overview
+## 🏗️ Architecture Technique
 
-### Tech Stack
+### Stack Technologique
 
 ```
 ┌─────────────────────────────────────────────────┐
@@ -123,98 +133,98 @@ noIndex: true  // Active <meta name="robots" content="noindex">
 │  React 19  │  TypeScript  │  Styled Components  │
 ├─────────────────────────────────────────────────┤
 │              Sanity CMS v4                       │
-│         (Headless Content Platform)              │
+│         (Plateforme de contenu headless)         │
 ├─────────────────────────────────────────────────┤
-│       Portable Text (Rich Text Format)          │
-│       @sanity/image-url (Image CDN)             │
+│       Portable Text (Format texte riche)        │
+│       @sanity/image-url (CDN d'images)          │
 └─────────────────────────────────────────────────┘
 ```
 
-### Core Technologies
+### Technologies Principales
 
-| Technology | Version | Purpose |
+| Technologie | Version | Utilité |
 |------------|---------|---------|
-| **Next.js** | 16.0.1 | React framework with App Router, SSR, and optimization |
-| **React** | 19.2.0 | UI library with React Compiler enabled |
-| **Sanity** | 4.12.0 | Headless CMS with real-time collaboration |
-| **TypeScript** | 5.x | Type safety and developer experience |
-| **Styled Components** | 6.1.19 | CSS-in-JS styling with component encapsulation |
-| **@portabletext/react** | 4.0.3 | Rich text rendering for Sanity content |
+| **Next.js** | 16.0.1 | Framework React avec App Router, SSR et optimisations |
+| **React** | 19.2.0 | Bibliothèque UI avec React Compiler activé |
+| **Sanity** | 4.12.0 | CMS headless avec collaboration en temps réel |
+| **TypeScript** | 5.x | Sécurité des types et expérience développeur |
+| **Styled Components** | 6.1.19 | Styling CSS-in-JS avec encapsulation des composants |
+| **@portabletext/react** | 4.0.3 | Rendu de texte riche pour le contenu Sanity |
 
 ---
 
-## 📁 Project Structure
+## 📁 Structure du Projet
 
 ```
 sanity-boilerplate/
-├── public/                      # Static assets
+├── public/                      # Ressources statiques
 ├── src/
 │   ├── app/                     # Next.js App Router
-│   │   ├── (sanity)/           # Route group for Sanity Studio
-│   │   │   ├── studio/         # Sanity Studio at /studio
-│   │   │   └── layout.tsx      # Studio-specific layout
-│   │   ├── (website)/          # Route group for public website
-│   │   │   ├── [[...slug]]/    # Catch-all dynamic routes
-│   │   │   │   └── page.tsx    # Dynamic page renderer
-│   │   │   └── layout.tsx      # Website layout (Header/Footer)
+│   │   ├── (sanity)/           # Groupe de routes pour Sanity Studio
+│   │   │   ├── studio/         # Sanity Studio à /studio
+│   │   │   └── layout.tsx      # Layout spécifique au Studio
+│   │   ├── (website)/          # Groupe de routes pour le site public
+│   │   │   ├── [[...slug]]/    # Routes dynamiques catch-all
+│   │   │   │   └── page.tsx    # Rendu de page dynamique
+│   │   │   └── layout.tsx      # Layout du site (Header/Footer)
 │   │   ├── favicon.ico
-│   │   └── globals.css         # Global CSS reset
+│   │   └── globals.css         # CSS global reset
 │   │
 │   ├── components/
-│   │   ├── BlockRenderer/      # Dynamic block rendering system
+│   │   ├── BlockRenderer/      # Système de rendu dynamique des blocs
 │   │   │   ├── BlockRenderer.tsx
 │   │   │   └── index.ts
-│   │   ├── blocks/             # Content blocks (page builder components)
-│   │   │   └── TextBlock/      # Rich text block component
+│   │   ├── blocks/             # Blocs de contenu (composants page builder)
+│   │   │   └── TextBlock/      # Composant bloc de texte riche
 │   │   │       ├── TextBlock.tsx
 │   │   │       ├── TextBlock.styles.ts
 │   │   │       └── index.ts
-│   │   ├── common/             # Reusable UI components
-│   │   └── layout/             # Layout components
+│   │   ├── common/             # Composants UI réutilisables
+│   │   └── layout/             # Composants de layout
 │   │       ├── Header/
 │   │       └── Footer/
 │   │
-│   ├── sanity/                 # Sanity CMS configuration
-│   │   ├── env.ts              # Environment variables
-│   │   ├── lib/                # Sanity utilities
-│   │   │   ├── client.ts       # Sanity API client
-│   │   │   ├── image.ts        # Image URL builder
-│   │   │   ├── queries.ts      # GROQ queries
-│   │   │   └── live.ts         # Real-time updates
-│   │   ├── schemas/            # Content schemas
-│   │   │   ├── page.ts         # Page document schema
-│   │   │   ├── blocks/         # Block schemas
+│   ├── sanity/                 # Configuration Sanity CMS
+│   │   ├── env.ts              # Variables d'environnement
+│   │   ├── lib/                # Utilitaires Sanity
+│   │   │   ├── client.ts       # Client API Sanity
+│   │   │   ├── image.ts        # Constructeur d'URL d'images
+│   │   │   ├── queries.ts      # Requêtes GROQ
+│   │   │   └── live.ts         # Mises à jour en temps réel
+│   │   ├── schemas/            # Schémas de contenu
+│   │   │   ├── page.ts         # Schéma document de page
+│   │   │   ├── blocks/         # Schémas de blocs
 │   │   │   │   └── textBlock.ts
-│   │   │   └── settings/       # Global settings
+│   │   │   └── settings/       # Paramètres globaux
 │   │   │       ├── headerSettings.ts
 │   │   │       └── footerSettings.ts
-│   │   ├── schemaTypes/        # Schema registry
+│   │   ├── schemaTypes/        # Registre des schémas
 │   │   │   └── index.ts
-│   │   └── structure.ts        # Studio structure
+│   │   └── structure.ts        # Structure du Studio
 │   │
 │   └── styles/
-│       └── brand.css           # Design tokens (CSS variables)
+│       └── brand.css           # Design tokens (variables CSS)
 │
-├── sanity.config.ts            # Sanity Studio configuration
-├── next.config.ts              # Next.js configuration
-├── tsconfig.json               # TypeScript configuration
-└── package.json                # Dependencies
+├── sanity.config.ts            # Configuration Sanity Studio
+├── next.config.ts              # Configuration Next.js
+├── tsconfig.json               # Configuration TypeScript
+└── package.json                # Dépendances
 ```
 
 ---
 
-## 🧩 How It Works: The Block System
+## 🧩 Comment ça Fonctionne : Le Système de Blocs
 
 ### Concept
 
-The boilerplate uses a **Block-Based Architecture** where:
+Ce boilerplate utilise une **Architecture Basée sur les Blocs** où :
 
-1. **Content Managers** add content blocks in Sanity Studio
-2. **Blocks** are modular components (TextBlock, HeroBlock, etc.)
-3. **BlockRenderer** dynamically renders the correct component based on block type
-4. **Pages** are composed of multiple blocks in any order
+1. **Les gestionnaires de contenu** ajoutent des blocs de contenu dans Sanity Studio
+2. **Les blocs** sont des composants modulaires (TextBlock, HeroBlock, etc.)
+3. **BlockRenderer** rend dynamiquement le bon composant selon le type de bloc
+4. **Les pages** sont composées de plusieurs blocs dans n'importe quel ordre
 
-### Data Flow
+### Flux de Données
 
 ```
 ┌─────────────────┐
@@ -244,22 +254,22 @@ The boilerplate uses a **Block-Based Architecture** where:
 └─────────────────┘
 ```
 
-### Example: How a Page Renders
+### Exemple : Comment une Page est Rendue
 
-1. **User visits** `yoursite.com/about`
+1. **L'utilisateur visite** `votresite.com/about`
 
-2. **Page component** fetches data:
+2. **Le composant Page** récupère les données :
 ```typescript
 const pageData = await client.fetch(pageBySlugQuery, { slug: 'about' })
 // Returns: { title: "About", pageBuilder: [{ _type: 'textBlock', content: [...] }] }
 ```
 
-3. **BlockRenderer** receives blocks:
+3. **BlockRenderer** reçoit les blocs :
 ```typescript
 <BlockRenderer blocks={pageData.pageBuilder} />
 ```
 
-4. **Switch statement** selects component:
+4. **L'instruction switch** sélectionne le composant :
 ```typescript
 switch (block._type) {
   case 'textBlock':
@@ -267,71 +277,71 @@ switch (block._type) {
 }
 ```
 
-5. **TextBlock** renders content:
+5. **TextBlock** rend le contenu :
 ```typescript
 <PortableText value={content} components={customComponents} />
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Démarrage
 
-### Prerequisites
+### Prérequis
 
-- Node.js 18+ installed
-- npm, yarn, or pnpm
-- A Sanity account (free at [sanity.io](https://sanity.io))
+- Node.js 18+ installé
+- npm, yarn, ou pnpm
+- Un compte Sanity (gratuit sur [sanity.io](https://sanity.io))
 
 ### Installation
 
-1. **Clone the repository**
+1. **Cloner le repository**
 ```bash
 git clone <your-repo-url>
 cd sanity-boilerplate
 ```
 
-2. **Install dependencies**
+2. **Installer les dépendances**
 ```bash
 npm install
 ```
 
-3. **Set up environment variables**
+3. **Configurer les variables d'environnement**
 
-Create a `.env.local` file:
+Créer un fichier `.env.local` :
 ```bash
 NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
 NEXT_PUBLIC_SANITY_DATASET=production
 NEXT_PUBLIC_SANITY_API_VERSION=2025-10-30
 ```
 
-Get your Project ID from:
-- Sanity Dashboard: https://www.sanity.io/manage
-- Or run: `npx sanity init` in your project
+Obtenir votre ID de projet depuis :
+- Tableau de bord Sanity : https://www.sanity.io/manage
+- Ou exécuter : `npx sanity init` dans votre projet
 
-4. **Run the development server**
+4. **Lancer le serveur de développement**
 ```bash
 npm run dev
 ```
 
-5. **Access the applications**
-- **Website**: http://localhost:3000
-- **Sanity Studio**: http://localhost:3000/studio
+5. **Accéder aux applications**
+- **Site web** : http://localhost:3000
+- **Sanity Studio** : http://localhost:3000/studio
 
 ---
 
-## 📝 What's Been Built
+## 📝 Ce qui a été Construit
 
-### ✅ Core Infrastructure
+### ✅ Infrastructure de Base
 
-#### 1. **Sanity Integration**
-- Sanity client configuration
-- GROQ queries for fetching data
-- Image CDN integration
-- Real-time updates support
+#### 1. **Intégration Sanity**
+- Configuration du client Sanity
+- Requêtes GROQ pour récupérer les données
+- Intégration CDN d'images
+- Support des mises à jour en temps réel
 
-#### 2. **Next.js App Router Setup**
-- Route groups for Studio vs Website
-- Dynamic catch-all routing
+#### 2. **Configuration Next.js App Router**
+- Groupes de routes pour Studio vs Site web
+- Routage dynamique catch-all
 - Server and client component patterns
 - Styled Components integration
 
@@ -1141,11 +1151,242 @@ When contributing new blocks or features:
 
 ## 📞 Support
 
+Pour toute question ou problème:
+- Consultez les fichiers de documentation existants
+- Examinez l'implémentation du TextBlock comme référence
+- Consultez la documentation officielle de Sanity et Next.js
+
+---
+
+**🇫🇷 [Documentation en Français](#documentation-française) | 🇬🇧 [English Documentation](#english-documentation)**
+
+**Construit avec ❤️ en utilisant Next.js et Sanity CMS**
+
+---
+---
+---
+
+# English Documentation
+
+**🇬🇧 [English Documentation](#english-documentation) | 🇫🇷 [Documentation en Français](#documentation-française)**
+
+---
+
+## 🎯 What Is This Boilerplate?
+
+This is a **headless CMS solution** that separates content management from presentation:
+
+- **Sanity Studio**: A customizable CMS for content managers to create and edit content
+- **Next.js Frontend**: A modern React framework that renders the content
+- **Block System**: A modular architecture where pages are built from reusable content blocks
+
+### Built For:
+
+- **Marketing teams** who need to create landing pages, blog posts, and marketing content
+- **Developers** who want a scalable, maintainable codebase with clear patterns
+- **Agencies** building client websites with non-technical content editors
+- **Startups** needing rapid iteration on content without code deployments
+
+---
+
+## 📋 Quick Parameters Reference
+
+### Site Settings (Global Configuration)
+
+| Parameter | Type | Purpose | Default Value |
+|-----------|------|---------|---------------|
+| **Header** |
+| `logo` | Image | Your website logo | - |
+| `layout` | split/center/left | Elements layout | `split` |
+| `navigationMenu` | Array | Main navigation menu | - |
+| `cta` | Object | Call-to-action button | - |
+| `backgroundColor` | HEX | Header background color | `#ffffff` |
+| `textColor` | HEX | Header text color | `#000000` |
+| **Footer** |
+| `text` | Text | Footer descriptive text | - |
+| `columns` | Array | Organized link columns | - |
+| `socialLinks` | Object | Social media links | - |
+| `copyrightText` | String | Copyright text | - |
+| `backgroundColor` | HEX | Footer background color | `#111827` |
+| `textColor` | HEX | Footer text color | `#ffffff` |
+
+### Page Parameters
+
+| Tab | Parameter | Type | Purpose | Required |
+|-----|-----------|------|---------|----------|
+| **Content** |
+| | `title` | String | Page title | ✅ |
+| | `slug` | Slug | Page URL | ✅ |
+| | `pageBuilder` | Array | Content blocks | - |
+| **SEO** |
+| | `seoTitle` | String | Google title (60 chars) | - |
+| | `seoDescription` | Text | Google description (160 chars) | - |
+| | `seoImage` | Image | Social sharing image (1200x630) | - |
+| | `seoKeywords` | Tags | Keywords for SEO | - |
+| **Advanced** |
+| | `customCss` | Text | Page-specific CSS | - |
+| | `customJs` | Text | Page-specific JavaScript | - |
+| | `noIndex` | Boolean | Prevent Google indexing | false |
+| | `publishedAt` | DateTime | Publication date | - |
+
+### Available Content Blocks
+
+| Block | Description | Main Options |
+|-------|-------------|-------------|
+| **TextBlock** | Rich content with visual editor | Alignment, Width, Background color, Padding |
+
+### 💡 Practical Usage Examples
+
+#### Create Navigation Menu with Submenu
+```javascript
+// In Sanity Studio → Site Settings → Header → Navigation Menu
+{
+  title: "Services",
+  link: "/services",
+  submenu: [
+    { title: "Web Design", link: "/services/web-design" },
+    { title: "SEO", link: "/services/seo" },
+    { title: "Marketing", link: "/services/marketing" }
+  ]
+}
+```
+
+#### Optimize Page SEO
+```javascript
+// In Page → SEO Tab
+seoTitle: "Web Design Services in Montreal | Your Company"  // 55 characters
+seoDescription: "Discover our professional web design services. 
+  Modern, responsive and SEO-optimized creations. Free quote."  // 132 characters
+seoImage: [Image 1200x630px with visible text]
+seoKeywords: ["web design", "montreal", "website creation"]
+```
+
+#### Style a TextBlock for Hero Section
+```javascript
+// TextBlock layout options
+alignment: "center"
+maxWidth: "wide"
+backgroundColor: "#1e3a8a"  // Dark blue
+paddingSize: "large"
+
+// Text will be centered, wide, with blue background and generous spacing
+```
+
+#### Prevent Indexing for Test Page
+```javascript
+// In Page → Advanced Tab
+noIndex: true  // Activates <meta name="robots" content="noindex">
+// Used for: pages under construction, thank you pages, internal pages
+```
+
+---
+
+## 🏗️ Architecture Overview
+
+### Tech Stack
+
+```
+┌─────────────────────────────────────────────────┐
+│                 Next.js 16                       │
+│              (App Router + RSC)                  │
+├─────────────────────────────────────────────────┤
+│  React 19  │  TypeScript  │  Styled Components  │
+├─────────────────────────────────────────────────┤
+│              Sanity CMS v4                       │
+│         (Headless Content Platform)              │
+├─────────────────────────────────────────────────┤
+│       Portable Text (Rich Text Format)          │
+│       @sanity/image-url (Image CDN)             │
+└─────────────────────────────────────────────────┘
+```
+
+### Core Technologies
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| **Next.js** | 16.0.1 | React framework with App Router, SSR, and optimization |
+| **React** | 19.2.0 | UI library with React Compiler enabled |
+| **Sanity** | 4.12.0 | Headless CMS with real-time collaboration |
+| **TypeScript** | 5.x | Type safety and developer experience |
+| **Styled Components** | 6.1.19 | CSS-in-JS styling with component encapsulation |
+| **@portabletext/react** | 4.0.3 | Rich text rendering for Sanity content |
+
+---
+
+## 📊 Content Management Workflow
+
+### For Content Managers:
+
+#### Initial Site Configuration
+
+1. **Access Studio**: Go to `/studio`
+2. **Site Settings**: Click on "Site Settings"
+3. **Configure Header**:
+   - Upload your logo
+   - Choose layout (split/center/left)
+   - Add navigation links with `+` in "Navigation Menu"
+   - (Optional) Add a CTA button
+   - Customize background and text colors
+4. **Configure Footer**:
+   - Write descriptive text
+   - Organize your links in columns
+   - Add social media URLs
+   - Define copyright text
+   - Customize colors
+5. **Publish**: Click "Publish"
+
+#### Create a New Page
+
+1. **Create**: Click "Page" → "Create new"
+2. **Content Tab**:
+   - Enter the title (slug auto-generates)
+   - Add blocks via "Page Builder"
+   - Click `+` to add a TextBlock
+   - Reorder with drag & drop
+3. **SEO Tab** (recommended):
+   - Optimized SEO title (60 characters max)
+   - Catchy description (160 characters max)
+   - Image for social sharing
+   - Relevant keywords
+4. **Advanced Tab** (optional):
+   - Custom CSS/JS if needed
+   - Check "No index" for temporary pages
+5. **Publish**: Click "Publish"
+
+#### Edit a TextBlock
+
+1. In page builder, click on a TextBlock
+2. **Edit content**:
+   - Use toolbar to format (bold, italic, etc.)
+   - Add links with link icon
+   - Insert images from editor
+   - Create lists with dedicated icons
+3. **Layout options**:
+   - **Alignment**: Left, center, or right
+   - **Max width**: Narrow (prose), Medium, Large, Full width
+   - **Background color**: HEX code (ex: `#f3f4f6`)
+   - **Padding**: Small (compact), Medium, Large (airy)
+4. **Save**: Changes are auto-saved
+
+### For Developers:
+
+1. **Define schema**: Create schema in `src/sanity/schemas/blocks/`
+2. **Build component**: Create React component in `src/components/blocks/`
+3. **Register block**: Add to BlockRenderer switch
+4. **Update queries**: Add fields to GROQ query
+5. **Test**: Create test page in Studio
+
+---
+
+## 📞 Support
+
 For questions or issues:
 - Check existing documentation files
 - Review the TextBlock implementation as a reference
 - Consult Sanity and Next.js official docs
 
 ---
+
+**🇬🇧 [English Documentation](#english-documentation) | 🇫🇷 [Documentation en Français](#documentation-française)**
 
 **Built with ❤️ using Next.js and Sanity CMS**
