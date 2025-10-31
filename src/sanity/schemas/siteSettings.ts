@@ -1,10 +1,10 @@
 import { defineType, defineField } from 'sanity'
 
-export default {
+export default defineType({
   name: 'siteSettings',
   title: 'Paramètres du site',
   type: 'document',
-  __experimental_singleton: true,
+  __experimental_singleton: true as any,
   fields: [
     // === SECTION HEADER ===
     defineField({
@@ -283,4 +283,4 @@ export default {
       }
     },
   },
-} as const
+})

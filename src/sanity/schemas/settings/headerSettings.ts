@@ -1,10 +1,9 @@
-import { defineField } from 'sanity'
+import { defineField, defineType } from 'sanity'
 
-export default {
+export default defineType({
   name: 'headerSettings',
   title: 'Header',
   type: 'document',
-  __experimental_singleton: true,
   fields: [
     defineField({
       name: 'logoType',
@@ -140,4 +139,4 @@ export default {
       }
     },
   },
-} as const
+})

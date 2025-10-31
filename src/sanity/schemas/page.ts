@@ -46,6 +46,7 @@ export default defineType({
       description: 'Ajoutez et organisez vos composants',
       of: [
         { type: 'textBlock' },
+        { type: 'heroBlock' },
         // Ajoutez vos autres blocs ici
       ],
       group: 'content',

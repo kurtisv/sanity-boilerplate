@@ -1,10 +1,9 @@
-import { defineField } from 'sanity'
+import { defineField, defineType } from 'sanity'
 
-export default {
+export default defineType({
   name: 'footerSettings',
   title: 'Footer',
   type: 'document',
-  __experimental_singleton: true,
   fields: [
     defineField({
       name: 'text',
@@ -140,4 +139,4 @@ export default {
       }
     },
   },
-} as const
+})

@@ -1,6 +1,6 @@
-import { defineField } from 'sanity'
+import { defineField, defineType } from 'sanity'
 
-export default {
+export default defineType({
   name: 'footerBlock',
   title: 'Footer',
   type: 'object',
@@ -144,4 +144,4 @@ export default {
       }
     },
   },
-} as const
+})

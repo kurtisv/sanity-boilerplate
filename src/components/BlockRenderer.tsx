@@ -1,11 +1,46 @@
 import TextBlock from "./blocks/TextBlock"
 import HeroBlock from "./blocks/HeroBlock"
 
-type Block = {
+// Base block interface
+interface BaseBlock {
   _type: string
   _key: string
-  [key: string]: any
 }
+
+// Specific block types
+interface TextBlockData extends BaseBlock {
+  _type: 'textBlock'
+  content: any // Portable Text content
+}
+
+interface HeroBlockData extends BaseBlock {
+  _type: 'heroBlock'
+  title: string
+  subtitle?: string
+  cta?: {
+    text: string
+    link: string
+    style: 'primary' | 'secondary' | 'ghost'
+  }
+  backgroundImage?: {
+    asset: {
+      _id: string
+      url: string
+    }
+  }
+  backgroundOverlay?: {
+    enabled: boolean
+    color: string
+  }
+  textAlignment: 'left' | 'center' | 'right'
+  verticalAlignment: 'top' | 'center' | 'bottom'
+  height: 'small' | 'medium' | 'large' | 'fullscreen'
+  textColor: string
+  backgroundColor: string
+}
+
+// Union type for all possible blocks
+type Block = TextBlockData | HeroBlockData
 
 type BlockRendererProps = {
   blocks: Block[]
