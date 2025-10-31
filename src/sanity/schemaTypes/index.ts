@@ -4,12 +4,14 @@ import { type SchemaTypeDefinition } from 'sanity'
 import page from '../schemas/page'
 
 // Settings (Paramètres du site)
-import siteSettings from '../schemas/siteSettings'
 import headerSettings from '../schemas/settings/headerSettings'
 import footerSettings from '../schemas/settings/footerSettings'
 
 // Blocks (Composants pour le page builder)
 import textBlock from '../schemas/blocks/textBlock'
+import headerBlock from '../schemas/blocks/headerBlock'
+import footerBlock from '../schemas/blocks/footerBlock'
+import heroBlock from '../schemas/blocks/heroBlock'
 // Ajoutez vos autres blocs ici
 
 export const schema: { types: SchemaTypeDefinition[] } = {
@@ -18,12 +20,14 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     page,
     
     // Settings
-    siteSettings,
     headerSettings,
     footerSettings,
     
     // Blocks
     textBlock,
+    headerBlock,
+    footerBlock,
+    heroBlock,
     // Ajoutez vos autres blocs ici
   ],
 }

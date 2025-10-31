@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "../../styles/brand.css";
 import "../globals.css";
 import { client } from '@/sanity/lib/client'
-import { siteSettingsQuery, headerSettingsQuery, footerSettingsQuery } from '@/sanity/lib/queries'
+import { headerSettingsQuery, footerSettingsQuery } from '@/sanity/lib/queries'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 
@@ -38,20 +38,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Essayer d'abord siteSettings unifié
-  let siteSettings = await client.fetch(siteSettingsQuery)
-  
-  // Fallback vers les anciennes requêtes si siteSettings est vide
-  let headerSettings = null
-  let footerSettings = null
-  
-  if (!siteSettings) {
-    headerSettings = await client.fetch(headerSettingsQuery)
-    footerSettings = await client.fetch(footerSettingsQuery)
-  }
+  // Récupérer les paramètres du header et footer
+  const headerSettings = await client.fetch(headerSettingsQuery)
+  const footerSettings = await client.fetch(footerSettingsQuery)
   
   // Debug temporaire
-  console.log('🔍 DEBUG - siteSettings:', siteSettings)
   console.log('🔍 DEBUG - headerSettings:', headerSettings)
   console.log('🔍 DEBUG - footerSettings:', footerSettings)
   
@@ -59,22 +50,22 @@ export default async function RootLayout({
     <html lang="fr">
       <body>
         <Header
-          logoType={siteSettings?.header?.logoType || headerSettings?.logoType}
-          logo={siteSettings?.header?.logo || headerSettings?.logo}
-          logoText={siteSettings?.header?.logoText || headerSettings?.logoText}
-          navigationMenu={siteSettings?.header?.navigationMenu || headerSettings?.navigationMenu}
-          headerCta={siteSettings?.header?.cta || headerSettings?.cta}
-          headerBackgroundColor={siteSettings?.header?.backgroundColor || headerSettings?.backgroundColor}
-          headerTextColor={siteSettings?.header?.textColor || headerSettings?.textColor}
+          logoType={headerSettings?.logoType}
+          logo={headerSettings?.logo}
+          logoText={headerSettings?.logoText}
+          navigationMenu={headerSettings?.navigationMenu}
+          headerCta={headerSettings?.cta}
+          headerBackgroundColor={headerSettings?.backgroundColor}
+          headerTextColor={headerSettings?.textColor}
         />
         {children}
         <Footer
-          footerText={siteSettings?.footer?.text || footerSettings?.text}
-          footerColumns={siteSettings?.footer?.columns || footerSettings?.columns}
-          copyrightText={siteSettings?.footer?.copyrightText || footerSettings?.copyrightText}
-          socialLinks={siteSettings?.footer?.socialLinks || footerSettings?.socialLinks}
-          footerBackgroundColor={siteSettings?.footer?.backgroundColor || footerSettings?.backgroundColor}
-          footerTextColor={siteSettings?.footer?.textColor || footerSettings?.textColor}
+          footerText={footerSettings?.text}
+          footerColumns={footerSettings?.columns}
+          copyrightText={footerSettings?.copyrightText}
+          socialLinks={footerSettings?.socialLinks}
+          footerBackgroundColor={footerSettings?.backgroundColor}
+          footerTextColor={footerSettings?.textColor}
         />
       </body>
     </html>

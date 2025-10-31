@@ -24,6 +24,23 @@ export const pageBySlugQuery = groq`
         maxWidth,
         backgroundColor,
         paddingSize
+      },
+      _type == 'heroBlock' => {
+        title,
+        subtitle,
+        cta,
+        backgroundImage {
+          asset->{
+            _id,
+            url
+          }
+        },
+        backgroundOverlay,
+        textAlignment,
+        verticalAlignment,
+        height,
+        textColor,
+        backgroundColor
       }
     },
     seoTitle,
@@ -49,54 +66,7 @@ export const pageSlugsQuery = groq`
   }
 `
 
-// Récupérer les paramètres unifiés du site
-export const siteSettingsQuery = groq`
-  *[_type == "siteSettings"][0] {
-    header {
-      logo {
-        asset->{
-          _id,
-          url
-        }
-      },
-      layout,
-      navigationMenu[] {
-        title,
-        link,
-        submenu[] {
-          title,
-          link
-        }
-      },
-      cta {
-        text,
-        link
-      },
-      backgroundColor,
-      textColor
-    },
-    footer {
-      text,
-      columns[] {
-        title,
-        links[] {
-          title,
-          link
-        }
-      },
-      socialLinks {
-        facebook,
-        twitter,
-        instagram,
-        linkedin,
-        youtube
-      },
-      copyrightText,
-      backgroundColor,
-      textColor
-    }
-  }
-`
+// Requête supprimée - utiliser headerSettingsQuery et footerSettingsQuery directement
 
 // Récupérer les paramètres du header (legacy - pour compatibilité)
 export const headerSettingsQuery = groq`

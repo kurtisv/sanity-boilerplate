@@ -1,4 +1,5 @@
 import TextBlock from "./blocks/TextBlock"
+import HeroBlock from "./blocks/HeroBlock"
 
 type Block = {
   _type: string
@@ -31,9 +32,10 @@ export default function BlockRenderer({ blocks }: BlockRendererProps) {
           case 'textBlock':
             return <TextBlock key={block._key} {...block} />
           
+          case 'heroBlock':
+            return <HeroBlock key={block._key} {...block} />
+          
           // Add more block types here:
-          // case 'heroBlock':
-          //   return <HeroBlock key={block._key} {...block} />
           
           default:
             return null
