@@ -41,6 +41,25 @@ export const pageBySlugQuery = groq`
         height,
         textColor,
         backgroundColor
+      },
+      _type == 'featureGridBlock' => {
+        title,
+        subtitle,
+        gridLayout,
+        features[] {
+          icon,
+          iconColor,
+          title,
+          description,
+          link,
+          featured
+        },
+        cardStyle,
+        iconStyle,
+        textAlignment,
+        spacing,
+        backgroundColor,
+        textColor
       }
     },
     seoTitle,

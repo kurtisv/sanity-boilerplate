@@ -12,6 +12,7 @@ import textBlock from '../schemas/blocks/textBlock'
 import headerBlock from '../schemas/blocks/headerBlock'
 import footerBlock from '../schemas/blocks/footerBlock'
 import heroBlock from '../schemas/blocks/heroBlock'
+import featureGridBlock from '../schemas/blocks/featureGridBlock'
 // Ajoutez vos autres blocs ici
 
 export const schema: { types: SchemaTypeDefinition[] } = {
@@ -28,6 +29,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     headerBlock,
     footerBlock,
     heroBlock,
+    featureGridBlock,
     // Ajoutez vos autres blocs ici
   ],
 }

@@ -47,6 +47,7 @@ export default defineType({
       of: [
         { type: 'textBlock' },
         { type: 'heroBlock' },
+        { type: 'featureGridBlock' },
         // Ajoutez vos autres blocs ici
       ],
       group: 'content',

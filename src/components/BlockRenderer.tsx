@@ -1,5 +1,6 @@
 import TextBlock from "./blocks/TextBlock"
 import HeroBlock from "./blocks/HeroBlock"
+import FeatureGridBlock from "./blocks/FeatureGridBlock"
 
 // Base block interface
 interface BaseBlock {
@@ -39,8 +40,32 @@ interface HeroBlockData extends BaseBlock {
   backgroundColor: string
 }
 
+interface FeatureGridBlockData extends BaseBlock {
+  _type: 'featureGridBlock'
+  title?: string
+  subtitle?: string
+  gridLayout: string
+  features: Array<{
+    icon: string
+    iconColor: string
+    title: string
+    description: string
+    link?: {
+      url: string
+      text: string
+    }
+    featured: boolean
+  }>
+  cardStyle: 'minimal' | 'bordered' | 'shadow' | 'colored' | 'glass'
+  iconStyle: 'simple' | 'circle' | 'square' | 'gradient'
+  textAlignment: 'left' | 'center' | 'right'
+  spacing: 'compact' | 'normal' | 'large'
+  backgroundColor: string
+  textColor: string
+}
+
 // Union type for all possible blocks
-type Block = TextBlockData | HeroBlockData
+type Block = TextBlockData | HeroBlockData | FeatureGridBlockData
 
 type BlockRendererProps = {
   blocks: Block[]
@@ -69,6 +94,9 @@ export default function BlockRenderer({ blocks }: BlockRendererProps) {
           
           case 'heroBlock':
             return <HeroBlock key={block._key} {...block} />
+          
+          case 'featureGridBlock':
+            return <FeatureGridBlock key={block._key} {...block} />
           
           // Add more block types here:
           
