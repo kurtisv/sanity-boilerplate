@@ -19,6 +19,98 @@ This is a **headless CMS solution** that separates content management from prese
 
 ---
 
+## 📋 Référence Rapide des Paramètres
+
+### Paramètres du Site (Configuration Globale)
+
+| Paramètre | Type | Utilité | Valeur par défaut |
+|-----------|------|---------|-------------------|
+| **Header** |
+| `logo` | Image | Logo de votre site | - |
+| `layout` | split/center/left | Disposition des éléments | `split` |
+| `navigationMenu` | Array | Menu principal de navigation | - |
+| `cta` | Object | Bouton d'appel à l'action | - |
+| `backgroundColor` | HEX | Couleur de fond du header | `#ffffff` |
+| `textColor` | HEX | Couleur du texte du header | `#000000` |
+| **Footer** |
+| `text` | Text | Texte descriptif du footer | - |
+| `columns` | Array | Colonnes de liens organisés | - |
+| `socialLinks` | Object | Liens réseaux sociaux | - |
+| `copyrightText` | String | Texte de copyright | - |
+| `backgroundColor` | HEX | Couleur de fond du footer | `#111827` |
+| `textColor` | HEX | Couleur du texte du footer | `#ffffff` |
+
+### Paramètres de Page
+
+| Onglet | Paramètre | Type | Utilité | Requis |
+|--------|-----------|------|---------|--------|
+| **Contenu** |
+| | `title` | String | Titre de la page | ✅ |
+| | `slug` | Slug | URL de la page | ✅ |
+| | `pageBuilder` | Array | Blocs de contenu | - |
+| **SEO** |
+| | `seoTitle` | String | Titre pour Google (60 car.) | - |
+| | `seoDescription` | Text | Description pour Google (160 car.) | - |
+| | `seoImage` | Image | Image partage social (1200x630) | - |
+| | `seoKeywords` | Tags | Mots-clés pour référencement | - |
+| **Avancé** |
+| | `customCss` | Text | CSS personnalisé page | - |
+| | `customJs` | Text | JavaScript personnalisé page | - |
+| | `noIndex` | Boolean | Empêcher indexation Google | false |
+| | `publishedAt` | DateTime | Date de publication | - |
+
+### Blocs de Contenu Disponibles
+
+| Bloc | Description | Options Principales |
+|------|-------------|-------------------|
+| **TextBlock** | Contenu riche avec éditeur visuel | Alignement, Largeur, Couleur fond, Espacement |
+
+### 💡 Exemples d'Utilisation Pratiques
+
+#### Créer un Menu de Navigation avec Sous-menu
+```javascript
+// Dans Sanity Studio → Paramètres du site → Header → Navigation Menu
+{
+  title: "Services",
+  link: "/services",
+  submenu: [
+    { title: "Web Design", link: "/services/web-design" },
+    { title: "SEO", link: "/services/seo" },
+    { title: "Marketing", link: "/services/marketing" }
+  ]
+}
+```
+
+#### Optimiser le SEO d'une Page
+```javascript
+// Dans Page → Onglet SEO
+seoTitle: "Services Web Design à Montréal | Votre Entreprise"  // 55 caractères
+seoDescription: "Découvrez nos services de web design professionnels. 
+  Créations modernes, responsive et optimisées SEO. Devis gratuit."  // 132 caractères
+seoImage: [Image 1200x630px avec texte visible]
+seoKeywords: ["web design", "montréal", "création site web"]
+```
+
+#### Styliser un TextBlock pour une Section Hero
+```javascript
+// Options de mise en page du TextBlock
+alignment: "center"
+maxWidth: "wide"
+backgroundColor: "#1e3a8a"  // Bleu foncé
+paddingSize: "large"
+
+// Le texte sera centré, large, avec fond bleu et espacement généreux
+```
+
+#### Empêcher l'Indexation d'une Page de Test
+```javascript
+// Dans Page → Onglet Avancé
+noIndex: true  // Active <meta name="robots" content="noindex">
+// Utilisé pour: pages en construction, pages de remerciement, pages internes
+```
+
+---
+
 ## 🏗️ Architecture Overview
 
 ### Tech Stack
@@ -252,32 +344,129 @@ npm run dev
 
 ### ✅ Content Models (Schemas)
 
-#### 1. **Page Schema** (`src/sanity/schemas/page.ts`)
-The main document type for creating pages.
+#### 1. **Paramètres du Site** (`src/sanity/schemas/siteSettings.ts`)
+Document singleton pour la configuration globale du site (Header & Footer).
 
-**Fields:**
-- Title (required)
-- Slug (auto-generated from title)
-- Page Builder (array of blocks)
-- SEO fields (title, description, image, keywords)
-- Advanced fields (custom CSS/JS, noIndex flag)
+##### Section Header
+- **`logo`** (Image)
+  - Logo affiché dans l'en-tête
+  - Support hotspot pour recadrage intelligent
+  
+- **`layout`** (Choix: split | center | left)
+  - `split`: Logo à gauche, menu à droite (par défaut)
+  - `center`: Tous les éléments centrés
+  - `left`: Tous les éléments alignés à gauche
+  
+- **`navigationMenu`** (Array d'objets)
+  - **`title`**: Texte du lien (requis)
+  - **`link`**: URL ou slug (ex: `/about`) (requis)
+  - **`submenu`**: Menu déroulant optionnel (array d'objets)
+    - **`title`**: Texte du sous-lien
+    - **`link`**: URL du sous-lien
+  
+- **`cta`** (Objet - optionnel)
+  - **`text`**: Texte du bouton d'action
+  - **`link`**: URL du bouton
+  
+- **`backgroundColor`** (String HEX)
+  - Couleur de fond du header (défaut: `#ffffff`)
+  
+- **`textColor`** (String HEX)
+  - Couleur du texte du header (défaut: `#000000`)
 
-#### 2. **TextBlock Schema** (`src/sanity/schemas/blocks/textBlock.ts`)
-A rich text content block.
+##### Section Footer
+- **`text`** (Texte)
+  - Description ou texte principal du footer
+  
+- **`columns`** (Array de colonnes)
+  - **`title`**: Titre de la colonne
+  - **`links`**: Array de liens
+    - **`title`**: Texte du lien
+    - **`link`**: URL du lien
+  
+- **`socialLinks`** (Objet)
+  - **`facebook`**: URL Facebook
+  - **`twitter`**: URL Twitter/X
+  - **`instagram`**: URL Instagram
+  - **`linkedin`**: URL LinkedIn
+  - **`youtube`**: URL YouTube
+  
+- **`copyrightText`** (String)
+  - Texte de copyright (ex: "© 2025 Tous droits réservés")
+  
+- **`backgroundColor`** (String HEX)
+  - Couleur de fond du footer (défaut: `#111827`)
+  
+- **`textColor`** (String HEX)
+  - Couleur du texte du footer (défaut: `#ffffff`)
 
-**Features:**
-- Portable Text editor with full formatting
-- Heading levels (H1-H4)
-- Text styles (bold, italic, underline, code)
-- Links with "open in new tab" option
-- Blockquotes
-- Ordered and unordered lists
-- Inline images with alt text and captions
-- Layout controls (alignment, max-width, background, padding)
+#### 2. **Page Schema** (`src/sanity/schemas/page.ts`)
+Document principal pour créer des pages dynamiques avec constructeur de blocs.
 
-#### 3. **Settings Schemas**
-- **Header Settings**: Logo, navigation menu, CTA button
-- **Footer Settings**: Footer text, columns, social links, copyright
+##### Onglet Contenu
+- **`title`** (String - requis)
+  - Titre de la page affiché dans le Studio
+  
+- **`slug`** (Slug - requis)
+  - URL de la page (généré automatiquement depuis le titre)
+  - Modifiable manuellement si nécessaire
+  - Max 96 caractères
+  
+- **`pageBuilder`** (Array de blocs)
+  - Constructeur visuel pour assembler la page
+  - Blocs disponibles: TextBlock (extensible)
+  - Drag & drop pour réorganiser les blocs
+
+##### Onglet SEO
+- **`seoTitle`** (String)
+  - Titre affiché dans les résultats Google (max 60 caractères)
+  - Si vide, utilise le titre de la page
+  
+- **`seoDescription`** (Text)
+  - Description pour les résultats de recherche (max 160 caractères)
+  - Améliore le taux de clic (CTR)
+  
+- **`seoImage`** (Image)
+  - Image Open Graph pour les partages sociaux
+  - Recommandé: 1200x630px
+  
+- **`seoKeywords`** (Array de strings - tags)
+  - Mots-clés pour référencement interne
+  - Format tags pour faciliter la saisie
+
+##### Onglet Avancé
+- **`customCss`** (Text)
+  - CSS spécifique à cette page uniquement
+  - Utile pour styles exceptionnels
+  
+- **`customJs`** (Text)
+  - JavaScript personnalisé pour cette page
+  - Ex: scripts de suivi, widgets tiers
+  
+- **`noIndex`** (Boolean - défaut: false)
+  - Empêche l'indexation par Google
+  - Active la balise `<meta name="robots" content="noindex">`
+  
+- **`publishedAt`** (DateTime)
+  - Date de publication de la page
+  - Utilisable pour tri chronologique
+
+#### 3. **TextBlock Schema** (`src/sanity/schemas/blocks/textBlock.ts`)
+Bloc de contenu riche pour le constructeur de pages.
+
+**Fonctionnalités de l'éditeur:**
+- Titres (H1, H2, H3, H4)
+- Styles de texte (gras, italique, souligné, code)
+- Listes (ordonnées et non-ordonnées)
+- Citations (blockquotes)
+- Liens (avec option "nouvel onglet")
+- Images inline (avec alt text et légende)
+
+**Options de mise en page:**
+- **`alignment`**: left | center | right
+- **`maxWidth`**: narrow | medium | wide | full
+- **`backgroundColor`**: Couleur de fond HEX
+- **`paddingSize`**: small | medium | large
 
 ### ✅ Components
 
@@ -731,22 +920,66 @@ export const Title = styled.h1`
 
 ## 📊 Content Management Workflow
 
-### For Content Managers:
+### Pour les Gestionnaires de Contenu:
 
-1. **Access Sanity Studio**: Go to `/studio`
-2. **Create a new page**: Click "Page" → "Create new"
-3. **Add content blocks**: Click "Add" in Page Builder
-4. **Edit content**: Use the rich text editor
-5. **Customize layout**: Adjust alignment, width, colors
-6. **Publish**: Click "Publish" button
+#### Configuration Initiale du Site
 
-### For Developers:
+1. **Accéder au Studio**: Allez sur `/studio`
+2. **Paramètres du Site**: Cliquez sur "Paramètres du site"
+3. **Configurer le Header**:
+   - Uploadez votre logo
+   - Choisissez la disposition (split/center/left)
+   - Ajoutez les liens de navigation avec `+` dans "Menu de navigation"
+   - (Optionnel) Ajoutez un bouton CTA
+   - Personnalisez les couleurs de fond et texte
+4. **Configurer le Footer**:
+   - Rédigez le texte descriptif
+   - Organisez vos liens en colonnes
+   - Ajoutez les URLs de réseaux sociaux
+   - Définissez le texte de copyright
+   - Personnalisez les couleurs
+5. **Publier**: Cliquez sur "Publish"
 
-1. **Define schema**: Create block schema in Sanity
-2. **Build component**: Create React component
-3. **Register block**: Add to BlockRenderer switch
-4. **Update queries**: Add block fields to GROQ query
-5. **Test**: Create test page in Studio
+#### Créer une Nouvelle Page
+
+1. **Créer**: Cliquez sur "Page" → "Create new"
+2. **Onglet Contenu**:
+   - Saisissez le titre (le slug se génère automatiquement)
+   - Ajoutez des blocs via "Page Builder"
+   - Cliquez sur `+` pour ajouter un TextBlock
+   - Réorganisez avec drag & drop
+3. **Onglet SEO** (recommandé):
+   - Titre SEO optimisé (60 caractères max)
+   - Description accrocheuse (160 caractères max)
+   - Image pour partages sociaux
+   - Mots-clés pertinents
+4. **Onglet Avancé** (optionnel):
+   - CSS/JS personnalisés si nécessaire
+   - Cochez "Ne pas indexer" pour pages temporaires
+5. **Publier**: Cliquez sur "Publish"
+
+#### Modifier un Bloc TextBlock
+
+1. Dans le constructeur de page, cliquez sur un TextBlock
+2. **Éditez le contenu**:
+   - Utilisez la barre d'outils pour formater (gras, italique, etc.)
+   - Ajoutez des liens avec l'icône de lien
+   - Insérez des images depuis l'éditeur
+   - Créez des listes avec les icônes dédiées
+3. **Options de mise en page**:
+   - **Alignement**: Gauche, centré ou droite
+   - **Largeur max**: Étroit (prose), Moyen, Large, Pleine largeur
+   - **Couleur de fond**: Code HEX (ex: `#f3f4f6`)
+   - **Espacement**: Small (compact), Medium, Large (aéré)
+4. **Sauvegarder**: Les modifications sont auto-sauvegardées
+
+### Pour les Développeurs:
+
+1. **Définir le schéma**: Créer le schema dans `src/sanity/schemas/blocks/`
+2. **Construire le composant**: Créer le composant React dans `src/components/blocks/`
+3. **Enregistrer le bloc**: Ajouter au switch du BlockRenderer
+4. **Mettre à jour les requêtes**: Ajouter les champs au GROQ query
+5. **Tester**: Créer une page de test dans le Studio
 
 ---
 

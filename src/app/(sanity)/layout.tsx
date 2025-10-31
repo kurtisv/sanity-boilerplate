@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "../../styles/brand.css";
 import "../globals.css";
+import StyledComponentsRegistry from "@/lib/registry";
 
 export const metadata: Metadata = {
   title: "Sanity Studio",
@@ -15,7 +16,7 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body>
-        {children}
+        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
       </body>
     </html>
   );
