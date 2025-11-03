@@ -4,7 +4,6 @@ export default defineType({
   name: 'featureGridBlock',
   title: 'Grille de fonctionnalités',
   type: 'object',
-  icon: () => '🎯',
   description: 'Grille de fonctionnalités avec icônes et descriptions',
   fields: [
     defineField({

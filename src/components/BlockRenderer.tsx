@@ -5,8 +5,8 @@ import HeroBlock from "./blocks/HeroBlock"
 import FeatureGridBlock from "./blocks/FeatureGridBlock"
 import ContactBlock from "./blocks/ContactBlock"
 import GalleryBlock from "./blocks/GalleryBlock"
-import TeamBlock from "./blocks/TeamBlock"
-import StatsBlock from "./blocks/StatsBlock"
+import TeamBlock from "./blocks/TeamBlock/TeamBlock"
+import StatsBlock from "./blocks/StatsBlock/StatsBlock"
 
 // Base block interface
 interface BaseBlock {

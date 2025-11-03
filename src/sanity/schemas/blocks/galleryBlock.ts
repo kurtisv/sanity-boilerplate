@@ -4,7 +4,6 @@ export default defineType({
   name: 'galleryBlock',
   title: 'Gallery Block',
   type: 'object',
-  icon: () => '🖼️',
   description: 'Galerie d\'images avec lightbox, filtres et layouts multiples',
   fields: [
     defineField({

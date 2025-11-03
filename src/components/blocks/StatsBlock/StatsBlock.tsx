@@ -243,7 +243,7 @@ export default function StatsBlock({
           <S.StatContent $alignment={styling.alignment}>
             {stat.icon && (
               <S.StatIcon $featured={stat.featured}>
-                {stat.icon}
+                <span>{stat.icon}</span>
               </S.StatIcon>
             )}
 

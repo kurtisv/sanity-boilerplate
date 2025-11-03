@@ -12,55 +12,216 @@ const writeClient = createClient({
   apiVersion: '2024-01-01'
 })
 
-// Configuration des blocs de démo (même que dans le script)
+// Configuration des blocs de démo - Design classique et professionnel
 const demoBlocks = [
+  // 1. Hero Block - Bannière d'accueil
   {
     _type: 'heroBlock',
     _key: 'hero-demo',
-    title: 'Boilerplate Next.js + Sanity',
-    subtitle: 'Découvrez tous les blocs universels créés pour accélérer vos projets web',
+    title: 'Système de Blocs Universels',
+    subtitle: 'Démonstration complète des 8 blocs disponibles dans ce boilerplate professionnel Next.js + Sanity CMS',
     layout: 'centered',
     ctaButtons: [
       {
-        text: 'Voir les blocs',
-        href: '#stats',
+        text: 'Explorer les Blocs',
+        href: '#blocs-info',
         variant: 'primary',
         size: 'lg'
       },
       {
-        text: 'Documentation',
-        href: '#features',
+        text: 'Ouvrir Studio',
+        href: '/studio',
         variant: 'secondary',
         size: 'lg'
       }
     ],
     backgroundSettings: {
-      backgroundType: 'gradient',
-      gradientColors: {
-        from: '#2563eb',
-        to: '#7c3aed',
-        direction: 'to-br'
-      }
+      backgroundType: 'solid',
+      backgroundColor: '#f8fafc'
     },
     styling: {
-      textColor: '#ffffff',
+      textColor: '#1a202c',
       textAlignment: 'center',
       verticalAlignment: 'center',
-      height: 'large',
+      height: 'medium',
       spacing: 'normal'
     }
   },
+
+  // 2. Text Block - Information sur les blocs
+  {
+    _type: 'textBlock',
+    _key: 'blocs-info',
+    content: [
+      {
+        _type: 'block',
+        _key: 'info-title',
+        style: 'h2',
+        children: [
+          {
+            _type: 'span',
+            text: '📋 Guide des Blocs Disponibles'
+          }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: 'info-intro',
+        style: 'normal',
+        children: [
+          {
+            _type: 'span',
+            text: 'Cette page présente tous les blocs universels inclus dans le boilerplate. Chaque bloc est entièrement personnalisable via Sanity Studio et peut être réutilisé sur n\'importe quelle page.'
+          }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: 'info-list',
+        style: 'normal',
+        listItem: 'bullet',
+        children: [
+          {
+            _type: 'span',
+            text: '🦸 Hero Block - Bannières et sections d\'accueil'
+          }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: 'info-list-2',
+        style: 'normal',
+        listItem: 'bullet',
+        children: [
+          {
+            _type: 'span',
+            text: '📝 Text Block - Contenu riche avec formatage'
+          }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: 'info-list-3',
+        style: 'normal',
+        listItem: 'bullet',
+        children: [
+          {
+            _type: 'span',
+            text: '⭐ Feature Grid - Grilles de fonctionnalités'
+          }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: 'info-list-4',
+        style: 'normal',
+        listItem: 'bullet',
+        children: [
+          {
+            _type: 'span',
+            text: '📊 Stats Block - Statistiques et métriques'
+          }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: 'info-list-5',
+        style: 'normal',
+        listItem: 'bullet',
+        children: [
+          {
+            _type: 'span',
+            text: '📞 Contact Block - Formulaires de contact'
+          }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: 'info-list-6',
+        style: 'normal',
+        listItem: 'bullet',
+        children: [
+          {
+            _type: 'span',
+            text: '🖼️ Gallery Block - Galeries d\'images'
+          }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: 'info-list-7',
+        style: 'normal',
+        listItem: 'bullet',
+        children: [
+          {
+            _type: 'span',
+            text: '👥 Team Block - Présentation d\'équipe'
+          }
+        ]
+      }
+    ],
+    styling: {
+      backgroundColor: '#ffffff',
+      textColor: '#374151',
+      textAlignment: 'left',
+      spacing: 'normal'
+    }
+  },
+
+  // 3. Feature Grid Block - Présentation des fonctionnalités
+  {
+    _type: 'featureGridBlock',
+    _key: 'features-demo',
+    title: 'Fonctionnalités des Blocs',
+    subtitle: 'Chaque bloc est conçu pour être flexible, réutilisable et entièrement personnalisable',
+    gridLayout: '3-balanced',
+    features: [
+      {
+        icon: 'star',
+        iconColor: '#2563eb',
+        title: 'Design Classique',
+        description: 'Interface épurée et professionnelle qui inspire confiance à vos clients.',
+        featured: false
+      },
+      {
+        icon: 'rocket',
+        iconColor: '#059669',
+        title: 'Facilité d\'Usage',
+        description: 'Configuration simple via Sanity Studio, aucune compétence technique requise.',
+        featured: true
+      },
+      {
+        icon: 'target',
+        iconColor: '#dc2626',
+        title: 'Personnalisable',
+        description: 'Chaque élément peut être modifié : couleurs, textes, images et mise en page.',
+        featured: false
+      }
+    ],
+    backgroundSettings: {
+      backgroundType: 'solid',
+      backgroundColor: '#ffffff'
+    },
+    styling: {
+      textColor: '#374151',
+      cardStyle: 'minimal',
+      spacing: 'comfortable',
+      alignment: 'center'
+    }
+  },
+
+  // 4. Stats Block - Métriques du boilerplate
   {
     _type: 'statsBlock',
     _key: 'stats-demo',
-    title: 'Performance du Boilerplate',
-    subtitle: 'Des chiffres qui parlent',
+    title: 'Chiffres Clés',
+    subtitle: 'Performance et efficacité du boilerplate',
     layout: 'grid-4col',
     stats: [
       {
-        number: 7,
-        label: 'Blocs Universels',
-        description: 'Couvrent 95% des besoins',
+        number: 8,
+        label: 'Blocs Disponibles',
+        description: 'Couvrent tous les besoins',
         icon: '🧩',
         featured: false,
         animationType: 'counter',
@@ -70,11 +231,11 @@ const demoBlocks = [
       {
         number: 95,
         suffix: '%',
-        label: 'Couverture Projets',
+        label: 'Projets Couverts',
         description: 'Sites web classiques',
         icon: '🎯',
         featured: true,
-        animationType: 'progress',
+        animationType: 'counter',
         animationDuration: 2.5,
         order: 2
       },
@@ -82,21 +243,21 @@ const demoBlocks = [
         number: 100,
         suffix: '%',
         label: 'TypeScript',
-        description: 'Sécurité de type garantie',
+        description: 'Sécurité garantie',
         icon: '🔒',
         featured: false,
-        animationType: 'bounce',
+        animationType: 'counter',
         animationDuration: 1.5,
         order: 3
       },
       {
         number: 98,
         suffix: '+',
-        label: 'Lighthouse Score',
-        description: 'Performance optimisée',
+        label: 'Performance',
+        description: 'Score Lighthouse',
         icon: '⚡',
         featured: false,
-        animationType: 'pulse',
+        animationType: 'counter',
         animationDuration: 2,
         order: 4
       }
@@ -114,81 +275,209 @@ const demoBlocks = [
     styling: {
       textColor: '#1f2937',
       numberColor: '#2563eb',
-      cardStyle: 'shadow',
+      cardStyle: 'clean',
       spacing: 'normal',
       alignment: 'center'
     }
   },
+
+  // 5. Contact Block - Formulaire de contact
   {
-    _type: 'featureGridBlock',
-    _key: 'features-demo',
-    title: 'Fonctionnalités des Blocs',
-    subtitle: 'Chaque bloc est conçu pour être flexible et réutilisable',
-    gridLayout: '3-balanced',
-    features: [
+    _type: 'contactBlock',
+    _key: 'contact-demo',
+    title: 'Contactez-nous',
+    subtitle: 'Exemple de formulaire de contact intégré',
+    layout: 'split',
+    formFields: [
       {
-        icon: 'star',
-        iconColor: '#2563eb',
-        title: 'TextBlock',
-        description: 'Contenu riche avec Portable Text, support markdown, listes, liens et mise en forme avancée.',
-        featured: false
+        name: 'name',
+        label: 'Nom complet',
+        type: 'text',
+        required: true,
+        placeholder: 'Votre nom'
       },
       {
-        icon: 'rocket',
-        iconColor: '#7c3aed',
-        title: 'HeroBlock',
-        description: 'Bannières avec CTA, images de fond, dégradés et layouts multiples pour un impact maximal.',
-        featured: true
+        name: 'email',
+        label: 'Email',
+        type: 'email',
+        required: true,
+        placeholder: 'votre@email.com'
       },
       {
-        icon: 'target',
-        iconColor: '#f59e0b',
-        title: 'FeatureGridBlock',
-        description: 'Grilles de fonctionnalités avec icônes, descriptions et layouts adaptatifs.',
-        featured: false
+        name: 'subject',
+        label: 'Sujet',
+        type: 'text',
+        required: false,
+        placeholder: 'Sujet de votre message'
       },
       {
-        icon: 'mail',
-        iconColor: '#10b981',
-        title: 'ContactBlock',
-        description: 'Formulaires de contact configurables avec validation, styles multiples et intégration email.',
-        featured: false
-      },
-      {
-        icon: 'camera',
-        iconColor: '#8b5cf6',
-        title: 'GalleryBlock',
-        description: 'Galeries d\'images avec lightbox, filtres par catégorie et layouts masonry/grid.',
-        featured: true
-      },
-      {
-        icon: 'users',
-        iconColor: '#06b6d4',
-        title: 'TeamBlock',
-        description: 'Équipes et témoignages avec photos, réseaux sociaux, compétences et layouts variés.',
-        featured: false
-      },
-      {
-        icon: 'trending',
-        iconColor: '#ef4444',
-        title: 'StatsBlock',
-        description: 'Statistiques animées avec compteurs, graphiques et effets visuels personnalisables.',
-        featured: true
+        name: 'message',
+        label: 'Message',
+        type: 'textarea',
+        required: true,
+        placeholder: 'Votre message...'
       }
     ],
-    cardStyle: 'shadow',
-    iconStyle: 'circle',
-    textAlignment: 'center',
-    spacing: 'normal',
-    backgroundColor: '#f8fafc',
-    textColor: '#1f2937'
+    contactInfo: {
+      title: 'Informations de Contact',
+      description: 'Ce bloc permet d\'intégrer facilement un formulaire de contact avec validation et envoi d\'emails.',
+      details: [
+        {
+          icon: 'mail',
+          label: 'Email',
+          value: 'contact@example.com'
+        },
+        {
+          icon: 'phone',
+          label: 'Téléphone',
+          value: '+33 1 23 45 67 89'
+        },
+        {
+          icon: 'location',
+          label: 'Adresse',
+          value: 'Paris, France'
+        }
+      ]
+    },
+    styling: {
+      backgroundColor: '#ffffff',
+      textColor: '#374151',
+      formStyle: 'modern',
+      spacing: 'comfortable'
+    }
+  },
+
+  // 6. Gallery Block - Galerie d'images
+  {
+    _type: 'galleryBlock',
+    _key: 'gallery-demo',
+    title: 'Galerie d\'Images',
+    subtitle: 'Présentation visuelle avec différents layouts',
+    layout: 'grid',
+    columns: 3,
+    images: [
+      {
+        alt: 'Image de démonstration 1',
+        caption: 'Exemple d\'image dans la galerie'
+      },
+      {
+        alt: 'Image de démonstration 2',
+        caption: 'Support de différents formats'
+      },
+      {
+        alt: 'Image de démonstration 3',
+        caption: 'Lightbox intégrée'
+      }
+    ],
+    settings: {
+      enableLightbox: true,
+      showCaptions: true,
+      aspectRatio: '16:9'
+    },
+    styling: {
+      backgroundColor: '#f8fafc',
+      spacing: 'normal',
+      borderRadius: 'medium'
+    }
+  },
+
+  // 7. Team Block - Présentation d'équipe
+  {
+    _type: 'teamBlock',
+    _key: 'team-demo',
+    title: 'Notre Équipe',
+    subtitle: 'Présentation des membres avec informations détaillées',
+    layout: 'grid-3col',
+    members: [
+      {
+        name: 'Jean Dupont',
+        role: 'Développeur Frontend',
+        bio: 'Expert en React et Next.js avec 5 ans d\'expérience.',
+        socialLinks: {
+          linkedin: 'https://linkedin.com',
+          twitter: 'https://twitter.com',
+          github: 'https://github.com'
+        }
+      },
+      {
+        name: 'Marie Martin',
+        role: 'Designer UX/UI',
+        bio: 'Spécialisée dans l\'expérience utilisateur et le design system.',
+        socialLinks: {
+          linkedin: 'https://linkedin.com',
+          dribbble: 'https://dribbble.com'
+        }
+      },
+      {
+        name: 'Pierre Durand',
+        role: 'Développeur Backend',
+        bio: 'Architecte logiciel passionné par les performances et la scalabilité.',
+        socialLinks: {
+          linkedin: 'https://linkedin.com',
+          github: 'https://github.com'
+        }
+      }
+    ],
+    styling: {
+      backgroundColor: '#ffffff',
+      textColor: '#374151',
+      cardStyle: 'clean',
+      spacing: 'comfortable'
+    }
+  },
+
+  // 8. Text Block final - Conclusion
+  {
+    _type: 'textBlock',
+    _key: 'conclusion-demo',
+    content: [
+      {
+        _type: 'block',
+        _key: 'conclusion-title',
+        style: 'h2',
+        children: [
+          {
+            _type: 'span',
+            text: '🎯 Prêt à Commencer ?'
+          }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: 'conclusion-text',
+        style: 'normal',
+        children: [
+          {
+            _type: 'span',
+            text: 'Cette démonstration présente tous les blocs disponibles dans le boilerplate. Chaque bloc peut être personnalisé, réorganisé et adapté à vos besoins spécifiques via Sanity Studio.'
+          }
+        ]
+      },
+      {
+        _type: 'block',
+        _key: 'conclusion-cta',
+        style: 'normal',
+        children: [
+          {
+            _type: 'span',
+            text: 'Ouvrez Sanity Studio pour commencer à créer votre propre contenu et découvrir toutes les possibilités de personnalisation.'
+          }
+        ]
+      }
+    ],
+    styling: {
+      backgroundColor: '#f8fafc',
+      textColor: '#374151',
+      textAlignment: 'center',
+      spacing: 'comfortable'
+    }
   },
   {
     _type: 'contactBlock',
     _key: 'contact-demo',
-    title: 'Testez le Boilerplate',
-    subtitle: 'Envoyez-nous vos retours sur ce boilerplate',
-    layout: 'two-columns',
+    title: 'Contactez-nous',
+    subtitle: 'Exemple de formulaire de contact intégré - Entièrement personnalisable',
+    layout: 'split',
     formFields: [
       {
         fieldType: 'name',

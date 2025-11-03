@@ -205,7 +205,7 @@ export default function TeamBlock({
             rel={link.key !== 'email' ? 'noopener noreferrer' : undefined}
             $accentColor={styling.accentColor}
           >
-            {link.icon}
+            <span>{link.icon}</span>
           </S.SocialLink>
         ))}
       </S.SocialLinks>

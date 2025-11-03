@@ -75,72 +75,73 @@ export const structure: StructureResolver = (S) =>
               
               // Instances des blocs (pour référence technique)
               S.listItem()
-                .title('🔧 Instances des Blocs')
+                .title('Block Instances')
                 .id('blockInstances')
                 .child(
                   S.list()
                     .title('Types de blocs créés')
                     .items([
                       S.listItem()
-                        .title('📝 Blocs de Texte')
+                        .title('Text Blocks')
                         .child(
                           S.documentTypeList('textBlock')
-                            .title('Instances de Blocs de Texte')
+                            .title('Text Block Instances')
                             .filter('_type == "textBlock"')
                         ),
                       S.listItem()
-                        .title('🦸 Blocs Héro')
+                        .title('Hero Blocks')
                         .child(
                           S.documentTypeList('heroBlock')
-                            .title('Instances de Blocs Héro')
+                            .title('Hero Block Instances')
                             .filter('_type == "heroBlock"')
                         ),
                       S.listItem()
-                        .title('🎯 Blocs Header')
+                        .title('Header Blocks')
                         .child(
                           S.documentTypeList('headerBlock')
-                            .title('Instances de Blocs Header')
+                            .title('Header Block Instances')
                             .filter('_type == "headerBlock"')
                         ),
                       S.listItem()
-                        .title('🦶 Blocs Footer')
+                        .title('Footer Blocks')
                         .child(
                           S.documentTypeList('footerBlock')
-                            .title('Instances de Blocs Footer')
+                            .title('Footer Block Instances')
                             .filter('_type == "footerBlock"')
                         ),
                       S.listItem()
-                        .title('⭐ Grilles de Fonctionnalités')
+                        .title('Feature Grids')
                         .child(
                           S.documentTypeList('featureGridBlock')
-                            .title('Instances de Grilles de Fonctionnalités')
+                            .title('Feature Grid Instances')
                             .filter('_type == "featureGridBlock"')
                         ),
                       S.listItem()
-                        .title('📞 Blocs Contact')
+                        .title('Contact Blocks')
                         .child(
                           S.documentTypeList('contactBlock')
-                            .title('Instances de Blocs Contact')
+                            .title('Contact Block Instances')
                             .filter('_type == "contactBlock"')
                         ),
                       S.listItem()
-                        .title('🖼️ Galeries d\'Images')
+                        .title('Gallery Blocks')
                         .child(
                           S.documentTypeList('galleryBlock')
-                            .title('Instances de Galeries d\'Images')
+                            .title('Gallery Block Instances')
                             .filter('_type == "galleryBlock"')
                         ),
                       S.listItem()
-                        .title('👥 Blocs Équipe')
+                        .title('Team Blocks')
                         .child(
                           S.documentTypeList('teamBlock')
-                            .title('Instances de Blocs Équipe')
+                            .title('Team Block Instances')
                             .filter('_type == "teamBlock"')
                         ),
                       S.listItem()
-                        .title('📊 Blocs Statistiques')
+                        .title('Stats Blocks')
                         .child(
                           S.documentTypeList('statsBlock')
+                            .title('Stats Block Instances')
                             .title('Instances de Blocs Statistiques')
                             .filter('_type == "statsBlock"')
                         ),

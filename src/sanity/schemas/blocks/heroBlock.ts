@@ -1,10 +1,9 @@
-import { defineField, defineType } from 'sanity'
+import { defineType, defineField } from 'sanity'
 
 export default defineType({
   name: 'heroBlock',
-  title: 'Hero',
+  title: 'Hero Block',
   type: 'object',
-  icon: () => '🦸',
   description: 'Bannière principale avec titre, CTA et image de fond',
   fields: [
     defineField({

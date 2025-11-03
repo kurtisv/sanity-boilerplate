@@ -4,7 +4,6 @@ export default defineType({
   name: 'footerSettings',
   title: 'Footer',
   type: 'document',
-  icon: () => '🦶',
   description: 'Configuration du pied de page (liens, réseaux sociaux, copyright)',
   fields: [
     defineField({

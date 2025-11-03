@@ -104,13 +104,36 @@ export default function DemoAdminPage() {
         <div className={styles.card}>
           <div className={styles.headerSection}>
             <h1 className={styles.title}>
-              🚀 Administration de la Démo
+              🚀 Administration de la Démonstration
             </h1>
             <p className={styles.description}>
-              Gérez l'importation automatique de la page de démonstration dans Sanity Studio. 
-              Cette interface utilise les données du fichier DEMO_SETUP.md pour créer automatiquement 
-              tous les blocs configurés.
+              Créez une démonstration complète et professionnelle pour présenter toutes les 
+              fonctionnalités du boilerplate. Cette démo est essentielle pour l'onboarding 
+              des nouveaux clients et la découverte des possibilités.
             </p>
+          </div>
+
+          {/* Avantages de la démo */}
+          <div className={styles.infoSection}>
+            <h3 className={styles.infoTitle}>🎯 Pourquoi importer la démonstration ?</h3>
+            <div className={styles.infoList}>
+              <div style={{ marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ color: '#48bb78', fontWeight: 'bold' }}>✓</span>
+                <span><strong>Onboarding client</strong> : Présentation immédiate des possibilités</span>
+              </div>
+              <div style={{ marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ color: '#48bb78', fontWeight: 'bold' }}>✓</span>
+                <span><strong>Tous les blocs</strong> : Hero, Stats, Features, Contact, Gallery, Team</span>
+              </div>
+              <div style={{ marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ color: '#48bb78', fontWeight: 'bold' }}>✓</span>
+                <span><strong>Contenu réaliste</strong> : Textes et images professionnels</span>
+              </div>
+              <div style={{ marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ color: '#48bb78', fontWeight: 'bold' }}>✓</span>
+                <span><strong>Base de travail</strong> : Point de départ pour personnalisation</span>
+              </div>
+            </div>
           </div>
 
           {/* Status Card */}
@@ -135,7 +158,7 @@ export default function DemoAdminPage() {
                         rel="noopener noreferrer"
                         className="text-blue-600 hover:text-blue-800 font-medium"
                       >
-                        Voir la démo →
+                        👁️ Voir la Démonstration
                       </Link>
                       <Link 
                         href={`/studio/desk/page;${demoStatus.page?.id}`} 
@@ -143,7 +166,7 @@ export default function DemoAdminPage() {
                         rel="noopener noreferrer"
                         className="text-blue-600 hover:text-blue-800 font-medium"
                       >
-                        Éditer dans Studio →
+                        ✏️ Éditer dans Studio
                       </Link>
                     </div>
                   </div>
@@ -153,6 +176,60 @@ export default function DemoAdminPage() {
                   <span className="text-lg font-semibold">ℹ️ Aucune page de démo trouvée</span>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Workflow pour les clients */}
+          <div className={styles.infoSection}>
+            <h3 className={styles.infoTitle}>🎯 Workflow Client Recommandé</h3>
+            <div className={styles.infoList}>
+              <div style={{ marginBottom: '1rem', padding: '1rem', background: '#f0f9ff', borderRadius: '8px', border: '1px solid #0284c7' }}>
+                <strong style={{ color: '#0c4a6e' }}>🚀 Première visite du client :</strong>
+                <ol style={{ marginTop: '0.5rem', paddingLeft: '1.5rem', color: '#0c4a6e' }}>
+                  <li>Importez la démonstration (bouton ci-dessus)</li>
+                  <li>Montrez la page <Link href="/demo" style={{ color: '#0284c7', fontWeight: 'bold' }}>/demo</Link> au client</li>
+                  <li>Expliquez que chaque section est modifiable dans Studio</li>
+                  <li>Ouvrez Studio ensemble pour une démonstration live</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+
+          {/* Accès Studio */}
+          {demoStatus?.exists && (
+            <div className={styles.scriptsSection}>
+              <h4 className={styles.scriptsTitle}>🎨 Accès Rapide</h4>
+              <div className={styles.scriptsList}>
+                <div className={styles.scriptItem}>
+                  <Link href="/demo" className={styles.statusLink}>
+                    👁️ Voir la Démonstration
+                  </Link>
+                  <span> - Interface client avec guide intégré</span>
+                </div>
+                <div className={styles.scriptItem}>
+                  <Link 
+                    href={`/studio/desk/page;${demoStatus.page?.id}`} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className={styles.statusLink}
+                  >
+                    ✏️ Éditer dans Studio
+                  </Link>
+                  <span> - Modification directe du contenu</span>
+                </div>
+                <div className={styles.scriptItem}>
+                  <Link href="/admin/site-settings" className={styles.statusLink}>
+                    ⚙️ Paramètres Site
+                  </Link>
+                  <span> - Configuration Header/Footer</span>
+                </div>
+                <div className={styles.scriptItem}>
+                  <Link href="/admin/home" className={styles.statusLink}>
+                    🏠 Page Home
+                  </Link>
+                  <span> - Créer page d'accueil éditable</span>
+                </div>
+              </div>
             </div>
           )}
 

@@ -12,9 +12,8 @@ import { defineType, defineField } from 'sanity'
  */
 export default defineType({
   name: 'textBlock',
-  title: 'Bloc de texte',
+  title: 'Text Block',
   type: 'object',
-  icon: () => '📝',
   description: 'Contenu riche avec éditeur visuel (texte, images, liens)',
   fields: [
     defineField({

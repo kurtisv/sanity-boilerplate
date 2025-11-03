@@ -4,7 +4,6 @@ export default defineType({
   name: 'statsBlock',
   title: 'Stats Block',
   type: 'object',
-  icon: () => '📊',
   description: 'Statistiques animées avec compteurs, graphiques et effets visuels',
   fields: [
     defineField({

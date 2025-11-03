@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { pageBySlugQuery } from '@/sanity/lib/queries'
-import ClientDemoContent from './ClientDemoContent'
+import ProfessionalDemo from './ProfessionalDemo'
 import type { Block } from '@/components/BlockRenderer'
 
 type Page = {
@@ -22,5 +22,5 @@ export default async function DemoPage() {
   // Récupérer la page "demo" depuis Sanity
   const page: Page | null = await client.fetch(pageBySlugQuery, { slug: 'demo' })
 
-  return <ClientDemoContent page={page} />
+  return <ProfessionalDemo page={page} />
 }

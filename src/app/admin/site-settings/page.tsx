@@ -257,8 +257,8 @@ export default function SiteSettingsAdminPage() {
             <h3 className={styles.infoTitle}>🔗 Autres Administrations</h3>
             <div className={styles.scriptsList}>
               <div className={styles.scriptItem}>
-                <Link href="/admin/home" className={styles.statusLink}>🏠 Admin Page Home</Link>
-                <span> - Gérer la page d'accueil</span>
+                <Link href="/admin/home" className={styles.statusLink}>🏠 Admin Home</Link>
+                <span> - Créer page d'accueil éditable</span>
               </div>
               <div className={styles.scriptItem}>
                 <Link href="/admin/demo" className={styles.statusLink}>📋 Admin Démo</Link>

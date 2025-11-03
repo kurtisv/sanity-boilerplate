@@ -4,7 +4,6 @@ export default defineType({
   name: 'page',
   title: 'Page',
   type: 'document',
-  icon: () => '📄',
   description: 'Pages du site avec constructeur de blocs',
   groups: [
     {

@@ -4,7 +4,6 @@ export default defineType({
   name: 'headerSettings',
   title: 'Header',
   type: 'document',
-  icon: () => '🎯',
   description: 'Configuration de l\'en-tête du site (logo, navigation, couleurs)',
   fields: [
     defineField({
