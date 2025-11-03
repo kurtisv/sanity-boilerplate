@@ -1,0 +1,159 @@
+/**
+ * Theme Variables
+ * Variables CSS spécifiques aux thèmes clair et sombre
+ */
+
+/* === THÈME CLAIR (par défaut) === */
+:root,
+[data-theme="light"] {
+  /* Couleurs de fond */
+  --theme-bg-primary: var(--color-white);
+  --theme-bg-secondary: var(--color-gray-50);
+  --theme-bg-tertiary: var(--color-gray-100);
+  --theme-bg-elevated: var(--color-white);
+  --theme-bg-overlay: rgba(0, 0, 0, 0.5);
+  
+  /* Couleurs de texte */
+  --theme-text-primary: var(--color-gray-900);
+  --theme-text-secondary: var(--color-gray-700);
+  --theme-text-tertiary: var(--color-gray-500);
+  --theme-text-inverse: var(--color-white);
+  --theme-text-muted: var(--color-gray-400);
+  
+  /* Couleurs de bordure */
+  --theme-border-primary: var(--color-gray-200);
+  --theme-border-secondary: var(--color-gray-300);
+  --theme-border-focus: var(--color-primary);
+  --theme-border-error: var(--color-error);
+  
+  /* Couleurs d'interaction */
+  --theme-hover-bg: var(--color-gray-50);
+  --theme-active-bg: var(--color-gray-100);
+  --theme-selected-bg: var(--color-primary-light);
+  --theme-disabled-bg: var(--color-gray-100);
+  --theme-disabled-text: var(--color-gray-400);
+  
+  /* Ombres */
+  --theme-shadow-sm: var(--shadow-sm);
+  --theme-shadow-md: var(--shadow-md);
+  --theme-shadow-lg: var(--shadow-lg);
+  --theme-shadow-xl: var(--shadow-xl);
+  
+  /* Couleurs des composants */
+  --theme-card-bg: var(--color-white);
+  --theme-card-border: var(--color-gray-200);
+  --theme-input-bg: var(--color-white);
+  --theme-input-border: var(--color-gray-300);
+  --theme-modal-bg: var(--color-white);
+  --theme-tooltip-bg: var(--color-gray-900);
+  --theme-tooltip-text: var(--color-white);
+}
+
+/* === THÈME SOMBRE === */
+[data-theme="dark"] {
+  /* Couleurs de fond */
+  --theme-bg-primary: #0f172a;
+  --theme-bg-secondary: #1e293b;
+  --theme-bg-tertiary: #334155;
+  --theme-bg-elevated: #1e293b;
+  --theme-bg-overlay: rgba(0, 0, 0, 0.8);
+  
+  /* Couleurs de texte */
+  --theme-text-primary: #f8fafc;
+  --theme-text-secondary: #e2e8f0;
+  --theme-text-tertiary: #cbd5e1;
+  --theme-text-inverse: var(--color-gray-900);
+  --theme-text-muted: #64748b;
+  
+  /* Couleurs de bordure */
+  --theme-border-primary: #334155;
+  --theme-border-secondary: #475569;
+  --theme-border-focus: var(--color-primary-light);
+  --theme-border-error: var(--color-error);
+  
+  /* Couleurs d'interaction */
+  --theme-hover-bg: #1e293b;
+  --theme-active-bg: #334155;
+  --theme-selected-bg: #1e40af;
+  --theme-disabled-bg: #1e293b;
+  --theme-disabled-text: #64748b;
+  
+  /* Ombres adaptées au thème sombre */
+  --theme-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --theme-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+  --theme-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  --theme-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  
+  /* Couleurs des composants */
+  --theme-card-bg: #1e293b;
+  --theme-card-border: #334155;
+  --theme-input-bg: #1e293b;
+  --theme-input-border: #475569;
+  --theme-modal-bg: #1e293b;
+  --theme-tooltip-bg: #f8fafc;
+  --theme-tooltip-text: var(--color-gray-900);
+}
+
+/* === TRANSITIONS POUR LE CHANGEMENT DE THÈME === */
+*,
+*::before,
+*::after {
+  transition: 
+    background-color var(--transition-base),
+    border-color var(--transition-base),
+    color var(--transition-base),
+    box-shadow var(--transition-base);
+}
+
+/* === COULEURS SPÉCIALES POUR LES ÉTATS === */
+:root {
+  /* États de succès */
+  --theme-success-bg: #dcfce7;
+  --theme-success-border: #16a34a;
+  --theme-success-text: #15803d;
+}
+
+[data-theme="dark"] {
+  --theme-success-bg: #14532d;
+  --theme-success-border: #16a34a;
+  --theme-success-text: #4ade80;
+}
+
+:root {
+  /* États d'erreur */
+  --theme-error-bg: #fef2f2;
+  --theme-error-border: #ef4444;
+  --theme-error-text: #dc2626;
+}
+
+[data-theme="dark"] {
+  --theme-error-bg: #7f1d1d;
+  --theme-error-border: #ef4444;
+  --theme-error-text: #f87171;
+}
+
+:root {
+  /* États d'avertissement */
+  --theme-warning-bg: #fffbeb;
+  --theme-warning-border: #f59e0b;
+  --theme-warning-text: #d97706;
+}
+
+[data-theme="dark"] {
+  --theme-warning-bg: #78350f;
+  --theme-warning-border: #f59e0b;
+  --theme-warning-text: #fbbf24;
+}
+
+:root {
+  /* États d'information */
+  --theme-info-bg: #eff6ff;
+  --theme-info-border: #3b82f6;
+  --theme-info-text: #2563eb;
+}
+
+[data-theme="dark"] {
+  --theme-info-bg: #1e3a8a;
+  --theme-info-border: #3b82f6;
+  --theme-info-text: #60a5fa;
+}

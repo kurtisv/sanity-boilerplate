@@ -49,7 +49,13 @@ export default defineType({
       of: [
         { type: 'textBlock' },
         { type: 'heroBlock' },
+        { type: 'headerBlock' },
+        { type: 'footerBlock' },
         { type: 'featureGridBlock' },
+        { type: 'contactBlock' },
+        { type: 'galleryBlock' },
+        { type: 'teamBlock' },
+        { type: 'statsBlock' },
         // Ajoutez vos autres blocs ici
       ],
       group: 'content',

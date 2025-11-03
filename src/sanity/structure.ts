@@ -58,22 +58,99 @@ export const structure: StructureResolver = (S) =>
         .id('blocks')
         .child(
           S.list()
-            .title('Types de blocs')
+            .title('Documentation et Référence des Blocs')
             .items([
+              // Documentation des blocs
               S.listItem()
-                .title('📝 Text Block')
-                .child(S.documentTypeList('textBlock').title('Text Blocks')),
+                .title('📚 Documentation des Blocs')
+                .id('blockDocumentation')
+                .child(
+                  S.documentTypeList('blockDocumentation')
+                    .title('Documentation des Blocs')
+                    .filter('_type == "blockDocumentation"')
+                    .defaultOrdering([{field: 'blockType', direction: 'asc'}])
+                ),
+              
+              S.divider(),
+              
+              // Instances des blocs (pour référence technique)
               S.listItem()
-                .title('🦸 Hero Block')
-                .child(S.documentTypeList('heroBlock').title('Hero Blocks')),
-              S.listItem()
-                .title('🎯 Feature Grid Block')
-                .child(S.documentTypeList('featureGridBlock').title('Feature Grid Blocks')),
+                .title('🔧 Instances des Blocs')
+                .id('blockInstances')
+                .child(
+                  S.list()
+                    .title('Types de blocs créés')
+                    .items([
+                      S.listItem()
+                        .title('📝 Blocs de Texte')
+                        .child(
+                          S.documentTypeList('textBlock')
+                            .title('Instances de Blocs de Texte')
+                            .filter('_type == "textBlock"')
+                        ),
+                      S.listItem()
+                        .title('🦸 Blocs Héro')
+                        .child(
+                          S.documentTypeList('heroBlock')
+                            .title('Instances de Blocs Héro')
+                            .filter('_type == "heroBlock"')
+                        ),
+                      S.listItem()
+                        .title('🎯 Blocs Header')
+                        .child(
+                          S.documentTypeList('headerBlock')
+                            .title('Instances de Blocs Header')
+                            .filter('_type == "headerBlock"')
+                        ),
+                      S.listItem()
+                        .title('🦶 Blocs Footer')
+                        .child(
+                          S.documentTypeList('footerBlock')
+                            .title('Instances de Blocs Footer')
+                            .filter('_type == "footerBlock"')
+                        ),
+                      S.listItem()
+                        .title('⭐ Grilles de Fonctionnalités')
+                        .child(
+                          S.documentTypeList('featureGridBlock')
+                            .title('Instances de Grilles de Fonctionnalités')
+                            .filter('_type == "featureGridBlock"')
+                        ),
+                      S.listItem()
+                        .title('📞 Blocs Contact')
+                        .child(
+                          S.documentTypeList('contactBlock')
+                            .title('Instances de Blocs Contact')
+                            .filter('_type == "contactBlock"')
+                        ),
+                      S.listItem()
+                        .title('🖼️ Galeries d\'Images')
+                        .child(
+                          S.documentTypeList('galleryBlock')
+                            .title('Instances de Galeries d\'Images')
+                            .filter('_type == "galleryBlock"')
+                        ),
+                      S.listItem()
+                        .title('👥 Blocs Équipe')
+                        .child(
+                          S.documentTypeList('teamBlock')
+                            .title('Instances de Blocs Équipe')
+                            .filter('_type == "teamBlock"')
+                        ),
+                      S.listItem()
+                        .title('📊 Blocs Statistiques')
+                        .child(
+                          S.documentTypeList('statsBlock')
+                            .title('Instances de Blocs Statistiques')
+                            .filter('_type == "statsBlock"')
+                        ),
+                    ])
+                ),
             ])
         ),
       
       // Autres documents (si ajoutés plus tard)
       ...S.documentTypeListItems().filter(
-        (item) => !['page', 'headerSettings', 'footerSettings', 'textBlock', 'heroBlock', 'featureGridBlock'].includes(item.getId() ?? '')
+        (item) => !['page', 'headerSettings', 'footerSettings', 'blockDocumentation', 'textBlock', 'heroBlock', 'headerBlock', 'footerBlock', 'featureGridBlock', 'contactBlock', 'galleryBlock', 'teamBlock', 'statsBlock'].includes(item.getId() ?? '')
       ),
     ])

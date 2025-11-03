@@ -42,7 +42,11 @@ type Props = {
 
 // Génération des métadonnées SEO par page
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const slug = params.slug?.join('/') || 'home'
+  // Déterminer le slug : / et /home pointent vers 'home'
+  const slug = !params.slug || params.slug.length === 0 || params.slug.join('/') === 'home' 
+    ? 'home' 
+    : params.slug.join('/')
+  
   const page: Page = await client.fetch(pageBySlugQuery, { slug })
   
   if (!page) {
@@ -89,7 +93,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export const revalidate = 60
 
 export default async function DynamicPage({ params }: Props) {
-  const slug = params.slug?.join('/') || 'home'
+  // Déterminer le slug : / et /home pointent vers 'home'
+  const slug = !params.slug || params.slug.length === 0 || params.slug.join('/') === 'home' 
+    ? 'home' 
+    : params.slug.join('/')
+  
   const page: Page = await client.fetch(pageBySlugQuery, { slug })
   
   if (!page) {

@@ -5,6 +5,7 @@ import { client } from '@/sanity/lib/client'
 import { headerSettingsQuery, footerSettingsQuery } from '@/sanity/lib/queries'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import { ThemeProvider } from '@/contexts/ThemeContext'
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
@@ -85,24 +86,26 @@ export default async function RootLayout({
   return (
     <html lang="fr">
       <body>
-        <Header
-          logoType={headerSettings?.logoType}
-          logo={headerSettings?.logo}
-          logoText={headerSettings?.logoText}
-          navigationMenu={headerSettings?.navigationMenu}
-          headerCta={headerSettings?.cta}
-          headerBackgroundColor={headerSettings?.backgroundColor}
-          headerTextColor={headerSettings?.textColor}
-        />
-        {children}
-        <Footer
-          footerText={footerSettings?.text}
-          footerColumns={footerSettings?.columns}
-          copyrightText={footerSettings?.copyrightText}
-          socialLinks={footerSettings?.socialLinks}
-          footerBackgroundColor={footerSettings?.backgroundColor}
-          footerTextColor={footerSettings?.textColor}
-        />
+        <ThemeProvider defaultTheme="auto" storageKey="site-theme">
+          <Header
+            logoType={headerSettings?.logoType}
+            logo={headerSettings?.logo}
+            logoText={headerSettings?.logoText}
+            navigationMenu={headerSettings?.navigationMenu}
+            headerCta={headerSettings?.cta}
+            headerBackgroundColor={headerSettings?.backgroundColor}
+            headerTextColor={headerSettings?.textColor}
+          />
+          {children}
+          <Footer
+            footerText={footerSettings?.text}
+            footerColumns={footerSettings?.columns}
+            copyrightText={footerSettings?.copyrightText}
+            socialLinks={footerSettings?.socialLinks}
+            footerBackgroundColor={footerSettings?.backgroundColor}
+            footerTextColor={footerSettings?.textColor}
+          />
+        </ThemeProvider>
       </body>
     </html>
   );

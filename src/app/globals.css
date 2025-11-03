@@ -3,6 +3,12 @@
  * Reset CSS et styles de base
  */
 
+/* Import des design tokens et utilitaires */
+@import '../styles/brand.css';
+@import '../styles/themes.css';
+@import '../styles/animations.css';
+@import '../styles/utilities.css';
+
 /* Reset CSS */
 *,
 *::before,
@@ -22,8 +28,8 @@ body {
   font-family: var(--font-family-primary);
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
-  color: var(--color-gray-900);
-  background-color: var(--color-white);
+  color: var(--theme-text-primary);
+  background-color: var(--theme-bg-primary);
   overflow-x: hidden;
 }
 

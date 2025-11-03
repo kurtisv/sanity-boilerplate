@@ -60,6 +60,120 @@ export const pageBySlugQuery = groq`
         spacing,
         backgroundColor,
         textColor
+      },
+      _type == 'contactBlock' => {
+        title,
+        subtitle,
+        layout,
+        formFields[] {
+          fieldType,
+          label,
+          placeholder,
+          required,
+          width
+        },
+        submitButton,
+        successMessage,
+        contactInfo,
+        styling
+      },
+      _type == 'galleryBlock' => {
+        title,
+        subtitle,
+        layout,
+        images[] {
+          image {
+            asset->{
+              _id,
+              url
+            }
+          },
+          alt,
+          caption,
+          category,
+          featured
+        },
+        gridSettings,
+        carouselSettings,
+        filterOptions,
+        lightboxOptions,
+        styling
+      },
+      _type == 'teamBlock' => {
+        title,
+        subtitle,
+        blockType,
+        layout,
+        teamMembers[] {
+          name,
+          position,
+          photo {
+            asset->{
+              _id,
+              url
+            }
+          },
+          bio,
+          skills,
+          socialLinks,
+          featured,
+          order
+        },
+        testimonials[] {
+          content,
+          author {
+            name,
+            position,
+            company,
+            photo {
+              asset->{
+                _id,
+                url
+              }
+            }
+          },
+          rating,
+          featured,
+          date
+        },
+        gridSettings,
+        carouselSettings,
+        cardStyle,
+        showSocialLinks,
+        showSkills,
+        styling
+      },
+      _type == 'statsBlock' => {
+        title,
+        subtitle,
+        layout,
+        stats[] {
+          number,
+          suffix,
+          prefix,
+          label,
+          description,
+          icon,
+          color,
+          featured,
+          animationType,
+          animationDuration,
+          order
+        },
+        animationSettings,
+        backgroundSettings {
+          backgroundType,
+          backgroundColor,
+          gradientColors,
+          backgroundImage {
+            asset->{
+              _id,
+              url
+            }
+          },
+          overlay
+        },
+        styling
       }
     },
     seoTitle,
