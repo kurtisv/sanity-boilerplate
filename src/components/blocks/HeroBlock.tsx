@@ -3,72 +3,95 @@
 import styled from 'styled-components'
 import { urlFor } from '@/sanity/lib/image'
 import Link from 'next/link'
+import { Button } from '@/components/ui'
 
 type HeroBlockProps = {
   title: string
   subtitle?: string
-  cta?: {
+  ctaButtons?: Array<{
     text: string
-    link: string
-    style: 'primary' | 'secondary' | 'ghost'
-  }
-  backgroundImage?: {
-    asset: {
-      _id: string
-      url: string
+    href: string
+    variant: 'primary' | 'secondary' | 'ghost'
+    size: 'sm' | 'md' | 'lg'
+  }>
+  layout?: 'centered' | 'left-image' | 'right-image' | 'fullwidth'
+  backgroundSettings?: {
+    backgroundType: 'solid' | 'gradient' | 'image'
+    backgroundColor?: string
+    gradientColors?: {
+      from: string
+      to: string
+      direction: string
+    }
+    backgroundImage?: {
+      asset: {
+        _id: string
+        url: string
+      }
+    }
+    backgroundOverlay?: {
+      enabled: boolean
+      color: string
     }
   }
-  backgroundOverlay?: {
-    enabled: boolean
-    color: string
+  styling?: {
+    textColor?: string
+    textAlignment?: 'left' | 'center' | 'right'
+    verticalAlignment?: 'top' | 'center' | 'bottom'
+    height?: 'small' | 'medium' | 'large' | 'fullscreen'
+    spacing?: 'compact' | 'normal' | 'large'
   }
-  textAlignment: 'left' | 'center' | 'right'
-  verticalAlignment: 'top' | 'center' | 'bottom'
-  height: 'small' | 'medium' | 'large' | 'fullscreen'
-  textColor: string
-  backgroundColor: string
 }
 
 const HeroContainer = styled.section<{
-  $backgroundImage?: string
-  $backgroundColor: string
+  $background: string
+  $isImage: boolean
+  $isGradient: boolean
   $height: string
   $textColor: string
 }>`
   position: relative;
   width: 100%;
   display: flex;
-  align-items: ${props => 
-    props.$height === 'fullscreen' ? 'center' : 
-    props.$height === 'large' ? 'center' : 'center'
-  };
+  align-items: center;
   justify-content: center;
-  background-color: ${props => props.$backgroundColor};
   color: ${props => props.$textColor};
   
-  ${props => props.$backgroundImage && `
-    background-image: url(${props.$backgroundImage});
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-  `}
-  
   ${props => {
-    switch (props.$height) {
-      case 'small': return 'min-height: 400px;'
-      case 'medium': return 'min-height: 600px;'
-      case 'large': return 'min-height: 800px;'
-      case 'fullscreen': return 'min-height: 100vh;'
-      default: return 'min-height: 800px;'
+    if (props.$isImage) {
+      return `
+        background-image: ${props.$background};
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+      `
+    } else if (props.$isGradient) {
+      return `background: ${props.$background};`
+    } else {
+      return `background-color: ${props.$background};`
     }
   }}
   
+  min-height: ${props => {
+    switch (props.$height) {
+      case 'small': return '400px'
+      case 'medium': return '600px'
+      case 'large': return '800px'
+      case 'fullscreen': return '100vh'
+      default: return '800px'
+    }
+  }};
+  
   @media (max-width: 768px) {
-    min-height: ${props => 
-      props.$height === 'fullscreen' ? '100vh' : 
-      props.$height === 'large' ? '600px' : 
-      props.$height === 'medium' ? '500px' : '400px'
-    };
+    min-height: ${props => {
+      switch (props.$height) {
+        case 'small': return '300px'
+        case 'medium': return '400px'
+        case 'large': return '500px'
+        case 'fullscreen': return '100vh'
+        default: return '500px'
+      }
+    }};
   }
 `
 
@@ -85,27 +108,43 @@ const Overlay = styled.div<{ $color: string; $enabled: boolean }>`
 const ContentWrapper = styled.div<{
   $textAlignment: string
   $verticalAlignment: string
+  $spacing: string
 }>`
   position: relative;
   z-index: 2;
   max-width: 1200px;
   width: 100%;
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
   text-align: ${props => props.$textAlignment};
   
-  ${props => {
+  display: flex;
+  flex-direction: column;
+  justify-content: ${props => {
     switch (props.$verticalAlignment) {
-      case 'top': return 'justify-content: flex-start; align-self: flex-start;'
-      case 'center': return 'justify-content: center; align-self: center;'
-      case 'bottom': return 'justify-content: flex-end; align-self: flex-end;'
-      default: return 'justify-content: center; align-self: center;'
+      case 'top': return 'flex-start'
+      case 'bottom': return 'flex-end'
+      case 'center':
+      default: return 'center'
     }
-  }}
+  }};
+  
+  padding: ${props => {
+    switch (props.$spacing) {
+      case 'compact': return '1rem'
+      case 'large': return '3rem'
+      case 'normal':
+      default: return '2rem'
+    }
+  }};
   
   @media (max-width: 768px) {
-    padding: 1.5rem;
+    padding: ${props => {
+      switch (props.$spacing) {
+        case 'compact': return '0.5rem'
+        case 'large': return '2rem'
+        case 'normal':
+        default: return '1rem'
+      }
+    }};
     text-align: center;
   }
 `
@@ -140,121 +179,103 @@ const Subtitle = styled.p`
   }
 `
 
-const CTAButton = styled(Link)<{ $style: string }>`
-  display: inline-flex;
-  align-items: center;
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
   justify-content: center;
-  padding: 1rem 2rem;
-  font-size: 1.125rem;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 0.5rem;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border: 2px solid transparent;
-  
-  ${props => {
-    switch (props.$style) {
-      case 'primary':
-        return `
-          background: #3b82f6;
-          color: white;
-          border-color: #3b82f6;
-          
-          &:hover {
-            background: #2563eb;
-            border-color: #2563eb;
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
-          }
-        `
-      case 'secondary':
-        return `
-          background: transparent;
-          color: currentColor;
-          border-color: currentColor;
-          
-          &:hover {
-            background: currentColor;
-            color: #1f2937;
-            transform: translateY(-2px);
-          }
-        `
-      case 'ghost':
-        return `
-          background: rgba(255, 255, 255, 0.1);
-          color: currentColor;
-          border-color: rgba(255, 255, 255, 0.2);
-          backdrop-filter: blur(10px);
-          
-          &:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
-          }
-        `
-      default:
-        return `
-          background: #3b82f6;
-          color: white;
-          border-color: #3b82f6;
-        `
-    }
-  }}
   
   @media (max-width: 768px) {
-    padding: 0.875rem 1.5rem;
-    font-size: 1rem;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
   }
 `
 
 export default function HeroBlock({
   title,
   subtitle,
-  cta,
-  backgroundImage,
-  backgroundOverlay = { enabled: true, color: 'rgba(0, 0, 0, 0.4)' },
-  textAlignment = 'center',
-  verticalAlignment = 'center',
-  height = 'large',
-  textColor = '#ffffff',
-  backgroundColor = '#1f2937',
+  ctaButtons = [],
+  layout = 'centered',
+  backgroundSettings = { backgroundType: 'solid', backgroundColor: '#1f2937' },
+  styling = {
+    textColor: '#ffffff',
+    textAlignment: 'center',
+    verticalAlignment: 'center',
+    height: 'large',
+    spacing: 'normal'
+  }
 }: HeroBlockProps) {
-  const backgroundImageUrl = backgroundImage 
-    ? urlFor(backgroundImage).width(1920).height(1080).url()
-    : undefined
+  // Génération du style de fond
+  const getBackgroundStyle = () => {
+    const { backgroundType, backgroundColor, gradientColors, backgroundImage } = backgroundSettings
+    
+    switch (backgroundType) {
+      case 'gradient':
+        if (gradientColors) {
+          return `linear-gradient(${gradientColors.direction}, ${gradientColors.from}, ${gradientColors.to})`
+        }
+        return backgroundColor || '#1f2937'
+      
+      case 'image':
+        if (backgroundImage) {
+          const imageUrl = urlFor(backgroundImage).width(1920).height(1080).url()
+          return `url(${imageUrl})`
+        }
+        return backgroundColor || '#1f2937'
+      
+      case 'solid':
+      default:
+        return backgroundColor || '#1f2937'
+    }
+  }
+
+  const backgroundStyle = getBackgroundStyle()
+  const isImage = backgroundSettings.backgroundType === 'image'
+  const isGradient = backgroundSettings.backgroundType === 'gradient'
 
   return (
     <HeroContainer
-      $backgroundImage={backgroundImageUrl}
-      $backgroundColor={backgroundColor}
-      $height={height}
-      $textColor={textColor}
+      $background={backgroundStyle}
+      $isImage={isImage}
+      $isGradient={isGradient}
+      $height={styling.height || 'large'}
+      $textColor={styling.textColor || '#ffffff'}
     >
-      <Overlay 
-        $color={backgroundOverlay.color} 
-        $enabled={backgroundOverlay.enabled} 
-      />
+      {isImage && backgroundSettings.backgroundOverlay?.enabled && (
+        <Overlay 
+          $color={backgroundSettings.backgroundOverlay.color} 
+          $enabled={true} 
+        />
+      )}
       
       <ContentWrapper
-        $textAlignment={textAlignment}
-        $verticalAlignment={verticalAlignment}
+        $textAlignment={styling.textAlignment || 'center'}
+        $verticalAlignment={styling.verticalAlignment || 'center'}
+        $spacing={styling.spacing || 'normal'}
       >
         <Title>{title}</Title>
         
         {subtitle && (
-          <Subtitle style={{ textAlign: textAlignment }}>
+          <Subtitle style={{ textAlign: styling.textAlignment || 'center' }}>
             {subtitle}
           </Subtitle>
         )}
         
-        {cta && (
-          <CTAButton 
-            href={cta.link} 
-            $style={cta.style}
-          >
-            {cta.text}
-          </CTAButton>
+        {ctaButtons && ctaButtons.length > 0 && (
+          <ButtonGroup>
+            {ctaButtons.map((button, index) => (
+              <Link key={index} href={button.href} passHref>
+                <Button
+                  variant={button.variant}
+                  size={button.size}
+                >
+                  {button.text}
+                </Button>
+              </Link>
+            ))}
+          </ButtonGroup>
         )}
       </ContentWrapper>
     </HeroContainer>

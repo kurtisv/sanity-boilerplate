@@ -28,19 +28,39 @@ export const pageBySlugQuery = groq`
       _type == 'heroBlock' => {
         title,
         subtitle,
-        cta,
-        backgroundImage {
-          asset->{
-            _id,
-            url
+        ctaButtons[] {
+          text,
+          href,
+          variant,
+          size
+        },
+        layout,
+        backgroundSettings {
+          backgroundType,
+          backgroundColor,
+          gradientColors {
+            from,
+            to,
+            direction
+          },
+          backgroundImage {
+            asset->{
+              _id,
+              url
+            }
+          },
+          backgroundOverlay {
+            enabled,
+            color
           }
         },
-        backgroundOverlay,
-        textAlignment,
-        verticalAlignment,
-        height,
-        textColor,
-        backgroundColor
+        styling {
+          textColor,
+          textAlignment,
+          verticalAlignment,
+          height,
+          spacing
+        }
       },
       _type == 'featureGridBlock' => {
         title,

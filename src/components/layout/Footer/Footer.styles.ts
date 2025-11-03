@@ -4,35 +4,37 @@ import Link from 'next/link'
 // === FOOTER CONTAINER (Full Width) ===
 export const FooterContainer = styled.footer<{ $bgColor?: string; $textColor?: string }>`
   width: 100%;
-  background-color: ${props => props.$bgColor || 'var(--color-gray-900)'};
-  color: ${props => props.$textColor || 'var(--color-white)'};
+  background-color: ${props => props.$bgColor || '#f8fafc'};
+  color: ${props => props.$textColor || '#4a5568'};
+  border-top: 2px solid #e2e8f0;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
 `
 
 // === FOOTER CONTENT (Max 1200px) ===
 export const FooterContent = styled.div`
-  max-width: var(--max-width-container);
+  max-width: 1200px;
   margin: 0 auto;
-  padding: var(--spacing-16) var(--spacing-6) var(--spacing-8);
+  padding: 4rem 2rem 2rem;
   
   @media (max-width: 768px) {
-    padding: var(--spacing-12) var(--spacing-4) var(--spacing-6);
+    padding: 3rem 1rem 1.5rem;
   }
 `
 
 export const FooterGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: var(--spacing-12);
-  margin-bottom: var(--spacing-12);
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
   
   @media (max-width: 1024px) {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--spacing-8);
+    gap: 2rem;
   }
   
   @media (max-width: 640px) {
     grid-template-columns: 1fr;
-    gap: var(--spacing-6);
+    gap: 2rem;
   }
 `
 
@@ -45,22 +47,21 @@ export const FooterTextSection = styled.div`
 `
 
 export const FooterText = styled.p`
-  color: var(--color-gray-400);
-  line-height: var(--line-height-relaxed);
-  font-size: var(--font-size-base);
-  margin: 0;
+  color: #4a5568;
+  line-height: 1.6;
+  font-size: 1rem;
+  margin: 0 0 1.5rem 0;
 `
 
 export const FooterColumn = styled.div``
 
 export const ColumnTitle = styled.h3`
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-semibold);
-  margin-bottom: var(--spacing-4);
-  color: var(--color-white);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: var(--font-size-sm);
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #1a202c;
+  letter-spacing: 0;
+  text-transform: none;
 `
 
 export const FooterLinksList = styled.ul`
@@ -69,26 +70,27 @@ export const FooterLinksList = styled.ul`
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2);
+  gap: 0.75rem;
 `
 
 export const FooterLinkItem = styled.li``
 
 export const FooterLink = styled(Link)`
-  color: var(--color-gray-400);
-  font-size: var(--font-size-sm);
-  transition: all var(--transition-fast);
+  color: #4a5568;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
   display: inline-block;
+  text-decoration: none;
   
   &:hover {
-    color: var(--color-white);
-    transform: translateX(4px);
+    color: #2b6cb0;
+    transform: translateX(2px);
   }
   
   &:focus-visible {
-    outline: 2px solid var(--color-primary);
+    outline: 2px solid #2b6cb0;
     outline-offset: 2px;
-    border-radius: var(--border-radius-base);
+    border-radius: 4px;
   }
 `
 
@@ -141,17 +143,22 @@ export const SocialLink = styled.a`
 
 // === COPYRIGHT SECTION ===
 export const CopyrightSection = styled.div`
-  text-align: center;
-  padding-top: var(--spacing-8);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid #e2e8f0;
+  padding-top: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
   
   @media (max-width: 640px) {
-    padding-top: var(--spacing-6);
+    flex-direction: column;
+    text-align: center;
   }
 `
 
 export const Copyright = styled.p`
-  color: var(--color-gray-500);
-  font-size: var(--font-size-sm);
+  color: #718096;
+  font-size: 0.875rem;
   margin: 0;
 `

@@ -1,24 +1,305 @@
-# 🚀 Sanity + Next.js Advanced Boilerplate
+# 🚀 Sanity + Next.js Professional Boilerplate
 
-**🇫🇷 [Documentation en Français](#documentation-française) | 🇬🇧 [English Documentation](#english-documentation)**
+<div align="center">
+
+![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)
+![Sanity](https://img.shields.io/badge/Sanity-CMS-red?style=for-the-badge&logo=sanity)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css)
+
+**Un boilerplate moderne et professionnel pour créer des sites web performants**
+
+[🚀 Voir la Démo](http://localhost:3000/demo) • [📖 Documentation](#documentation) • [🎨 Studio](http://localhost:3000/studio) • [⚙️ Administration](http://localhost:3000/admin/demo)
+
+</div>
 
 ---
 
-## ✨ **Boilerplate Professionnel & Évolutif**
+## ✨ **Aperçu du Projet**
 
-Un boilerplate **prêt pour la production** et de **niveau entreprise** pour créer des sites web et applications dynamiques avec **Sanity CMS** et **Next.js 15**. 
+Ce boilerplate combine **Next.js 16** et **Sanity CMS** pour offrir une solution complète de développement web moderne. Il propose un système de blocs universels, une interface d'administration intuitive et un design professionnel prêt pour la production.
 
-### 🎯 **Fonctionnalités Clés**
+### 🎯 **Fonctionnalités Principales**
 
-- 🏗️ **Architecture par blocs modulaires** (Hero, FeatureGrid, TextBlock, etc.)
-- 🎨 **Page Builder visuel** avec drag & drop dans Sanity Studio
-- 🌐 **Mode Preview** intégré pour prévisualiser le contenu avant publication
-- 📱 **100% Responsive** avec design adaptatif mobile-first
-- ⚡ **Performance optimisée** avec Next.js 15 App Router
-- 🎭 **Styled Components** pour un styling moderne et maintenable
-- 🔧 **TypeScript** pour une meilleure expérience développeur
-- 📊 **SEO avancé** avec métadonnées par page
-- 🎪 **Système de thèmes** avec couleurs et styles personnalisables
+- 🏗️ **Système de Blocs Universels** - 8 blocs prêts à l'emploi (Hero, Stats, Features, Contact, etc.)
+- 🎨 **Design Professionnel** - Interface moderne avec Tailwind CSS et design system
+- 🚀 **Import Automatique** - Interface d'administration pour importer la démo en un clic
+- 📱 **100% Responsive** - Design adaptatif mobile-first
+- ⚡ **Performance Optimisée** - Next.js 16 avec App Router et Server Components
+- 🔧 **TypeScript Complet** - Sécurité de type sur tout le projet
+- 📊 **SEO Avancé** - Métadonnées dynamiques et optimisation automatique
+- 🎪 **Thèmes Personnalisables** - Système de design cohérent et extensible
+
+## 🚀 **Démarrage Rapide**
+
+### **Prérequis**
+
+- Node.js 18+ 
+- npm ou yarn
+- Compte Sanity (gratuit)
+
+### **Installation**
+
+```bash
+# 1. Cloner le projet
+git clone https://github.com/votre-username/sanity-next-boilerplate.git
+cd sanity-next-boilerplate
+
+# 2. Installer les dépendances
+npm install
+
+# 3. Configuration Sanity
+npm run sanity:init
+
+# 4. Configurer les variables d'environnement
+cp .env.example .env.local
+# Éditer .env.local avec vos informations Sanity
+
+# 5. Démarrer le serveur de développement
+npm run dev
+```
+
+### **Configuration Automatique de la Démo**
+
+```bash
+# Option 1: Interface web (recommandé)
+# Allez sur http://localhost:3000/admin/demo
+
+# Option 2: Script en ligne de commande
+npm run demo:setup
+
+# Option 3: Import simple
+npm run demo:import
+```
+
+### **URLs Importantes**
+
+- 🏠 **Site principal** : `http://localhost:3000`
+- 📋 **Page de démo** : `http://localhost:3000/demo`
+- 🎨 **Sanity Studio** : `http://localhost:3000/studio`
+- ⚙️ **Administration** : `http://localhost:3000/admin/demo`
+
+---
+
+## 🧩 **Blocs Universels Inclus**
+
+| Bloc | Icône | Description | Fonctionnalités |
+|------|-------|-------------|-----------------|
+| **HeroBlock** | 🦸 | Bannière principale | Gradients, boutons multiples, layouts |
+| **StatsBlock** | 📊 | Statistiques animées | Compteurs, animations, graphiques |
+| **FeatureGridBlock** | ⭐ | Grille de fonctionnalités | Icônes, descriptions, layouts flexibles |
+| **TextBlock** | 📝 | Contenu riche | Portable Text, listes, formatage |
+| **GalleryBlock** | 🖼️ | Galerie d'images | Lightbox, filtres, masonry |
+| **TeamBlock** | 👥 | Équipe et témoignages | Photos, réseaux sociaux, compétences |
+| **ContactBlock** | 📧 | Formulaire de contact | Validation, layouts, configuration |
+| **HeaderBlock** | 🎯 | En-tête de site | Logo, navigation, CTA |
+| **FooterBlock** | 🦶 | Pied de page | Liens, réseaux sociaux, colonnes |
+
+---
+
+## 🏗️ **Architecture Technique**
+
+### **Stack Technologique**
+
+```
+Frontend:
+├── Next.js 16 (App Router)
+├── React 19
+├── TypeScript 5
+├── Tailwind CSS
+└── Styled Components
+
+Backend:
+├── Sanity CMS
+├── GROQ (requêtes)
+└── Sanity Studio
+
+Outils:
+├── ESLint + Prettier
+├── Husky (Git hooks)
+└── Scripts d'automatisation
+```
+
+### **Structure du Projet**
+
+```
+src/
+├── app/                    # App Router Next.js
+│   ├── (website)/         # Routes du site
+│   ├── (sanity)/          # Sanity Studio
+│   ├── admin/             # Interface d'administration
+│   └── api/               # API Routes
+├── components/            # Composants React
+│   ├── blocks/           # Blocs universels
+│   ├── layout/           # Header, Footer
+│   └── ui/               # Composants UI
+├── sanity/               # Configuration Sanity
+│   ├── schemas/          # Schémas de contenu
+│   ├── lib/              # Client et utilitaires
+│   └── structure.ts      # Structure du Studio
+├── styles/               # Styles globaux
+└── hooks/                # Hooks personnalisés
+```
+
+## 📖 **Guide d'Utilisation**
+
+### **1. Créer une Nouvelle Page**
+
+1. Allez sur `http://localhost:3000/studio`
+2. Cliquez sur **"Pages"** dans le menu
+3. Cliquez sur **"Create new Page"**
+4. Remplissez les informations de base :
+   - **Titre** : Le nom de votre page
+   - **Slug** : L'URL de la page (ex: `about-us`)
+   - **Description SEO** : Pour le référencement
+
+### **2. Ajouter des Blocs**
+
+1. Dans l'éditeur de page, cliquez sur **"Add item"** dans la section Page Builder
+2. Choisissez le type de bloc souhaité
+3. Configurez le contenu et les options
+4. Prévisualisez en temps réel
+5. Publiez quand vous êtes satisfait
+
+### **3. Personnaliser le Design**
+
+#### **Couleurs et Thème**
+```css
+/* src/styles/design-system.css */
+:root {
+  --color-primary: #1e40af;        /* Votre couleur principale */
+  --color-secondary: #64748b;      /* Couleur secondaire */
+  --font-family-primary: 'Inter';  /* Police principale */
+}
+```
+
+#### **Ajouter un Nouveau Bloc**
+```typescript
+// 1. Créer le schéma Sanity
+// src/sanity/schemas/blocks/monNouveauBlock.ts
+
+// 2. Créer le composant React
+// src/components/blocks/MonNouveauBlock.tsx
+
+// 3. L'ajouter au BlockRenderer
+// src/components/BlockRenderer.tsx
+```
+
+---
+
+## 🔧 **Scripts Disponibles**
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Démarre le serveur de développement |
+| `npm run build` | Construit l'application pour la production |
+| `npm run start` | Démarre le serveur de production |
+| `npm run demo:import` | Importe la démo automatiquement |
+| `npm run demo:setup` | Configuration complète de la démo |
+| `npm run demo:reset` | Remet à zéro et réimporte la démo |
+
+---
+
+## 🚀 **Déploiement**
+
+### **Vercel (Recommandé)**
+
+```bash
+# 1. Installer Vercel CLI
+npm i -g vercel
+
+# 2. Déployer
+vercel
+
+# 3. Configurer les variables d'environnement sur Vercel
+# NEXT_PUBLIC_SANITY_PROJECT_ID
+# NEXT_PUBLIC_SANITY_DATASET
+# SANITY_API_TOKEN (pour les webhooks)
+```
+
+### **Netlify**
+
+```bash
+# 1. Build du projet
+npm run build
+
+# 2. Déployer le dossier .next
+# Configurer les variables d'environnement dans Netlify
+```
+
+---
+
+## 🛠️ **Personnalisation Avancée**
+
+### **Ajouter un Nouveau Type de Contenu**
+
+1. **Créer le schéma Sanity** :
+```typescript
+// src/sanity/schemas/monType.ts
+import { defineType, defineField } from 'sanity'
+
+export default defineType({
+  name: 'monType',
+  title: 'Mon Type',
+  type: 'document',
+  fields: [
+    defineField({
+      name: 'title',
+      title: 'Titre',
+      type: 'string',
+      validation: (Rule) => Rule.required()
+    })
+  ]
+})
+```
+
+2. **L'enregistrer** :
+```typescript
+// src/sanity/schemaTypes/index.ts
+import monType from './schemas/monType'
+
+export const schemaTypes = [monType, /* autres schémas */]
+```
+
+### **Personnaliser Sanity Studio**
+
+```typescript
+// src/sanity/structure.ts
+export const structure = (S) =>
+  S.list()
+    .title('Contenu')
+    .items([
+      S.listItem()
+        .title('Mon Type')
+        .child(S.documentTypeList('monType'))
+    ])
+```
+
+---
+
+## 🐛 **Dépannage**
+
+### **Problèmes Courants**
+
+**Erreur : "SANITY_API_TOKEN manquant"**
+```bash
+# Solution : Créer un token API sur sanity.io/manage
+# L'ajouter dans .env.local
+SANITY_API_TOKEN=sk_test_votre_token
+```
+
+**Erreur d'hydratation React**
+```bash
+# Solution : Vérifier que les composants utilisent 'use client'
+# pour les styled-components et hooks
+```
+
+**Page de démo vide**
+```bash
+# Solution : Importer la démo
+npm run demo:import
+# ou via l'interface : http://localhost:3000/admin/demo
+```
 
 ---
 

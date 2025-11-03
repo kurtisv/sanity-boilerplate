@@ -4,6 +4,8 @@ export default defineType({
   name: 'contactBlock',
   title: 'Contact Block',
   type: 'object',
+  icon: () => '📧',
+  description: 'Formulaire de contact configurable avec validation et styles multiples',
   fields: [
     defineField({
       name: 'title',

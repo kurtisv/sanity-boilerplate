@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "demo:import": "node scripts/import-demo.js",
+    "demo:setup": "node scripts/setup-demo.js",
+    "demo:reset": "node scripts/import-demo.js --force"
   },
   "dependencies": {
     "@portabletext/react": "^4.0.3",
@@ -25,6 +28,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "dotenv": "^16.3.1",
     "typescript": "^5"
   }
 }

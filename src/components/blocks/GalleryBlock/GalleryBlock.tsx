@@ -184,7 +184,8 @@ export default function GalleryBlock({
 
   // Rendu d'une image
   const renderImage = (image: GalleryImage, index: number) => {
-    const imageUrl = urlFor(image.image).width(800).height(600).url()
+    // Support pour les URLs directes (démo) et les assets Sanity
+    const imageUrl = (image as any).imageUrl || urlFor(image.image).width(800).height(600).url()
     
     return (
       <S.ImageWrapper
@@ -360,7 +361,7 @@ export default function GalleryBlock({
             <S.LightboxContent onClick={(e: React.MouseEvent) => e.stopPropagation()}>
               <S.LightboxImage>
                 <Image
-                  src={urlFor(filteredImages[lightboxIndex].image).width(1200).height(900).url()}
+                  src={(filteredImages[lightboxIndex] as any).imageUrl || urlFor(filteredImages[lightboxIndex].image).width(1200).height(900).url()}
                   alt={filteredImages[lightboxIndex].alt}
                   fill
                   style={{ objectFit: 'contain' }}

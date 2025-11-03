@@ -3,6 +3,9 @@
  * Reset CSS et styles de base
  */
 
+/* Design System Variables */
+@import '../styles/design-system.css';
+
 /* Import des design tokens et utilitaires */
 @import '../styles/brand.css';
 @import '../styles/themes.css';

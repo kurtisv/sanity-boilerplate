@@ -30,12 +30,31 @@ type FooterProps = {
 }
 
 export default function Footer({
-  footerText,
-  footerColumns,
-  copyrightText,
+  footerText = "Solution professionnelle Next.js + Sanity CMS prête à l'emploi pour créer des sites web modernes et performants.",
+  footerColumns = [
+    {
+      title: "Navigation",
+      links: [
+        { title: "Accueil", link: "/" },
+        { title: "Démonstration", link: "/demo" },
+        { title: "Studio Sanity", link: "/studio" },
+        { title: "Administration", link: "/admin/home" }
+      ]
+    },
+    {
+      title: "Technologies",
+      links: [
+        { title: "Next.js 16", link: "#" },
+        { title: "Sanity CMS", link: "#" },
+        { title: "TypeScript", link: "#" },
+        { title: "CSS Modules", link: "#" }
+      ]
+    }
+  ],
+  copyrightText = "Sanity Boilerplate. Conçu pour les développeurs modernes.",
   socialLinks,
-  footerBackgroundColor,
-  footerTextColor,
+  footerBackgroundColor = '#f8fafc',
+  footerTextColor = '#4a5568',
 }: FooterProps) {
   const currentYear = new Date().getFullYear()
   
@@ -44,12 +63,75 @@ export default function Footer({
       <S.FooterContent>
         {/* Texte et colonnes */}
         <S.FooterGrid>
-          {/* Texte du footer */}
-          {footerText && (
-            <S.FooterTextSection>
+          {/* Section Branding + Texte */}
+          <S.FooterTextSection>
+            {/* Logo et nom */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              marginBottom: '1.5rem'
+            }}>
+              <div style={{
+                width: '36px',
+                height: '36px',
+                background: 'linear-gradient(135deg, #2b6cb0 0%, #3182ce 100%)',
+                borderRadius: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: 'white',
+                fontWeight: 'bold',
+                fontSize: '16px'
+              }}>
+                S
+              </div>
+              <span style={{ 
+                fontWeight: '700', 
+                color: '#1a202c',
+                fontSize: '1.25rem'
+              }}>
+                Sanity Boilerplate
+              </span>
+            </div>
+            
+            {/* Texte descriptif */}
+            {footerText && (
               <S.FooterText>{footerText}</S.FooterText>
-            </S.FooterTextSection>
-          )}
+            )}
+            
+            {/* Boutons d'action */}
+            <div style={{
+              display: 'flex',
+              gap: '1rem',
+              flexWrap: 'wrap'
+            }}>
+              <Link href="/demo" style={{
+                background: '#2b6cb0',
+                color: 'white',
+                padding: '0.5rem 1rem',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontWeight: '500',
+                fontSize: '0.875rem',
+                transition: 'all 0.2s'
+              }}>
+                Voir la Démo
+              </Link>
+              <Link href="/studio" style={{
+                background: '#4a5568',
+                color: 'white',
+                padding: '0.5rem 1rem',
+                borderRadius: '6px',
+                textDecoration: 'none',
+                fontWeight: '500',
+                fontSize: '0.875rem',
+                transition: 'all 0.2s'
+              }}>
+                Ouvrir Studio
+              </Link>
+            </div>
+          </S.FooterTextSection>
           
           {/* Colonnes */}
           {footerColumns?.map((column, index) => (
@@ -133,8 +215,17 @@ export default function Footer({
         {/* Copyright */}
         <S.CopyrightSection>
           <S.Copyright>
-            {copyrightText || `© ${currentYear} Tous droits réservés.`}
+            © {currentYear} {copyrightText}
           </S.Copyright>
+          
+          <div style={{
+            display: 'flex',
+            gap: '1.5rem',
+            fontSize: '0.875rem',
+            color: '#718096'
+          }}>
+            <span>Made with ❤️ for developers</span>
+          </div>
         </S.CopyrightSection>
       </S.FooterContent>
     </S.FooterContainer>

@@ -4,6 +4,8 @@ export default defineType({
   name: 'teamBlock',
   title: 'Team Block',
   type: 'object',
+  icon: () => '👥',
+  description: 'Équipe et témoignages avec photos, réseaux sociaux et layouts variés',
   fields: [
     defineField({
       name: 'title',

@@ -3,27 +3,30 @@ import Link from 'next/link'
 
 // === HEADER CONTAINER ===
 export const HeaderContainer = styled.header<{ $bgColor?: string; $textColor?: string; $scrolled?: boolean }>`
-  background-color: ${props => props.$bgColor || 'var(--color-white)'};
-  color: ${props => props.$textColor || 'var(--color-gray-900)'};
-  box-shadow: ${props => props.$scrolled ? 'var(--shadow-md)' : 'var(--shadow-sm)'};
+  background-color: ${props => props.$bgColor || '#ffffff'};
+  color: ${props => props.$textColor || '#2d3748'};
+  box-shadow: ${props => props.$scrolled ? '0 4px 12px rgba(0, 0, 0, 0.1)' : '0 2px 8px rgba(0, 0, 0, 0.08)'};
+  border-bottom: 2px solid #f7fafc;
   position: sticky;
   top: 0;
-  z-index: var(--z-index-sticky);
-  transition: box-shadow var(--transition-base);
+  z-index: 1000;
+  transition: box-shadow 0.3s ease;
   backdrop-filter: blur(8px);
 `
 
 export const HeaderContent = styled.div`
-  max-width: var(--max-width-container);
+  max-width: 1200px;
   margin: 0 auto;
-  padding: var(--spacing-4) var(--spacing-6);
+  padding: 0 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--spacing-4);
+  gap: 1rem;
+  height: 90px;
   
   @media (max-width: 768px) {
-    padding: var(--spacing-3) var(--spacing-4);
+    padding: 0 1rem;
+    height: 80px;
   }
 `
 

@@ -1,0 +1,183 @@
+{
+  "title": "Démonstration Boilerplate",
+  "slug": { "current": "demo" },
+  "seoTitle": "Démonstration - Boilerplate Next.js + Sanity",
+  "seoDescription": "Découvrez tous les blocs universels en action, créés directement dans Sanity Studio",
+  "pageBuilder": [
+    {
+      "_type": "heroBlock",
+      "_key": "hero-demo",
+      "title": "Boilerplate Next.js + Sanity",
+      "subtitle": "Découvrez tous les blocs universels créés pour accélérer vos projets web",
+      "layout": "centered",
+      "ctaButtons": [
+        {
+          "text": "Voir les blocs",
+          "href": "#stats",
+          "variant": "primary",
+          "size": "lg"
+        },
+        {
+          "text": "Documentation",
+          "href": "#features",
+          "variant": "secondary", 
+          "size": "lg"
+        }
+      ],
+      "backgroundSettings": {
+        "backgroundType": "gradient",
+        "gradientColors": {
+          "from": "#2563eb",
+          "to": "#7c3aed",
+          "direction": "to-br"
+        }
+      },
+      "styling": {
+        "textColor": "#ffffff",
+        "textAlignment": "center",
+        "verticalAlignment": "center",
+        "height": "large",
+        "spacing": "normal"
+      }
+    },
+    {
+      "_type": "statsBlock",
+      "_key": "stats-demo",
+      "title": "Performance du Boilerplate",
+      "subtitle": "Des chiffres qui parlent",
+      "layout": "grid-4col",
+      "stats": [
+        {
+          "number": 7,
+          "label": "Blocs Universels",
+          "description": "Couvrent 95% des besoins",
+          "icon": "🧩",
+          "featured": false,
+          "order": 1
+        },
+        {
+          "number": 95,
+          "suffix": "%",
+          "label": "Couverture Projets",
+          "description": "Sites web classiques",
+          "icon": "🎯",
+          "featured": true,
+          "order": 2
+        },
+        {
+          "number": 100,
+          "suffix": "%",
+          "label": "TypeScript",
+          "description": "Sécurité de type garantie",
+          "icon": "🔒",
+          "featured": false,
+          "order": 3
+        },
+        {
+          "number": 98,
+          "suffix": "+",
+          "label": "Lighthouse Score",
+          "description": "Performance optimisée",
+          "icon": "⚡",
+          "featured": false,
+          "order": 4
+        }
+      ]
+    },
+    {
+      "_type": "featureGridBlock",
+      "_key": "features-demo",
+      "title": "Fonctionnalités des Blocs",
+      "subtitle": "Chaque bloc est conçu pour être flexible et réutilisable",
+      "layout": "grid",
+      "features": [
+        {
+          "title": "TextBlock",
+          "description": "Contenu riche avec Portable Text, support markdown, listes, liens et mise en forme avancée.",
+          "icon": "📝",
+          "iconColor": "#2563eb",
+          "featured": false
+        },
+        {
+          "title": "HeroBlock", 
+          "description": "Bannières avec CTA, images de fond, dégradés et layouts multiples pour un impact maximal.",
+          "icon": "🦸",
+          "iconColor": "#7c3aed",
+          "featured": true
+        },
+        {
+          "title": "FeatureGridBlock",
+          "description": "Grilles de fonctionnalités avec icônes, descriptions et layouts adaptatifs.",
+          "icon": "⭐",
+          "iconColor": "#f59e0b",
+          "featured": false
+        },
+        {
+          "title": "ContactBlock",
+          "description": "Formulaires de contact configurables avec validation, styles multiples et intégration email.",
+          "icon": "📧",
+          "iconColor": "#10b981",
+          "featured": false
+        },
+        {
+          "title": "GalleryBlock",
+          "description": "Galeries d'images avec lightbox, filtres par catégorie et layouts masonry/grid.",
+          "icon": "🖼️",
+          "iconColor": "#8b5cf6",
+          "featured": true
+        },
+        {
+          "title": "TeamBlock",
+          "description": "Équipes et témoignages avec photos, réseaux sociaux, compétences et layouts variés.",
+          "icon": "👥",
+          "iconColor": "#06b6d4",
+          "featured": false
+        },
+        {
+          "title": "StatsBlock",
+          "description": "Statistiques animées avec compteurs, graphiques et effets visuels personnalisables.",
+          "icon": "📊",
+          "iconColor": "#ef4444",
+          "featured": true
+        }
+      ]
+    },
+    {
+      "_type": "contactBlock",
+      "_key": "contact-demo",
+      "title": "Testez le Boilerplate",
+      "subtitle": "Envoyez-nous vos retours sur ce boilerplate",
+      "layout": "two-columns",
+      "formFields": [
+        {
+          "fieldType": "name",
+          "label": "Votre nom",
+          "placeholder": "John Doe",
+          "required": true,
+          "width": "half"
+        },
+        {
+          "fieldType": "email",
+          "label": "Email",
+          "placeholder": "john@example.com",
+          "required": true,
+          "width": "half"
+        },
+        {
+          "fieldType": "subject",
+          "label": "Sujet",
+          "placeholder": "Feedback sur le boilerplate",
+          "required": true,
+          "width": "full"
+        },
+        {
+          "fieldType": "message",
+          "label": "Message",
+          "placeholder": "Partagez vos impressions, suggestions d'amélioration...",
+          "required": true,
+          "width": "full"
+        }
+      ]
+    }
+  ]
+}

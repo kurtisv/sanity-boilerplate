@@ -8,12 +8,12 @@ export const PageContainer = styled.main`
 `
 
 export const PageContent = styled.div`
-  max-width: var(--max-width-container);
+  max-width: 1200px;
   margin: 0 auto;
-  padding: var(--spacing-16) var(--spacing-6);
+  padding: 4rem 1.5rem;
   
   @media (max-width: 768px) {
-    padding: var(--spacing-12) var(--spacing-4);
+    padding: 3rem 1rem;
   }
 `
 
@@ -22,20 +22,20 @@ export const BlocksContainer = styled.div`
 `
 
 export const EmptyState = styled.div`
-  max-width: var(--max-width-4xl);
+  max-width: 800px;
   margin: 0 auto;
   text-align: center;
 `
 
 export const PageTitle = styled.h1`
-  font-size: var(--font-size-5xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-gray-900);
-  margin-bottom: var(--spacing-6);
+  font-size: 3rem;
+  font-weight: 800;
+  color: #1f2937;
+  margin-bottom: 1.5rem;
 `
 
 export const PageMessage = styled.p`
-  font-size: var(--font-size-xl);
-  color: var(--color-gray-600);
-  line-height: var(--line-height-relaxed);
+  font-size: 1.25rem;
+  color: #6b7280;
+  line-height: 1.75;
 `

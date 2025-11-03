@@ -4,6 +4,8 @@ export default defineType({
   name: 'footerBlock',
   title: 'Footer',
   type: 'object',
+  icon: () => '🦶',
+  description: 'Pied de page avec liens, réseaux sociaux et informations',
   fields: [
     defineField({
       name: 'text',

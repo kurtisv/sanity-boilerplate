@@ -1,0 +1,74 @@
+/* Styles pour la page de démonstration */
+
+.demoContainer {
+  min-height: 100vh;
+  position: relative;
+}
+
+.themeToggleContainer {
+  position: fixed;
+  top: 2rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+@media (max-width: 768px) {
+  .themeToggleContainer {
+    top: 1rem;
+    right: 1rem;
+  }
+}
+
+.navigationBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: var(--theme-bg-elevated);
+  border-bottom: 1px solid var(--theme-border-primary);
+  padding: 1rem 2rem;
+  z-index: 999;
+  backdrop-filter: blur(10px);
+  
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .navigationBar {
+    padding: 0.75rem 1rem;
+  }
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--theme-text-primary);
+}
+
+.navLinks {
+  display: flex;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .navLinks {
+    display: none;
+  }
+}
+
+.navLink {
+  color: var(--theme-text-secondary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-base);
+}
+
+.navLink:hover {
+  color: var(--theme-text-primary);
+}
+
+.contentWrapper {
+  padding-top: 80px; /* Espace pour la navigation fixe */
+}

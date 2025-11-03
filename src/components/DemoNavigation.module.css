@@ -1,0 +1,26 @@
+.demoNav {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+@media (max-width: 768px) {
+  .demoNav {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}
+
+.demoButton {
+  background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+  color: white !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+  transition: all var(--transition-base);
+}
+
+.demoButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}

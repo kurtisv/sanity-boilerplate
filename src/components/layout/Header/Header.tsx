@@ -32,13 +32,17 @@ type HeaderProps = {
 }
 
 export default function Header({
-  logoType = 'image',
+  logoType = 'text',
   logo,
-  logoText,
-  navigationMenu,
-  headerCta,
-  headerBackgroundColor,
-  headerTextColor,
+  logoText = 'Sanity Boilerplate',
+  navigationMenu = [
+    { title: 'Accueil', link: '/' },
+    { title: 'Démonstration', link: '/demo' },
+    { title: 'Studio', link: '/studio' }
+  ],
+  headerCta = { text: '🎨 Studio', link: '/studio' },
+  headerBackgroundColor = '#ffffff',
+  headerTextColor = '#2d3748',
 }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [activeSubmenu, setActiveSubmenu] = useState<number | null>(null)

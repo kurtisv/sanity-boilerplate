@@ -1,3 +1,5 @@
+'use client'
+
 import TextBlock from "./blocks/TextBlock"
 import HeroBlock from "./blocks/HeroBlock"
 import FeatureGridBlock from "./blocks/FeatureGridBlock"
@@ -26,26 +28,39 @@ interface HeroBlockData extends BaseBlock {
   _type: 'heroBlock'
   title: string
   subtitle?: string
-  cta?: {
+  ctaButtons?: Array<{
     text: string
-    link: string
-    style: 'primary' | 'secondary' | 'ghost'
-  }
-  backgroundImage?: {
-    asset: {
-      _id: string
-      url: string
+    href: string
+    variant: 'primary' | 'secondary' | 'ghost'
+    size: 'sm' | 'md' | 'lg'
+  }>
+  layout?: 'centered' | 'left-image' | 'right-image' | 'fullwidth'
+  backgroundSettings?: {
+    backgroundType: 'solid' | 'gradient' | 'image'
+    backgroundColor?: string
+    gradientColors?: {
+      from: string
+      to: string
+      direction: string
+    }
+    backgroundImage?: {
+      asset: {
+        _id: string
+        url: string
+      }
+    }
+    backgroundOverlay?: {
+      enabled: boolean
+      color: string
     }
   }
-  backgroundOverlay?: {
-    enabled: boolean
-    color: string
+  styling?: {
+    textColor?: string
+    textAlignment?: 'left' | 'center' | 'right'
+    verticalAlignment?: 'top' | 'center' | 'bottom'
+    height?: 'small' | 'medium' | 'large' | 'fullscreen'
+    spacing?: 'compact' | 'normal' | 'large'
   }
-  textAlignment: 'left' | 'center' | 'right'
-  verticalAlignment: 'top' | 'center' | 'bottom'
-  height: 'small' | 'medium' | 'large' | 'fullscreen'
-  textColor: string
-  backgroundColor: string
 }
 
 interface FeatureGridBlockData extends BaseBlock {

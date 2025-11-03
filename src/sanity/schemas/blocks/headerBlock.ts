@@ -4,6 +4,8 @@ export default defineType({
   name: 'headerBlock',
   title: 'Header',
   type: 'object',
+  icon: () => '🎯',
+  description: 'En-tête de site avec logo, navigation et CTA',
   fields: [
     defineField({
       name: 'logo',

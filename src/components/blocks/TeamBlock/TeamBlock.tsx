@@ -214,7 +214,8 @@ export default function TeamBlock({
 
   // Rendu d'un membre d'équipe
   const renderTeamMember = (member: TeamMember, index: number) => {
-    const imageUrl = urlFor(member.photo).width(400).height(400).url()
+    // Support pour les URLs directes (démo) et les assets Sanity
+    const imageUrl = (member as any).photoUrl || urlFor(member.photo).width(400).height(400).url()
 
     return (
       <S.MemberCard
@@ -274,7 +275,7 @@ export default function TeamBlock({
   // Rendu d'un témoignage
   const renderTestimonial = (testimonial: Testimonial, index: number) => {
     const authorImageUrl = testimonial.author.photo 
-      ? urlFor(testimonial.author.photo).width(80).height(80).url()
+      ? ((testimonial.author as any).photoUrl || urlFor(testimonial.author.photo).width(80).height(80).url())
       : null
 
     return (

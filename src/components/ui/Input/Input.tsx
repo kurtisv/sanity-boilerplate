@@ -1,6 +1,7 @@
 'use client'
 
 import { forwardRef, InputHTMLAttributes, TextareaHTMLAttributes, ReactNode } from 'react'
+import { useIdWithFallback } from '@/hooks/useStableId'
 import * as S from './Input.styles'
 
 export type InputVariant = 'default' | 'filled' | 'flushed'
@@ -85,7 +86,7 @@ export const Input = forwardRef<HTMLInputElement | HTMLTextAreaElement, InputCom
   }, ref) => {
     const isTextarea = props.as === 'textarea'
     const hasError = Boolean(error)
-    const inputId = props.id || `input-${Math.random().toString(36).substr(2, 9)}`
+    const inputId = useIdWithFallback(props.id, 'input')
 
     return (
       <S.InputWrapper $fullWidth={fullWidth} className={className}>
