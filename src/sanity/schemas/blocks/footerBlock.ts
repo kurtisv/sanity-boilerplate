@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { getBasicStyleFields } from '../shared/themeFields'
 
 export default defineType({
   name: 'footerBlock',
@@ -123,20 +124,9 @@ export default defineType({
       description: 'Texte affiché en bas du footer',
       initialValue: '© 2025 Mon Site. Tous droits réservés.',
     }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Couleur de fond',
-      type: 'string',
-      description: 'Couleur de fond du footer (code HEX)',
-      initialValue: '#f8f9fa',
-    }),
-    defineField({
-      name: 'textColor',
-      title: 'Couleur du texte',
-      type: 'string',
-      description: 'Couleur du texte du footer (code HEX)',
-      initialValue: '#6c757d',
-    }),
+
+    // Champs de thème unifiés
+    ...getBasicStyleFields(),
   ],
   preview: {
     prepare() {

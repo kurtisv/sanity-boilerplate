@@ -3,10 +3,9 @@
 import React from 'react'
 import Link from 'next/link'
 import { applyTheme, type ThemeSettings } from '@/lib/theme-utils'
-import { IconWrapper } from '@/components/ui/Icon'
 import '@/styles/theme-utilities.css'
 
-type HeroBlockProps = {
+type ThemedHeroBlockProps = {
   title: string
   subtitle?: string
   ctaButtons?: Array<{
@@ -22,7 +21,7 @@ type HeroBlockProps = {
   }
 } & ThemeSettings
 
-export default function HeroBlock({
+export default function ThemedHeroBlock({
   title,
   subtitle,
   ctaButtons = [],
@@ -31,10 +30,9 @@ export default function HeroBlock({
   backgroundSettings,
   styling,
   typography,
-  icon,
-}: HeroBlockProps) {
+}: ThemedHeroBlockProps) {
   // Appliquer le thème
-  const theme = applyTheme({ backgroundSettings, styling, typography, icon })
+  const theme = applyTheme({ backgroundSettings, styling, typography })
   
   // Déterminer la hauteur
   const getHeightClass = () => {
@@ -95,27 +93,22 @@ export default function HeroBlock({
             ${styling?.alignment === 'center' ? 'text-center' : ''}
             ${styling?.alignment === 'right' ? 'text-right' : ''}
           `}>
-            {/* Titre principal avec icône */}
-            <IconWrapper 
-              icon={theme.iconConfig}
-              className="mb-6"
+            {/* Titre principal */}
+            <h1 
+              className={`
+                font-bold mb-6 leading-tight
+                ${theme.headingClasses}
+                ${typography?.headingSize === 'sm' ? 'text-4xl' : ''}
+                ${typography?.headingSize === 'md' ? 'text-5xl' : ''}
+                ${typography?.headingSize === 'lg' ? 'text-6xl' : ''}
+                ${typography?.headingSize === 'xl' ? 'text-7xl' : ''}
+                ${typography?.headingSize === '2xl' ? 'text-8xl' : ''}
+                ${!typography?.headingSize ? 'text-5xl lg:text-6xl' : ''}
+              `}
+              style={{ color: styling?.headingColor || styling?.textColor }}
             >
-              <h1 
-                className={`
-                  font-bold leading-tight
-                  ${theme.headingClasses}
-                  ${typography?.headingSize === 'sm' ? 'text-4xl' : ''}
-                  ${typography?.headingSize === 'md' ? 'text-5xl' : ''}
-                  ${typography?.headingSize === 'lg' ? 'text-6xl' : ''}
-                  ${typography?.headingSize === 'xl' ? 'text-7xl' : ''}
-                  ${typography?.headingSize === '2xl' ? 'text-8xl' : ''}
-                  ${!typography?.headingSize ? 'text-5xl lg:text-6xl' : ''}
-                `}
-                style={{ color: styling?.headingColor || styling?.textColor }}
-              >
-                {title}
-              </h1>
-            </IconWrapper>
+              {title}
+            </h1>
 
             {/* Sous-titre */}
             {subtitle && (

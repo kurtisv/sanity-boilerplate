@@ -149,7 +149,9 @@ export default function ContactBlock({
       await new Promise(resolve => setTimeout(resolve, 2000))
       
       // TODO: Intégrer avec votre service d'email (Resend, SendGrid, etc.)
-      console.log('Form data:', formData)
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Form data:', formData)
+      }
       
       setIsSuccess(true)
       setFormData({})

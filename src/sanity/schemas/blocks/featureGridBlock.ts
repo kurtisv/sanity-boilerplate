@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { getThemeFieldsWithIcon } from '../shared/themeFields'
 
 export default defineType({
   name: 'featureGridBlock',
@@ -216,20 +217,8 @@ export default defineType({
       },
       initialValue: 'normal',
     }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Couleur de fond',
-      type: 'string',
-      description: 'Couleur de fond de la section (code HEX)',
-      initialValue: '#ffffff',
-    }),
-    defineField({
-      name: 'textColor',
-      title: 'Couleur du texte',
-      type: 'string',
-      description: 'Couleur du texte principal (code HEX)',
-      initialValue: '#1f2937',
-    }),
+    // Champs de thème unifiés avec icône
+    ...getThemeFieldsWithIcon(),
   ],
   preview: {
     select: {

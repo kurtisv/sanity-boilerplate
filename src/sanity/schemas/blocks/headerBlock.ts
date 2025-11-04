@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { getBasicStyleFields } from '../shared/themeFields'
 
 export default defineType({
   name: 'headerBlock',
@@ -117,20 +118,9 @@ export default defineType({
         },
       ],
     }),
-    defineField({
-      name: 'backgroundColor',
-      title: 'Couleur de fond',
-      type: 'string',
-      description: 'Couleur de fond du header (code HEX)',
-      initialValue: '#ffffff',
-    }),
-    defineField({
-      name: 'textColor',
-      title: 'Couleur du texte',
-      type: 'string',
-      description: 'Couleur du texte du header (code HEX)',
-      initialValue: '#000000',
-    }),
+
+    // Champs de thème unifiés
+    ...getBasicStyleFields(),
   ],
   preview: {
     prepare() {

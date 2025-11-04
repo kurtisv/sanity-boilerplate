@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { getBasicStyleFieldsWithIcon } from '../shared/themeFields'
 
 /**
  * TextBlock - Composant de texte riche
@@ -131,23 +132,6 @@ export default defineType({
     }),
     
     defineField({
-      name: 'backgroundColor',
-      title: 'Couleur de fond',
-      type: 'string',
-      description: 'Couleur de fond du bloc (optionnel)',
-      options: {
-        list: [
-          { title: 'Aucune', value: '' },
-          { title: 'Blanc', value: '#ffffff' },
-          { title: 'Gris clair', value: '#f3f4f6' },
-          { title: 'Gris', value: '#e5e7eb' },
-          { title: 'Primaire', value: '#3b82f6' },
-        ],
-      },
-      initialValue: '',
-    }),
-    
-    defineField({
       name: 'paddingSize',
       title: 'Espacement (padding)',
       type: 'string',
@@ -162,6 +146,9 @@ export default defineType({
       },
       initialValue: 'medium',
     }),
+
+    // Champs de thème unifiés avec icône
+    ...getBasicStyleFieldsWithIcon(),
   ],
   
   preview: {

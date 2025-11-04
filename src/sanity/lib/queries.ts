@@ -38,20 +38,28 @@ export const pageBySlugQuery = groq`
         backgroundSettings {
           backgroundType,
           backgroundColor,
-          gradientColors {
-            from,
-            to,
-            direction
+          gradientSettings {
+            gradientType,
+            preset,
+            custom {
+              from,
+              to,
+              via,
+              direction,
+              intensity
+            }
           },
           backgroundImage {
             asset->{
               _id,
               url
+            },
+            alt,
+            overlay {
+              enabled,
+              color,
+              opacity
             }
-          },
-          backgroundOverlay {
-            enabled,
-            color
           }
         },
         styling {
@@ -60,6 +68,13 @@ export const pageBySlugQuery = groq`
           verticalAlignment,
           height,
           spacing
+        },
+        icon {
+          iconType,
+          iconColor,
+          iconSize,
+          iconPosition,
+          iconStyle
         }
       },
       _type == 'featureGridBlock' => {
@@ -208,7 +223,48 @@ export const pageBySlugQuery = groq`
     noIndex,
     customCss,
     customJs,
-    publishedAt
+    publishedAt,
+    // Champs de style de page
+    pageBackgroundSettings {
+      backgroundType,
+      backgroundColor,
+      gradientSettings {
+        preset,
+        custom {
+          from,
+          to,
+          direction
+        }
+      },
+      backgroundImage {
+        asset->{
+          _id,
+          url
+        },
+        alt,
+        overlay {
+          enabled,
+          color,
+          opacity
+        }
+      }
+    },
+    pageLayout {
+      maxWidth,
+      padding,
+      gap
+    },
+    pageTypography {
+      fontFamily,
+      baseTextSize,
+      lineHeight
+    },
+    pageColors {
+      textColor,
+      headingColor,
+      accentColor,
+      linkColor
+    }
   }
 `
 

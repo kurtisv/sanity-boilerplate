@@ -21,14 +21,14 @@ Ce boilerplate combine **Next.js 16** et **Sanity CMS** pour offrir une solution
 
 ### 🎯 **Fonctionnalités Principales**
 
-- 🏗️ **Système de Blocs Universels** - 8 blocs prêts à l'emploi (Hero, Stats, Features, Contact, etc.)
-- 🎨 **Design Professionnel** - Interface moderne avec Tailwind CSS et design system
-- 🚀 **Import Automatique** - Interface d'administration pour importer la démo en un clic
-- 📱 **100% Responsive** - Design adaptatif mobile-first
-- ⚡ **Performance Optimisée** - Next.js 16 avec App Router et Server Components
-- 🔧 **TypeScript Complet** - Sécurité de type sur tout le projet
-- 📊 **SEO Avancé** - Métadonnées dynamiques et optimisation automatique
-- 🎪 **Thèmes Personnalisables** - Système de design cohérent et extensible
+- 🧩 **Système de Blocs Avancé** - 8+ blocs universels avec 60+ options de personnalisation
+- 🎨 **Système de Thème Unifié** - 18 dégradés prédéfinis + dégradés personnalisés 3 couleurs
+- 🎯 **60+ Icônes Intégrées** - Lucide React avec styles et positions configurables
+- 🎨 **Styles de Page Globaux** - Personnalisation complète depuis Sanity Studio
+- 🚀 **Performance Optimisée** - Next.js 16 + React 19 avec imports dynamiques
+- 🔧 **Code Propre & Structuré** - Architecture modulaire avec types centralisés
+- 📊 **SEO Avancé** - Métadonnées dynamiques et gestion 404 correcte
+- ⚡ **Interface d'Administration** - Configuration automatique en un clic
 
 ## 🚀 **Démarrage Rapide**
 
@@ -81,19 +81,52 @@ npm run demo:import
 
 ---
 
+## 🆕 **Nouvelles Fonctionnalités (v2.0)**
+
+### 🎨 **Système de Thème Unifié**
+- **18 dégradés prédéfinis** : Sunset, Ocean, Fire, Dark Ocean, Pastel, etc.
+- **Dégradés personnalisés** : 3 couleurs (from, via, to) + 9 directions + radial
+- **Contrôle d'intensité** : 0-100% d'opacité pour tous les dégradés
+
+### 🎯 **Système d'Icônes Avancé**
+- **60+ icônes Lucide React** organisées par catégories
+- **5 tailles** : 16px à 64px
+- **4 positions** : au-dessus, gauche, droite, arrière-plan
+- **6 styles** : normal, fond coloré, bordure, ombre, cercle, arrondi
+
+### 🎨 **Styles de Page Globaux**
+- **Arrière-plans de page** : couleur, dégradé, image avec overlay
+- **Typographie globale** : 9 polices + tailles + hauteurs de ligne
+- **Couleurs globales** : texte, titres, accent, liens
+- **Mise en page** : largeur max, padding, espacement entre blocs
+
+### 🧹 **Code Nettoyé & Optimisé**
+- **Types centralisés** dans `/src/types/blocks.ts`
+- **Configuration centralisée** dans `/src/config/constants.ts`
+- **Utilitaires communs** dans `/src/utils/common.ts`
+- **Imports dynamiques** pour optimiser les performances
+- **Console.log conditionnels** (développement uniquement)
+
+### 🚫 **Gestion 404 Corrigée**
+- **Routage précis** : seuls `/` et `/home` pointent vers la page home
+- **Vraies pages 404** pour les slugs inexistants
+- **Messages de debug** en développement
+
+---
+
 ## 🧩 **Blocs Universels Inclus**
 
-| Bloc | Icône | Description | Fonctionnalités |
-|------|-------|-------------|-----------------|
-| **HeroBlock** | 🦸 | Bannière principale | Gradients, boutons multiples, layouts |
-| **StatsBlock** | 📊 | Statistiques animées | Compteurs, animations, graphiques |
-| **FeatureGridBlock** | ⭐ | Grille de fonctionnalités | Icônes, descriptions, layouts flexibles |
-| **TextBlock** | 📝 | Contenu riche | Portable Text, listes, formatage |
-| **GalleryBlock** | 🖼️ | Galerie d'images | Lightbox, filtres, masonry |
-| **TeamBlock** | 👥 | Équipe et témoignages | Photos, réseaux sociaux, compétences |
-| **ContactBlock** | 📧 | Formulaire de contact | Validation, layouts, configuration |
-| **HeaderBlock** | 🎯 | En-tête de site | Logo, navigation, CTA |
-| **FooterBlock** | 🦶 | Pied de page | Liens, réseaux sociaux, colonnes |
+| Bloc | Icône | Description | Nouvelles Fonctionnalités |
+|------|-------|-------------|---------------------------|
+| **HeroBlock** | 🦸 | Bannière principale | 18 dégradés + icônes + styles avancés |
+| **StatsBlock** | 📊 | Statistiques animées | Dégradés radiaux + animations fluides |
+| **FeatureGridBlock** | ⭐ | Grille de fonctionnalités | 60+ icônes + système de thème unifié |
+| **TextBlock** | 📝 | Contenu riche | Icônes + styles de page globaux |
+| **GalleryBlock** | 🖼️ | Galerie d'images | Arrière-plans personnalisés + thèmes |
+| **TeamBlock** | 👥 | Équipe et témoignages | Icônes sociales + styles unifiés |
+| **ContactBlock** | 📧 | Formulaire de contact | Validation améliorée + thèmes |
+| **HeaderBlock** | 🎯 | En-tête de site | Styles globaux + configuration centralisée |
+| **FooterBlock** | 🦶 | Pied de page | Thèmes unifiés + personnalisation avancée |
 
 ---
 
@@ -103,21 +136,25 @@ npm run demo:import
 
 ```
 Frontend:
-├── Next.js 16 (App Router)
-├── React 19
-├── TypeScript 5
-├── Tailwind CSS
-└── Styled Components
+├── Next.js 16.0.1 (App Router + RSC)
+├── React 19.2.0 (avec React Compiler)
+├── TypeScript 5 (types centralisés)
+├── Styled Components 6.1.19
+├── Lucide React 0.445.0 (icônes)
+└── TailwindCSS (utilitaires)
 
-Backend:
-├── Sanity CMS
-├── GROQ (requêtes)
-└── Sanity Studio
+Backend & CMS:
+├── Sanity CMS 4.12.0
+├── GROQ (requêtes optimisées)
+├── PortableText (contenu riche)
+└── Sanity Studio (interface admin)
 
-Outils:
-├── ESLint + Prettier
-├── Husky (Git hooks)
-└── Scripts d'automatisation
+Architecture:
+├── Système de blocs modulaires
+├── Thèmes unifiés centralisés
+├── Types TypeScript partagés
+├── Imports dynamiques (performance)
+└── Configuration centralisée
 ```
 
 ### **Structure du Projet**

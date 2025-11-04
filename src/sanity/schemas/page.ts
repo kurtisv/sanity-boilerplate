@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { getPageStyleFields } from './shared/themeFields'
 
 export default defineType({
   name: 'page',
@@ -14,6 +15,10 @@ export default defineType({
     {
       name: 'seo',
       title: 'SEO',
+    },
+    {
+      name: 'style',
+      title: 'Style de la page',
     },
     {
       name: 'advanced',
@@ -59,6 +64,9 @@ export default defineType({
       ],
       group: 'content',
     }),
+    
+    // Onglet Style de la page
+    ...getPageStyleFields(),
     
     // Onglet SEO
     defineField({

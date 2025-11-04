@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { pageBySlugQuery } from '@/sanity/lib/queries'
 import ProfessionalDemo from './ProfessionalDemo'
-import type { Block } from '@/components/BlockRenderer'
+import type { Block } from '@/types/blocks'
 
 type Page = {
   _id: string

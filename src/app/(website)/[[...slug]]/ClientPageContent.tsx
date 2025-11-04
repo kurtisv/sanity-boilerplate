@@ -2,10 +2,9 @@
 
 import BlockRenderer from '@/components/BlockRenderer'
 import type { Block } from '@/components/BlockRenderer'
+import PageWrapper from '@/components/layout/PageWrapper'
+import type { PageStyleSettings } from '@/lib/theme-utils'
 import { 
-  PageContainer, 
-  PageContent, 
-  BlocksContainer, 
   EmptyState, 
   PageTitle, 
   PageMessage 
@@ -18,7 +17,7 @@ type Page = {
   pageBuilder?: Block[]
   seoTitle?: string
   seoDescription?: string
-}
+} & PageStyleSettings
 
 interface ClientPageContentProps {
   page: Page | null
@@ -27,23 +26,23 @@ interface ClientPageContentProps {
 export default function ClientPageContent({ page }: ClientPageContentProps) {
   if (!page) {
     return (
-      <PageContainer>
-        <PageContent>
+      <PageWrapper>
+        <div className="flex items-center justify-center min-h-[60vh]">
           <EmptyState>
             <PageTitle>Page non trouvée</PageTitle>
             <PageMessage>
               Cette page n'existe pas ou n'a pas encore été créée dans Sanity Studio.
             </PageMessage>
           </EmptyState>
-        </PageContent>
-      </PageContainer>
+        </div>
+      </PageWrapper>
     )
   }
 
   if (!page.pageBuilder || page.pageBuilder.length === 0) {
     return (
-      <PageContainer>
-        <PageContent>
+      <PageWrapper pageStyles={page}>
+        <div className="flex items-center justify-center min-h-[60vh]">
           <EmptyState>
             <PageTitle>{page.title}</PageTitle>
             <PageMessage>
@@ -51,18 +50,14 @@ export default function ClientPageContent({ page }: ClientPageContentProps) {
               Ajoutez du contenu via Sanity Studio.
             </PageMessage>
           </EmptyState>
-        </PageContent>
-      </PageContainer>
+        </div>
+      </PageWrapper>
     )
   }
 
   return (
-    <PageContainer>
-      <PageContent>
-        <BlocksContainer>
-          <BlockRenderer blocks={page.pageBuilder} />
-        </BlocksContainer>
-      </PageContent>
-    </PageContainer>
+    <PageWrapper pageStyles={page}>
+      <BlockRenderer blocks={page.pageBuilder} />
+    </PageWrapper>
   )
 }

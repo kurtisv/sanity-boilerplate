@@ -1,4 +1,5 @@
 import { defineType, defineField } from 'sanity'
+import { getThemeFields } from '../shared/themeFields'
 
 export default defineType({
   name: 'contactBlock',
@@ -227,42 +228,9 @@ export default defineType({
         }),
       ],
     }),
-    defineField({
-      name: 'styling',
-      title: 'Apparence',
-      type: 'object',
-      fields: [
-        defineField({
-          name: 'backgroundColor',
-          title: 'Couleur de fond',
-          type: 'string',
-          description: 'Couleur de fond de la section (format HEX)',
-          initialValue: '#ffffff',
-          validation: (Rule) => Rule.regex(/^#[0-9A-Fa-f]{6}$/).error('Format HEX requis (ex: #ffffff)'),
-        }),
-        defineField({
-          name: 'textColor',
-          title: 'Couleur du texte',
-          type: 'string',
-          description: 'Couleur du texte (format HEX)',
-          initialValue: '#1f2937',
-          validation: (Rule) => Rule.regex(/^#[0-9A-Fa-f]{6}$/).error('Format HEX requis (ex: #1f2937)'),
-        }),
-        defineField({
-          name: 'spacing',
-          title: 'Espacement',
-          type: 'string',
-          options: {
-            list: [
-              { title: 'Compact', value: 'compact' },
-              { title: 'Normal', value: 'normal' },
-              { title: 'Large', value: 'large' },
-            ],
-          },
-          initialValue: 'normal',
-        }),
-      ],
-    }),
+
+    // Champs de thème unifiés
+    ...getThemeFields(),
   ],
   preview: {
     select: {

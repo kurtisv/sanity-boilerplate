@@ -1,0 +1,304 @@
+/* Système de thème CSS - Variables et utilitaires */
+
+:root {
+  /* Couleurs de base */
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-gray-50: #f8fafc;
+  --color-gray-100: #f1f5f9;
+  --color-gray-500: #64748b;
+  --color-gray-700: #334155;
+  
+  /* Couleurs primaires */
+  --color-blue-500: #3b82f6;
+  --color-blue-700: #1e40af;
+  --color-indigo-500: #6366f1;
+  --color-violet-500: #8b5cf6;
+  
+  /* Couleurs secondaires */
+  --color-green-500: #10b981;
+  --color-green-600: #059669;
+  --color-emerald-400: #06d6a0;
+  --color-teal-500: #14b8a6;
+  
+  /* Couleurs d'accent */
+  --color-orange-500: #f97316;
+  --color-red-500: #ef4444;
+  --color-pink-500: #ec4899;
+  --color-yellow-500: #eab308;
+  
+  /* Espacements */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  --spacing-4xl: 5rem;
+  
+  /* Rayons de bordure */
+  --radius-none: 0;
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+  --radius-full: 9999px;
+  
+  /* Ombres */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* Transitions */
+  --transition-fast: 150ms ease-in-out;
+  --transition-base: 300ms ease-in-out;
+  --transition-slow: 500ms ease-in-out;
+}
+
+/* Classes utilitaires pour les couleurs */
+.bg-solid { background-color: var(--bg-color, #ffffff); }
+.bg-gradient { background: var(--bg-gradient, linear-gradient(135deg, #3b82f6, #8b5cf6)); }
+.bg-transparent { background-color: transparent; }
+
+.text-primary { color: var(--text-color, #374151); }
+.text-heading { color: var(--heading-color, #1f2937); }
+.text-accent { color: var(--accent-color, #3b82f6); }
+
+/* Classes utilitaires pour l'alignement */
+.align-left { text-align: left; }
+.align-center { text-align: center; }
+.align-right { text-align: right; }
+
+/* Classes utilitaires pour l'espacement */
+.spacing-compact { 
+  padding: var(--spacing-md) 0; 
+  gap: var(--spacing-sm);
+}
+.spacing-normal { 
+  padding: var(--spacing-xl) 0; 
+  gap: var(--spacing-md);
+}
+.spacing-comfortable { 
+  padding: var(--spacing-2xl) 0; 
+  gap: var(--spacing-lg);
+}
+.spacing-large { 
+  padding: var(--spacing-3xl) 0; 
+  gap: var(--spacing-xl);
+}
+.spacing-xl { 
+  padding: var(--spacing-4xl) 0; 
+  gap: var(--spacing-2xl);
+}
+
+/* Classes utilitaires pour les styles de cartes */
+.card-minimal {
+  background: var(--bg-color, #ffffff);
+  border: none;
+  border-radius: var(--border-radius, var(--radius-md));
+}
+
+.card-bordered {
+  background: var(--bg-color, #ffffff);
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  border-radius: var(--border-radius, var(--radius-md));
+}
+
+.card-shadow {
+  background: var(--bg-color, #ffffff);
+  border: none;
+  border-radius: var(--border-radius, var(--radius-md));
+  box-shadow: var(--shadow-md);
+}
+
+.card-elevated {
+  background: var(--bg-color, #ffffff);
+  border: none;
+  border-radius: var(--border-radius, var(--radius-lg));
+  box-shadow: var(--shadow-lg);
+  transform: translateY(0);
+  transition: all var(--transition-base);
+}
+
+.card-elevated:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+}
+
+.card-colored {
+  background: var(--accent-color, #3b82f6);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius, var(--radius-md));
+}
+
+.card-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--border-radius, var(--radius-lg));
+}
+
+/* Classes utilitaires pour les rayons de bordure */
+.radius-none { border-radius: var(--radius-none); }
+.radius-sm { border-radius: var(--radius-sm); }
+.radius-md { border-radius: var(--radius-md); }
+.radius-lg { border-radius: var(--radius-lg); }
+.radius-xl { border-radius: var(--radius-xl); }
+.radius-full { border-radius: var(--radius-full); }
+
+/* Classes utilitaires pour les animations */
+.animate-fade {
+  animation: fadeIn var(--animation-duration, 600ms) ease-out var(--animation-delay, 0ms) both;
+}
+
+.animate-slide-up {
+  animation: slideUp var(--animation-duration, 600ms) ease-out var(--animation-delay, 0ms) both;
+}
+
+.animate-slide-left {
+  animation: slideLeft var(--animation-duration, 600ms) ease-out var(--animation-delay, 0ms) both;
+}
+
+.animate-zoom {
+  animation: zoomIn var(--animation-duration, 600ms) ease-out var(--animation-delay, 0ms) both;
+}
+
+.animate-rotate {
+  animation: rotateIn var(--animation-duration, 600ms) ease-out var(--animation-delay, 0ms) both;
+}
+
+/* Keyframes pour les animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { 
+    opacity: 0; 
+    transform: translateY(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
+  }
+}
+
+@keyframes slideLeft {
+  from { 
+    opacity: 0; 
+    transform: translateX(30px); 
+  }
+  to { 
+    opacity: 1; 
+    transform: translateX(0); 
+  }
+}
+
+@keyframes zoomIn {
+  from { 
+    opacity: 0; 
+    transform: scale(0.9); 
+  }
+  to { 
+    opacity: 1; 
+    transform: scale(1); 
+  }
+}
+
+@keyframes rotateIn {
+  from { 
+    opacity: 0; 
+    transform: rotate(-10deg) scale(0.9); 
+  }
+  to { 
+    opacity: 1; 
+    transform: rotate(0deg) scale(1); 
+  }
+}
+
+/* Classes responsive */
+@media (max-width: 768px) {
+  .spacing-compact { padding: var(--spacing-sm) 0; }
+  .spacing-normal { padding: var(--spacing-md) 0; }
+  .spacing-comfortable { padding: var(--spacing-lg) 0; }
+  .spacing-large { padding: var(--spacing-xl) 0; }
+  .spacing-xl { padding: var(--spacing-2xl) 0; }
+}
+
+/* Utilitaires pour les polices */
+.font-system { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+.font-inter { font-family: 'Inter', sans-serif; }
+.font-roboto { font-family: 'Roboto', sans-serif; }
+.font-opensans { font-family: 'Open Sans', sans-serif; }
+.font-lato { font-family: 'Lato', sans-serif; }
+.font-montserrat { font-family: 'Montserrat', sans-serif; }
+.font-poppins { font-family: 'Poppins', sans-serif; }
+.font-playfair { font-family: 'Playfair Display', serif; }
+.font-merriweather { font-family: 'Merriweather', serif; }
+
+/* Tailles de texte */
+.text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+.text-md { font-size: 1rem; line-height: 1.5rem; }
+.text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+
+.heading-sm { font-size: 1.5rem; line-height: 2rem; }
+.heading-md { font-size: 2rem; line-height: 2.5rem; }
+.heading-lg { font-size: 2.5rem; line-height: 3rem; }
+.heading-xl { font-size: 3rem; line-height: 3.5rem; }
+.heading-2xl { font-size: 4rem; line-height: 4.5rem; }
+
+/* Hauteurs de ligne */
+.leading-tight { line-height: 1.25; }
+.leading-normal { line-height: 1.5; }
+.leading-relaxed { line-height: 1.75; }
+
+/* Poids de police */
+.font-light { font-weight: 300; }
+.font-normal { font-weight: 400; }
+.font-medium { font-weight: 500; }
+.font-semibold { font-weight: 600; }
+.font-bold { font-weight: 700; }
+
+/* Variables de page globales */
+.page-styled {
+  color: var(--page-text-color, inherit);
+}
+
+.page-styled h1,
+.page-styled h2,
+.page-styled h3,
+.page-styled h4,
+.page-styled h5,
+.page-styled h6 {
+  color: var(--page-heading-color, inherit);
+}
+
+.page-styled a {
+  color: var(--page-link-color, var(--page-accent-color, #3b82f6));
+}
+
+.page-styled .accent {
+  color: var(--page-accent-color, #3b82f6);
+}
+
+/* Classes utilitaires pour l'espacement des blocs */
+.blocks-gap-none > * + * { margin-top: 0; }
+.blocks-gap-sm > * + * { margin-top: 1rem; }
+.blocks-gap-md > * + * { margin-top: 2rem; }
+.blocks-gap-lg > * + * { margin-top: 3rem; }
+.blocks-gap-xl > * + * { margin-top: 4rem; }
+
+/* Classes responsive pour les pages */
+@media (max-width: 640px) {
+  .page-styled {
+    font-size: 0.875rem;
+  }
+  
+  .blocks-gap-md > * + * { margin-top: 1.5rem; }
+  .blocks-gap-lg > * + * { margin-top: 2rem; }
+  .blocks-gap-xl > * + * { margin-top: 2.5rem; }
+}
