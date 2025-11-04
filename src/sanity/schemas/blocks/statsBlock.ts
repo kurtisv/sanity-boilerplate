@@ -47,6 +47,8 @@ export default defineType({
       of: [
         {
           type: 'object',
+          name: 'stat',
+          title: 'Statistique',
           fields: [
             defineField({
               name: 'number',
@@ -151,7 +153,7 @@ export default defineType({
               return {
                 title: `${icon ? icon + ' ' : ''}${displayNumber}`,
                 subtitle: `${label || 'Sans label'}${featured ? ' • ⭐ Mis en avant' : ''}`,
-                media: featured ? '📊' : '📈',
+                media: featured ? 'chart-bar' : 'trending-up',
               }
             },
           },
@@ -181,6 +183,42 @@ export default defineType({
           hidden: ({ parent }) => !parent?.enableAnimations,
         }),
         defineField({
+          name: 'animationType',
+          title: 'Type d\'animation',
+          type: 'string',
+          description: 'Type d\'animation pour les compteurs',
+          options: {
+            list: [
+              { title: 'Count Up (compteur)', value: 'countUp' },
+              { title: 'Fade In (apparition)', value: 'fadeIn' },
+              { title: 'Slide Up (glissement)', value: 'slideUp' },
+              { title: 'Scale (agrandissement)', value: 'scale' },
+              { title: 'Bounce (rebond)', value: 'bounce' },
+            ],
+            layout: 'dropdown',
+          },
+          initialValue: 'countUp',
+          hidden: ({ parent }) => !parent?.enableAnimations,
+        }),
+        defineField({
+          name: 'duration',
+          title: 'Durée de l\'animation (ms)',
+          type: 'number',
+          description: 'Durée totale de l\'animation en millisecondes',
+          initialValue: 2000,
+          validation: (Rule) => Rule.min(100).max(10000),
+          hidden: ({ parent }) => !parent?.enableAnimations,
+        }),
+        defineField({
+          name: 'delay',
+          title: 'Délai avant animation (ms)',
+          type: 'number',
+          description: 'Délai avant le début de l\'animation',
+          initialValue: 200,
+          validation: (Rule) => Rule.min(0).max(2000),
+          hidden: ({ parent }) => !parent?.enableAnimations,
+        }),
+        defineField({
           name: 'staggerDelay',
           title: 'Délai entre animations (ms)',
           type: 'number',
@@ -199,7 +237,11 @@ export default defineType({
               { title: 'Ease In', value: 'easeIn' },
               { title: 'Ease Out', value: 'easeOut' },
               { title: 'Ease In Out', value: 'easeInOut' },
+              { title: 'Ease Out Quart', value: 'easeOutQuart' },
+              { title: 'Ease Out Cubic', value: 'easeOutCubic' },
+              { title: 'Ease Out Back', value: 'easeOutBack' },
               { title: 'Bounce', value: 'bounce' },
+              { title: 'Elastic', value: 'elastic' },
             ],
           },
           initialValue: 'easeOut',
@@ -222,7 +264,7 @@ export default defineType({
       return {
         title: title || 'Bloc de statistiques',
         subtitle: `${layout} • ${statsCount || 0} stats${enableAnimations ? ' • Animé' : ''}`,
-        media: '📊',
+        media: 'chart-bar',
       }
     },
   },

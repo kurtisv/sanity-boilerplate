@@ -3,7 +3,21 @@
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
-import * as S from './TextBlock.styles'
+import {
+  Container,
+  Content,
+  RichText,
+  Link,
+  Underline,
+  InlineCode,
+  Blockquote,
+  UnorderedList,
+  OrderedList,
+  ListItem,
+  ImageWrapper,
+  ImageContainer,
+  ImageCaption
+} from './TextBlock.styles'
 
 /**
  * TextBlock Component
@@ -28,7 +42,7 @@ type TextBlockProps = {
   paddingSize?: 'small' | 'medium' | 'large'
 }
 
-export default function TextBlock(props: TextBlockProps) {
+function TextBlock(props: TextBlockProps) {
   const {
     content,
     alignment = 'left',
@@ -50,31 +64,31 @@ export default function TextBlock(props: TextBlockProps) {
       h3: ({ children }) => <h3>{children}</h3>,
       h4: ({ children }) => <h4>{children}</h4>,
       normal: ({ children }) => <p>{children}</p>,
-      blockquote: ({ children }) => <S.Blockquote>{children}</S.Blockquote>,
+      blockquote: ({ children }) => <Blockquote>{children}</Blockquote>,
     },
 
     list: {
-      bullet: ({ children }) => <S.UnorderedList>{children}</S.UnorderedList>,
-      number: ({ children }) => <S.OrderedList>{children}</S.OrderedList>,
+      bullet: ({ children }) => <UnorderedList>{children}</UnorderedList>,
+      number: ({ children }) => <OrderedList>{children}</OrderedList>,
     },
 
     listItem: {
-      bullet: ({ children }) => <S.ListItem>{children}</S.ListItem>,
-      number: ({ children }) => <S.ListItem>{children}</S.ListItem>,
+      bullet: ({ children }) => <ListItem>{children}</ListItem>,
+      number: ({ children }) => <ListItem>{children}</ListItem>,
     },
 
     marks: {
       strong: ({ children }) => <strong>{children}</strong>,
       em: ({ children }) => <em>{children}</em>,
-      underline: ({ children }) => <S.Underline>{children}</S.Underline>,
-      code: ({ children }) => <S.InlineCode>{children}</S.InlineCode>,
+      underline: ({ children }) => <Underline>{children}</Underline>,
+      code: ({ children }) => <InlineCode>{children}</InlineCode>,
       link: ({ value, children }) => {
         const target = value?.blank ? '_blank' : '_self'
         const rel = value?.blank ? 'noopener noreferrer' : undefined
         return (
-          <S.Link href={value?.href || '#'} target={target} rel={rel}>
+          <Link href={value?.href || '#'} target={target} rel={rel}>
             {children}
-          </S.Link>
+          </Link>
         )
       },
     },
@@ -90,8 +104,8 @@ export default function TextBlock(props: TextBlockProps) {
           .url()
 
         return (
-          <S.ImageWrapper>
-            <S.ImageContainer>
+          <ImageWrapper>
+            <ImageContainer>
               <Image
                 src={imageUrl}
                 alt={value.alt || 'Image'}
@@ -99,23 +113,25 @@ export default function TextBlock(props: TextBlockProps) {
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
                 style={{ objectFit: 'cover' }}
               />
-            </S.ImageContainer>
+            </ImageContainer>
             {value.caption && (
-              <S.ImageCaption>{value.caption}</S.ImageCaption>
+              <ImageCaption>{value.caption}</ImageCaption>
             )}
-          </S.ImageWrapper>
+          </ImageWrapper>
         )
       },
     },
   }
 
   return (
-    <S.Container $bgColor={backgroundColor}>
-      <S.Content $maxWidth={maxWidth} $padding={paddingSize}>
-        <S.RichText $alignment={alignment}>
+    <Container $bgColor={backgroundColor}>
+      <Content $maxWidth={maxWidth} $padding={paddingSize}>
+        <RichText $alignment={alignment}>
           <PortableText value={content} components={components} />
-        </S.RichText>
-      </S.Content>
-    </S.Container>
+        </RichText>
+      </Content>
+    </Container>
   )
 }
+
+export default TextBlock

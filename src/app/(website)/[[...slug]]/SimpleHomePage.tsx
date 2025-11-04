@@ -321,7 +321,7 @@ export default function SimpleHomePage() {
               </Link>
             </div>
 
-            {/* Vitrine Studio */}
+            {/* Services */}
             <div style={{
               background: '#f8fafc',
               border: '2px solid #e2e8f0',
@@ -334,6 +334,60 @@ export default function SimpleHomePage() {
                 width: '80px',
                 height: '80px',
                 background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                borderRadius: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 1.5rem',
+                fontSize: '2rem'
+              }}>
+                🛠️
+              </div>
+              <h3 style={{
+                fontSize: '1.5rem',
+                fontWeight: '600',
+                color: '#1a202c',
+                marginBottom: '1rem'
+              }}>
+                Nos Services
+              </h3>
+              <p style={{
+                fontSize: '1rem',
+                color: '#4a5568',
+                lineHeight: '1.6',
+                marginBottom: '2rem'
+              }}>
+                Découvrez nos services de développement web professionnel. Solutions complètes avec Next.js et Sanity CMS.
+              </p>
+              <Link href="/services" style={{
+                background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                color: 'white',
+                padding: '1rem 2rem',
+                borderRadius: '10px',
+                textDecoration: 'none',
+                fontWeight: '600',
+                fontSize: '1rem',
+                display: 'inline-block',
+                transition: 'all 0.3s',
+                boxShadow: '0 4px 12px rgba(5, 150, 105, 0.4)'
+              }}>
+                Voir nos Services →
+              </Link>
+            </div>
+
+            {/* Vitrine Studio */}
+            <div style={{
+              background: '#f8fafc',
+              border: '2px solid #e2e8f0',
+              borderRadius: '16px',
+              padding: '2.5rem',
+              textAlign: 'center',
+              transition: 'all 0.3s'
+            }}>
+              <div style={{
+                width: '80px',
+                height: '80px',
+                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
                 borderRadius: '20px',
                 display: 'flex',
                 alignItems: 'center',
@@ -360,7 +414,7 @@ export default function SimpleHomePage() {
                 Page qui présente automatiquement tous les blocs que vous créez dans Studio. Mise à jour en temps réel et design professionnel.
               </p>
               <Link href="/studio-showcase" style={{
-                background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                background: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
                 color: 'white',
                 padding: '1rem 2rem',
                 borderRadius: '10px',
@@ -369,7 +423,7 @@ export default function SimpleHomePage() {
                 fontSize: '1rem',
                 display: 'inline-block',
                 transition: 'all 0.3s',
-                boxShadow: '0 4px 12px rgba(5, 150, 105, 0.4)'
+                boxShadow: '0 4px 12px rgba(139, 92, 246, 0.4)'
               }}>
                 Voir la Vitrine →
               </Link>

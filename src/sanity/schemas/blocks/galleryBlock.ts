@@ -315,7 +315,7 @@ export default defineType({
       return {
         title: title || 'Galerie d\'images',
         subtitle: `${layout} • ${imagesCount || 0} images`,
-        media: media || '🖼️',
+        media: media || 'image',
       }
     },
   },

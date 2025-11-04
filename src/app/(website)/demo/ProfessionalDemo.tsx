@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import BlockRenderer from '@/components/BlockRenderer'
+import BlockRenderer from '@/components/BlockRenderer/BlockRenderer'
 import type { Block } from '@/types/blocks'
 
 type Page = {

@@ -57,14 +57,25 @@ export interface ThemeSettings {
 }
 
 // Dégradés prédéfinis
-const gradientPresets = [
-  { from: '#3b82f6', to: '#8b5cf6', direction: 'to-br' }, // Bleu → Violet
-  { from: '#8b5cf6', to: '#ec4899', direction: 'to-br' }, // Violet → Rose
-  { from: '#10b981', to: '#3b82f6', direction: 'to-br' }, // Vert → Bleu
-  { from: '#f97316', to: '#ef4444', direction: 'to-br' }, // Orange → Rouge
-  { from: '#6366f1', to: '#8b5cf6', direction: 'to-br' }, // Indigo → Violet
-  { from: '#14b8a6', to: '#10b981', direction: 'to-br' }, // Teal → Vert
-]
+const gradientPresets: Record<string, { from: string; to: string; direction: string }> = {
+  'blue-violet': { from: '#3b82f6', to: '#8b5cf6', direction: 'to-br' }, // Bleu → Violet
+  'violet-rose': { from: '#8b5cf6', to: '#ec4899', direction: 'to-br' }, // Violet → Rose
+  'green-blue': { from: '#10b981', to: '#3b82f6', direction: 'to-br' }, // Vert → Bleu
+  'orange-red': { from: '#f97316', to: '#ef4444', direction: 'to-br' }, // Orange → Rouge
+  'indigo-violet': { from: '#6366f1', to: '#8b5cf6', direction: 'to-br' }, // Indigo → Violet
+  'teal-green': { from: '#14b8a6', to: '#10b981', direction: 'to-br' }, // Teal → Vert
+  'forest': { from: '#134e5e', to: '#71b280', direction: 'to-t' }, // Forest
+  'ocean': { from: '#667eea', to: '#764ba2', direction: 'to-br' }, // Ocean
+  'sunset': { from: '#ff7e5f', to: '#feb47b', direction: 'to-r' }, // Sunset
+  'fire': { from: '#f12711', to: '#f5af19', direction: 'to-r' }, // Fire
+  'ice': { from: '#a8edea', to: '#fed6e3', direction: 'to-br' }, // Ice
+  'purple-rain': { from: '#667db6', to: '#0082c8', direction: 'to-bl' }, // Purple Rain
+}
+
+// Fonction pour récupérer un preset par nom
+function getPresetByName(name: string) {
+  return gradientPresets[name] || null
+}
 
 /**
  * Génère les styles CSS pour les arrière-plans
@@ -84,11 +95,27 @@ export function getBackgroundStyles(backgroundSettings?: ThemeSettings['backgrou
     case 'gradient':
       if (backgroundSettings.gradientSettings?.gradientType === 'preset' && backgroundSettings.gradientSettings?.preset) {
         try {
-          const preset = JSON.parse(backgroundSettings.gradientSettings.preset)
-          if (preset.direction === 'radial') {
-            styles.background = `radial-gradient(circle, ${preset.from}, ${preset.to})`
+          // Gérer les presets qui peuvent être des objets ou des chaînes JSON
+          let preset
+          if (typeof backgroundSettings.gradientSettings.preset === 'string') {
+            // Si c'est une chaîne, essayer de la parser comme JSON
+            try {
+              preset = JSON.parse(backgroundSettings.gradientSettings.preset)
+            } catch {
+              // Si ce n'est pas du JSON valide, chercher dans les presets prédéfinis
+              preset = getPresetByName(backgroundSettings.gradientSettings.preset)
+            }
           } else {
-            styles.background = `linear-gradient(${preset.direction}, ${preset.from}, ${preset.to})`
+            // Si c'est déjà un objet
+            preset = backgroundSettings.gradientSettings.preset
+          }
+          
+          if (preset && preset.from && preset.to) {
+            if (preset.direction === 'radial') {
+              styles.background = `radial-gradient(circle, ${preset.from}, ${preset.to})`
+            } else {
+              styles.background = `linear-gradient(${preset.direction || 'to-br'}, ${preset.from}, ${preset.to})`
+            }
           }
         } catch (error) {
           console.error('Erreur lors du parsing du dégradé prédéfini:', error)
@@ -443,12 +470,30 @@ export function getPageVariables(pageStyles?: PageStyleSettings): Record<string,
  * Fonction utilitaire principale pour appliquer tous les styles de page
  */
 export function applyPageStyles(pageStyles?: PageStyleSettings) {
-  return {
-    containerStyle: {
-      ...getPageStyles(pageStyles),
-      ...getPageVariables(pageStyles),
-    },
-    containerClasses: getPageClasses(pageStyles),
-    blocksGapClass: pageStyles?.pageLayout?.gap ? `gap-${pageStyles.pageLayout.gap === 'sm' ? '4' : pageStyles.pageLayout.gap === 'md' ? '8' : pageStyles.pageLayout.gap === 'lg' ? '12' : pageStyles.pageLayout.gap === 'xl' ? '16' : '0'}` : 'gap-8',
+  // Vérification de sécurité supplémentaire
+  if (!pageStyles) {
+    return {
+      containerStyle: {},
+      containerClasses: '',
+      blocksGapClass: '',
+    }
+  }
+
+  try {
+    return {
+      containerStyle: {
+        ...getPageStyles(pageStyles),
+        ...getPageVariables(pageStyles),
+      },
+      containerClasses: '', // Plus utilisé car remplacé par CSS inline
+      blocksGapClass: '', // Plus utilisé car remplacé par CSS inline
+    }
+  } catch (error) {
+    console.error('Erreur dans applyPageStyles:', error)
+    return {
+      containerStyle: {},
+      containerClasses: '',
+      blocksGapClass: '',
+    }
   }
 }

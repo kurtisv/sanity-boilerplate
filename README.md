@@ -5,11 +5,11 @@
 ![Next.js](https://img.shields.io/badge/Next.js-16-black?style=for-the-badge&logo=next.js)
 ![Sanity](https://img.shields.io/badge/Sanity-CMS-red?style=for-the-badge&logo=sanity)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind-CSS-38B2AC?style=for-the-badge&logo=tailwind-css)
+![Styled Components](https://img.shields.io/badge/Styled--Components-DB7093?style=for-the-badge&logo=styled-components)
 
 **Un boilerplate moderne et professionnel pour créer des sites web performants**
 
-[🚀 Voir la Démo](http://localhost:3000/demo) • [📖 Documentation](#documentation) • [🎨 Studio](http://localhost:3000/studio) • [⚙️ Administration](http://localhost:3000/admin/demo)
+[🚀 Voir la Démo](http://localhost:3000/demo) • [📖 Documentation](#documentation) • [🎨 Studio](http://localhost:3000/studio) • [⚙️ Administration](http://localhost:3000/admin/demo) • [🚨 Troubleshooting](#-important-imports--types-pattern-éviter-les-erreurs)
 
 </div>
 
@@ -21,7 +21,7 @@ Ce boilerplate combine **Next.js 16** et **Sanity CMS** pour offrir une solution
 
 ### 🎯 **Fonctionnalités Principales**
 
-- 🧩 **Système de Blocs Avancé** - 8+ blocs universels avec 60+ options de personnalisation
+- 🧩 **Système de Blocs Avancé** - 7 blocs universels avec 60+ options de personnalisation
 - 🎨 **Système de Thème Unifié** - 18 dégradés prédéfinis + dégradés personnalisés 3 couleurs
 - 🎯 **60+ Icônes Intégrées** - Lucide React avec styles et positions configurables
 - 🎨 **Styles de Page Globaux** - Personnalisation complète depuis Sanity Studio
@@ -649,9 +649,21 @@ sanity-boilerplate/
 Ce boilerplate utilise une **Architecture Basée sur les Blocs** où :
 
 1. **Les gestionnaires de contenu** ajoutent des blocs de contenu dans Sanity Studio
-2. **Les blocs** sont des composants modulaires (TextBlock, HeroBlock, etc.)
+2. **Les blocs** sont des composants modulaires (7 blocs disponibles)
 3. **BlockRenderer** rend dynamiquement le bon composant selon le type de bloc
 4. **Les pages** sont composées de plusieurs blocs dans n'importe quel ordre
+
+### 🧩 Blocs Disponibles (7 blocs)
+
+| Bloc | Description | Utilisation |
+|------|-------------|-------------|
+| 📝 **TextBlock** | Contenu riche avec éditeur visuel | Articles, descriptions, contenu éditorial |
+| 🦸 **HeroBlock** | Sections héro avec boutons CTA | En-têtes de pages, sections d'accueil |
+| ⭐ **FeatureGridBlock** | Grilles de fonctionnalités et services | Présentation de services, avantages |
+| 📞 **ContactBlock** | Formulaires de contact et informations | Pages contact, formulaires de demande |
+| 🖼️ **GalleryBlock** | Galeries d'images et portfolios | Portfolios, galeries de projets |
+| 👥 **TeamBlock** | Membres d'équipe et témoignages | Pages équipe, témoignages clients |
+| 📊 **StatsBlock** | Statistiques et compteurs | Chiffres clés, métriques, performances |
 
 ### Flux de Données
 
@@ -1511,6 +1523,112 @@ export const pageBySlugQuery = groq`
 `
 ```
 
+### 5. **⚠️ IMPORTANT: Imports & Types Pattern (Éviter les Erreurs)**
+
+**🚨 RÈGLES CRITIQUES À SUIVRE :**
+
+#### **Types de Blocs - TOUJOURS importer depuis `/src/types/blocks`**
+
+```typescript
+// ✅ CORRECT - Toujours utiliser cette source
+import type { Block, TextBlockData, HeroBlockData } from '@/types/blocks'
+
+// ❌ INCORRECT - Ne jamais importer depuis BlockRenderer
+import type { Block } from '@/components/BlockRenderer'  // ERREUR!
+```
+
+#### **BlockRenderer - Import du composant uniquement**
+
+```typescript
+// ✅ CORRECT - Import du composant seulement
+import BlockRenderer from '@/components/BlockRenderer'
+import type { Block } from '@/types/blocks'  // Types depuis types/blocks
+
+// ❌ INCORRECT - Mélange d'imports
+import BlockRenderer, { Block } from '@/components/BlockRenderer'  // ERREUR!
+```
+
+#### **Structure des Fichiers de Types**
+
+```
+src/
+├── types/
+│   └── blocks.ts          # ✅ Source unique pour tous les types de blocs
+├── components/
+│   └── BlockRenderer/
+│       ├── index.ts       # ✅ Export du composant uniquement
+│       └── BlockRenderer.tsx
+```
+
+#### **Imports Dynamiques dans BlockRenderer**
+
+```typescript
+// ✅ CORRECT - Utiliser les chemins de dossier avec index.ts
+const TextBlock = dynamic(() => import('@/components/blocks/TextBlock'))
+const HeroBlock = dynamic(() => import('@/components/blocks/HeroBlock'))
+
+// ❌ INCORRECT - Chemins inconsistants
+const TextBlock = dynamic(() => import('@/components/blocks/TextBlock/TextBlock'))
+```
+
+#### **Exports des Composants de Blocs**
+
+```typescript
+// ✅ CORRECT - Dans chaque dossier de bloc, créer index.ts:
+// src/components/blocks/TextBlock/index.ts
+export { default } from './TextBlock'
+
+// ✅ CORRECT - Dans le composant principal:
+// src/components/blocks/TextBlock/TextBlock.tsx
+export default function TextBlock(props: TextBlockProps) {
+  // ...
+}
+```
+
+#### **Erreurs Communes à Éviter**
+
+| Erreur | Cause | Solution |
+|--------|-------|---------|
+| `Element type is invalid: expected a string or class/function but got: object` | Import de type au lieu de composant | Vérifier les imports, séparer types et composants |
+| `Module not found: Can't resolve '@/components/BlockRenderer'` | Chemin d'import incorrect | Utiliser `@/components/BlockRenderer` (avec index.ts) |
+| `Type 'Block' is not assignable` | Conflit de types entre sources | Toujours importer `Block` depuis `@/types/blocks` |
+| `Cannot read properties of undefined` | Export par défaut manquant | Vérifier `export default` dans les composants |
+
+#### **Checklist de Vérification**
+
+Avant d'ajouter un nouveau composant qui utilise BlockRenderer :
+
+- [ ] ✅ Import `BlockRenderer` depuis `@/components/BlockRenderer`
+- [ ] ✅ Import types depuis `@/types/blocks`
+- [ ] ✅ Pas d'import de types depuis BlockRenderer
+- [ ] ✅ Composant de bloc a un `export default`
+- [ ] ✅ Dossier de bloc a un `index.ts` avec `export { default }`
+- [ ] ✅ BlockRenderer utilise des imports dynamiques consistants
+
+#### **Exemple Complet Correct**
+
+```typescript
+// ✅ ClientPageContent.tsx - PATTERN CORRECT
+'use client'
+
+import BlockRenderer from '@/components/BlockRenderer'        // Composant
+import type { Block } from '@/types/blocks'                   // Types
+import type { PageStyleSettings } from '@/lib/theme-utils'
+
+type Page = {
+  _id: string
+  title: string
+  slug: { current: string }
+  pageBuilder?: Block[]  // Type depuis /types/blocks
+} & PageStyleSettings
+
+export default function ClientPageContent({ page }: { page: Page | null }) {
+  if (!page?.pageBuilder) return null
+  
+  return <BlockRenderer blocks={page.pageBuilder} />  // Composant
+}
+```
+
 ---
 
 ## 🚦 Development Workflow
@@ -1556,8 +1674,8 @@ npm run start
 - [Styled Components](https://styled-components.com/docs)
 
 ### Helpful Files
-- `TEXTBLOCK_USAGE.md` - Detailed TextBlock usage guide
-- `SETUP.md` - Environment setup and troubleshooting
+- `WEBHOOK_SETUP.md` - Webhook configuration guide
+- `README.md` - Complete documentation and troubleshooting
 
 ---
 
@@ -1664,6 +1782,12 @@ This is a **headless CMS solution** that separates content management from prese
 | Block | Description | Main Options |
 |-------|-------------|-------------|
 | **TextBlock** | Rich content with visual editor | Alignment, Width, Background color, Padding |
+| **HeroBlock** | Hero sections with CTA buttons | Layout, Height, Background, Icons, Buttons |
+| **FeatureGridBlock** | Feature grids and service showcases | Grid layouts, Card styles, Icons, Links |
+| **ContactBlock** | Contact forms and information | Form fields, Layout, Contact info, Styling |
+| **GalleryBlock** | Image galleries and portfolios | Grid/Masonry/Carousel layouts, Lightbox |
+| **TeamBlock** | Team members and testimonials | Member profiles, Social links, Bio, Skills |
+| **StatsBlock** | Statistics and counters | Animated numbers, Icons, Layouts, Featured stats |
 
 ### 💡 Practical Usage Examples
 
@@ -1805,6 +1929,79 @@ noIndex: true  // Activates <meta name="robots" content="noindex">
 3. **Register block**: Add to BlockRenderer switch
 4. **Update queries**: Add fields to GROQ query
 5. **Test**: Create test page in Studio
+
+---
+
+## 🚨 Common Issues & Troubleshooting
+
+### Import/Type Errors
+
+#### Error: "Element type is invalid: expected a string or class/function but got: object"
+
+**Cause**: Importing types instead of components, or conflicting type sources.
+
+**Solution**:
+```typescript
+// ✅ CORRECT
+import BlockRenderer from '@/components/BlockRenderer'
+import type { Block } from '@/types/blocks'
+
+// ❌ WRONG
+import type { Block } from '@/components/BlockRenderer'
+```
+
+#### Error: "Module not found: Can't resolve '@/components/BlockRenderer'"
+
+**Cause**: Missing index.ts file or incorrect export.
+
+**Solution**: Ensure `src/components/BlockRenderer/index.ts` exists:
+```typescript
+export { default } from './BlockRenderer'
+```
+
+#### Error: "Type 'Block' is not assignable"
+
+**Cause**: Type conflicts between different import sources.
+
+**Solution**: Always import `Block` type from `@/types/blocks`:
+```typescript
+import type { Block, TextBlockData, HeroBlockData } from '@/types/blocks'
+```
+
+### Sanity Permission Errors
+
+#### Error: "Insufficient permissions; permission 'create' required"
+
+**Cause**: Missing write token or incorrect token permissions.
+
+**Solution**:
+1. Create API token with **Editor** permissions in Sanity Dashboard
+2. Add to `.env.local`:
+```env
+SANITY_API_TOKEN=your-editor-token-here
+```
+3. Restart development server
+
+### Block Rendering Issues
+
+#### Error: "Block not recognized" in console
+
+**Cause**: Block type not registered in BlockRenderer.
+
+**Solution**: Add block to `src/components/BlockRenderer/BlockRenderer.tsx`:
+```typescript
+case 'yourBlockType':
+  return <YourBlock key={block._key} {...(block as any)} />
+```
+
+#### Error: Component not rendering
+
+**Cause**: Missing default export or incorrect dynamic import path.
+
+**Solution**: 
+1. Ensure component has `export default`
+2. Check dynamic import path in BlockRenderer
+3. Verify index.ts file exists in block directory
 
 ---
 

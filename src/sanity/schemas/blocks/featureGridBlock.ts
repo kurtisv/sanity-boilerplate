@@ -51,10 +51,32 @@ export default defineType({
           title: 'Fonctionnalité',
           fields: [
             {
-              name: 'icon',
-              title: 'Icône',
+              name: 'iconType',
+              title: 'Type d\'icône',
               type: 'string',
-              description: 'Choisissez une icône pour votre fonctionnalité',
+              description: 'Choisissez le type d\'icône',
+              options: {
+                list: [
+                  { title: '😀 Emoji', value: 'emoji' },
+                  { title: '🎨 Icône Lucide', value: 'lucide' },
+                ],
+                layout: 'radio',
+              },
+              initialValue: 'emoji',
+            },
+            {
+              name: 'iconEmoji',
+              title: 'Emoji',
+              type: 'string',
+              description: 'Emoji à afficher (ex: 🚀)',
+              hidden: ({ parent }) => parent?.iconType !== 'emoji',
+              initialValue: '⭐',
+            },
+            {
+              name: 'iconLucide',
+              title: 'Icône Lucide',
+              type: 'string',
+              description: 'Nom de l\'icône Lucide',
               options: {
                 list: [
                   { title: '⭐ Étoile', value: 'star' },
@@ -78,18 +100,34 @@ export default defineType({
                   { title: 'ℹ️ Information', value: 'info' },
                   { title: '💡 Ampoule', value: 'lightbulb' },
                   { title: '🎯 Cible', value: 'target' },
-                  { title: '📈 Tendance', value: 'trending' },
+                  { title: '📈 Tendance', value: 'trending-up' },
                   { title: '🏆 Récompense', value: 'award' },
                   { title: '🎁 Cadeau', value: 'gift' },
-                  { title: '🔥 Feu', value: 'fire' },
+                  { title: '🔥 Feu', value: 'flame' },
                   { title: '💎 Diamant', value: 'diamond' },
                   { title: '👑 Couronne', value: 'crown' },
-                  { title: '✨ Magie', value: 'magic' },
+                  { title: '✨ Magie', value: 'sparkles' },
                 ],
                 layout: 'dropdown',
               },
-              validation: (Rule) => Rule.required(),
+              hidden: ({ parent }) => parent?.iconType !== 'lucide',
               initialValue: 'star',
+            },
+            {
+              name: 'iconSize',
+              title: 'Taille de l\'icône',
+              type: 'string',
+              description: 'Taille de l\'icône',
+              options: {
+                list: [
+                  { title: 'Petite', value: 'small' },
+                  { title: 'Moyenne', value: 'medium' },
+                  { title: 'Grande', value: 'large' },
+                  { title: 'Extra grande', value: 'xl' },
+                ],
+                layout: 'dropdown',
+              },
+              initialValue: 'medium',
             },
             {
               name: 'iconColor',
@@ -110,6 +148,16 @@ export default defineType({
               type: 'text',
               rows: 4,
               validation: (Rule) => Rule.max(200),
+            },
+            {
+              name: 'details',
+              title: 'Détails (liste)',
+              type: 'array',
+              description: 'Liste de détails ou fonctionnalités spécifiques',
+              of: [{ type: 'string' }],
+              options: {
+                layout: 'tags',
+              },
             },
             {
               name: 'link',

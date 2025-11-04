@@ -1,7 +1,7 @@
 'use client'
 
-import BlockRenderer from '@/components/BlockRenderer'
-import type { Block } from '@/components/BlockRenderer'
+import BlockRenderer from '@/components/BlockRenderer/BlockRenderer'
+import type { Block } from '@/types/blocks'
 import Link from 'next/link'
 
 type Page = {

@@ -1,8 +1,8 @@
 'use client'
 
 import React from 'react'
-import { applyPageStyles, type PageStyleSettings } from '@/lib/theme-utils'
-import '@/styles/theme-utilities.css'
+import type { PageStyleSettings } from '@/lib/theme-utils'
+import * as S from './PageWrapper.styles'
 
 interface PageWrapperProps {
   children: React.ReactNode
@@ -15,41 +15,36 @@ export default function PageWrapper({
   pageStyles, 
   className = '' 
 }: PageWrapperProps) {
-  // Appliquer les styles de page
-  const pageTheme = applyPageStyles(pageStyles)
-  
-  // Styles pour la superposition d'image de fond
-  const overlayStyle = pageStyles?.pageBackgroundSettings?.backgroundImage?.overlay?.enabled ? {
-    position: 'absolute' as const,
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: pageStyles.pageBackgroundSettings.backgroundImage.overlay.color,
-    opacity: (pageStyles.pageBackgroundSettings.backgroundImage.overlay.opacity || 50) / 100,
-    zIndex: 1,
-  } : undefined
+  // Extraire les informations de style
+  const backgroundImage = pageStyles?.pageBackgroundSettings?.backgroundImage?.asset?.url
+  const backgroundColor = pageStyles?.pageBackgroundSettings?.backgroundColor
+  const hasOverlay = pageStyles?.pageBackgroundSettings?.backgroundImage?.overlay?.enabled
+  const overlayColor = pageStyles?.pageBackgroundSettings?.backgroundImage?.overlay?.color
+  const overlayOpacity = pageStyles?.pageBackgroundSettings?.backgroundImage?.overlay?.opacity
+  const blocksGap = pageStyles?.pageLayout?.gap as 'sm' | 'md' | 'lg' | 'xl' | undefined
 
   return (
-    <div
-      className={`min-h-screen relative page-styled ${className}`}
-      style={pageTheme.containerStyle}
+    <S.PageContainer
+      className={`page-styled ${className}`}
+      $backgroundImage={backgroundImage}
+      $backgroundColor={backgroundColor}
     >
       {/* Superposition pour image de fond */}
-      {overlayStyle && <div style={overlayStyle} />}
+      {hasOverlay && (
+        <S.BackgroundOverlay
+          $color={overlayColor}
+          $opacity={overlayOpacity}
+        />
+      )}
       
       {/* Contenu principal */}
-      <div className={`relative z-10 ${pageTheme.containerClasses}`}>
+      <S.ContentWrapper>
         {/* Container pour les blocs avec espacement */}
-        <div className={`flex flex-col ${pageTheme.blocksGapClass}`}>
+        <S.BlocksContainer $gap={blocksGap}>
           {children}
-        </div>
-      </div>
-    </div>
+        </S.BlocksContainer>
+      </S.ContentWrapper>
+    </S.PageContainer>
   )
 }
 
-// Hook pour utiliser les styles de page
-export function usePageStyles(pageStyles?: PageStyleSettings) {
-  return applyPageStyles(pageStyles)
-}

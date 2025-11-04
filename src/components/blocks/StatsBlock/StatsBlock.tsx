@@ -87,32 +87,37 @@ export default function StatsBlock({
   title,
   subtitle,
   layout = 'grid-3col',
-  stats = [],
-  animationSettings = {
+  stats,
+  animationSettings,
+  backgroundSettings,
+  styling,
+}: StatsBlockProps) {
+  // Normaliser les props pour gérer les cas null/undefined de Sanity
+  const normalizedStats = stats || []
+  const normalizedAnimationSettings = animationSettings || {
     enableAnimations: true,
     triggerOffset: 50,
     staggerDelay: 200,
-    easing: 'easeOut'
-  },
-  backgroundSettings = {
-    backgroundType: 'solid',
+    easing: 'easeOut' as const
+  }
+  const normalizedBackgroundSettings = backgroundSettings || {
+    backgroundType: 'solid' as const,
     backgroundColor: '#ffffff'
-  },
-  styling = {
+  }
+  const normalizedStyling = styling || {
     textColor: '#1f2937',
     numberColor: '#2563eb',
-    cardStyle: 'shadow',
-    spacing: 'normal',
-    alignment: 'center'
-  },
-}: StatsBlockProps) {
+    cardStyle: 'shadow' as const,
+    spacing: 'normal' as const,
+    alignment: 'center' as const
+  }
   const [animatedValues, setAnimatedValues] = useState<Record<number, number>>({})
   const [hasAnimated, setHasAnimated] = useState(false)
   const [currentSlide, setCurrentSlide] = useState(0)
   const sectionRef = useRef<HTMLElement>(null)
 
   // Trier les stats par ordre puis par featured
-  const sortedStats = [...stats].sort((a, b) => {
+  const sortedStats = [...normalizedStats].sort((a, b) => {
     if (a.featured && !b.featured) return -1
     if (!a.featured && b.featured) return 1
     return a.order - b.order
@@ -161,12 +166,12 @@ export default function StatsBlock({
 
   // Observer pour déclencher les animations
   useEffect(() => {
-    if (!animationSettings.enableAnimations || hasAnimated) return
+    if (!normalizedAnimationSettings.enableAnimations || hasAnimated) return
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && entry.intersectionRatio >= animationSettings.triggerOffset / 100) {
+          if (entry.isIntersecting && entry.intersectionRatio >= normalizedAnimationSettings.triggerOffset / 100) {
             setHasAnimated(true)
             
             sortedStats.forEach((stat, index) => {
@@ -174,17 +179,17 @@ export default function StatsBlock({
                 animateCounter(
                   stat.number,
                   stat.animationDuration,
-                  animationSettings.easing,
+                  normalizedAnimationSettings.easing,
                   (value) => {
                     setAnimatedValues(prev => ({ ...prev, [index]: value }))
                   }
                 )
-              }, index * animationSettings.staggerDelay)
+              }, index * normalizedAnimationSettings.staggerDelay)
             })
           }
         })
       },
-      { threshold: [0, 0.25, 0.5, 0.75, 1] }
+      { threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1] }
     )
 
     if (sectionRef.current) {
@@ -192,18 +197,18 @@ export default function StatsBlock({
     }
 
     return () => observer.disconnect()
-  }, [animationSettings, hasAnimated, sortedStats])
+  }, [normalizedAnimationSettings, hasAnimated, sortedStats])
 
   // Initialiser les valeurs sans animation si désactivée
   useEffect(() => {
-    if (!animationSettings.enableAnimations) {
+    if (!normalizedAnimationSettings.enableAnimations) {
       const initialValues: Record<number, number> = {}
       sortedStats.forEach((stat, index) => {
         initialValues[index] = stat.number
       })
       setAnimatedValues(initialValues)
     }
-  }, [animationSettings.enableAnimations, sortedStats])
+  }, [normalizedAnimationSettings.enableAnimations, sortedStats])
 
   // Gestion du carrousel
   const nextSlide = () => {
@@ -233,14 +238,14 @@ export default function StatsBlock({
     return (
       <S.StatCard
         key={index}
-        $cardStyle={styling.cardStyle}
+        $cardStyle={normalizedStyling.cardStyle}
         $featured={stat.featured}
         $animationType={stat.animationType}
-        $alignment={styling.alignment}
+        $alignment={normalizedStyling.alignment}
         $customColor={stat.color}
       >
-        <Card variant={getCardVariant(styling.cardStyle)} padding="lg" hoverable>
-          <S.StatContent $alignment={styling.alignment}>
+        <Card variant={getCardVariant(normalizedStyling.cardStyle)} padding="lg" hoverable>
+          <S.StatContent $alignment={normalizedStyling.alignment}>
             {stat.icon && (
               <S.StatIcon $featured={stat.featured}>
                 <span>{stat.icon}</span>
@@ -248,19 +253,19 @@ export default function StatsBlock({
             )}
 
             <S.StatNumber
-              $textColor={stat.color || styling.numberColor}
+              $textColor={stat.color || normalizedStyling.numberColor}
               $featured={stat.featured}
               $animationType={stat.animationType}
             >
               {displayValue}
             </S.StatNumber>
 
-            <S.StatLabel $textColor={styling.textColor} $featured={stat.featured}>
+            <S.StatLabel $textColor={normalizedStyling.textColor} $featured={stat.featured}>
               {stat.label}
             </S.StatLabel>
 
             {stat.description && (
-              <S.StatDescription $textColor={styling.textColor}>
+              <S.StatDescription $textColor={normalizedStyling.textColor}>
                 {stat.description}
               </S.StatDescription>
             )}
@@ -270,21 +275,21 @@ export default function StatsBlock({
     )
   }
 
-  if (!stats || stats.length === 0) {
+  if (!normalizedStats || normalizedStats.length === 0) {
     return null
   }
 
   return (
     <S.Section
       ref={sectionRef}
-      $backgroundSettings={backgroundSettings}
-      $spacing={styling.spacing}
+      $backgroundSettings={normalizedBackgroundSettings}
+      $spacing={normalizedStyling.spacing}
     >
       {/* Image de fond */}
-      {backgroundSettings.backgroundType === 'image' && backgroundSettings.backgroundImage && (
+      {normalizedBackgroundSettings.backgroundType === 'image' && normalizedBackgroundSettings.backgroundImage && (
         <S.BackgroundImage>
           <Image
-            src={urlFor(backgroundSettings.backgroundImage).width(1920).height(1080).url()}
+            src={urlFor(normalizedBackgroundSettings.backgroundImage).width(1920).height(1080).url()}
             alt=""
             fill
             style={{ objectFit: 'cover' }}
@@ -294,24 +299,24 @@ export default function StatsBlock({
       )}
 
       {/* Superposition */}
-      {backgroundSettings.overlay?.enabled && (
+      {normalizedBackgroundSettings.overlay?.enabled && (
         <S.Overlay
-          $color={backgroundSettings.overlay.color}
-          $opacity={backgroundSettings.overlay.opacity}
+          $color={normalizedBackgroundSettings.overlay.color}
+          $opacity={normalizedBackgroundSettings.overlay.opacity}
         />
       )}
 
       <S.Container>
         {/* En-tête */}
         {(title || subtitle) && (
-          <S.Header $alignment={styling.alignment}>
+          <S.Header $alignment={normalizedStyling.alignment}>
             {title && (
-              <S.Title $textColor={styling.textColor}>
+              <S.Title $textColor={normalizedStyling.textColor}>
                 {title}
               </S.Title>
             )}
             {subtitle && (
-              <S.Subtitle $textColor={styling.textColor}>
+              <S.Subtitle $textColor={normalizedStyling.textColor} $alignment={normalizedStyling.alignment}>
                 {subtitle}
               </S.Subtitle>
             )}

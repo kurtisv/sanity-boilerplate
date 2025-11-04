@@ -250,7 +250,7 @@ export default defineType({
               return {
                 title: `${content?.substring(0, 60)}...` || 'Témoignage',
                 subtitle: `${authorName || 'Anonyme'}${company ? ` - ${company}` : ''} ${stars}${featured ? ' • Mis en avant' : ''}`,
-                media: '💬',
+                media: 'message-circle',
               }
             },
           },
@@ -391,7 +391,7 @@ export default defineType({
       return {
         title: title || `${type}`,
         subtitle: `${layout} • ${count || 0} éléments`,
-        media: blockType === 'team' ? '👥' : blockType === 'testimonials' ? '💬' : '🎭',
+        media: blockType === 'team' ? 'users' : blockType === 'testimonials' ? 'message-circle' : 'theater',
       }
     },
   },

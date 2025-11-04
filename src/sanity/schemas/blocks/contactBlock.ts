@@ -107,7 +107,7 @@ export default defineType({
               return {
                 title: label || fieldType,
                 subtitle: `${fieldType}${required ? ' (obligatoire)' : ''}`,
-                media: required ? '🔴' : '⚪',
+                media: required ? 'alert-circle' : 'circle',
               }
             },
           },
@@ -242,7 +242,7 @@ export default defineType({
       return {
         title: title || 'Formulaire de contact',
         subtitle: `${layout} • ${fieldsCount || 0} champs`,
-        media: '📧',
+        media: 'mail',
       }
     },
   },

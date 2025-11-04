@@ -1,1 +1,2 @@
-export { default } from './TextBlock'
+import TextBlock from './TextBlock'
+export default TextBlock

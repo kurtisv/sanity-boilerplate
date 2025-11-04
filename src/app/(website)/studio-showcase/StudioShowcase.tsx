@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import BlockRenderer from '@/components/BlockRenderer'
-import type { Block } from '@/components/BlockRenderer'
+import BlockRenderer from '@/components/BlockRenderer/BlockRenderer'
+import type { Block } from '@/types/blocks'
 
 type Page = {
   _id: string

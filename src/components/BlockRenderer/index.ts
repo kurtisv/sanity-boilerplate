@@ -1,2 +1,2 @@
-export { default } from './BlockRenderer'
-export type { Block } from '@/types/blocks'
+import BlockRenderer from './BlockRenderer'
+export default BlockRenderer

@@ -4,7 +4,7 @@ import { client } from '@/sanity/lib/client'
 import { pageBySlugQuery } from '@/sanity/lib/queries'
 import ClientPageContent from './ClientPageContent'
 import SimpleHomePage from './SimpleHomePage'
-import type { Block } from '@/components/BlockRenderer'
+import type { Block } from '@/types/blocks'
 import type { PageStyleSettings } from '@/lib/theme-utils'
 
 type Page = {

@@ -1,7 +1,7 @@
 'use client'
 
-import BlockRenderer from '@/components/BlockRenderer'
-import type { Block } from '@/components/BlockRenderer'
+import BlockRenderer from '@/components/BlockRenderer/BlockRenderer'
+import type { Block } from '@/types/blocks'
 import PageWrapper from '@/components/layout/PageWrapper'
 import type { PageStyleSettings } from '@/lib/theme-utils'
 import { 
@@ -27,7 +27,7 @@ export default function ClientPageContent({ page }: ClientPageContentProps) {
   if (!page) {
     return (
       <PageWrapper>
-        <div className="flex items-center justify-center min-h-[60vh]">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
           <EmptyState>
             <PageTitle>Page non trouvée</PageTitle>
             <PageMessage>
@@ -42,7 +42,7 @@ export default function ClientPageContent({ page }: ClientPageContentProps) {
   if (!page.pageBuilder || page.pageBuilder.length === 0) {
     return (
       <PageWrapper pageStyles={page}>
-        <div className="flex items-center justify-center min-h-[60vh]">
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
           <EmptyState>
             <PageTitle>{page.title}</PageTitle>
             <PageMessage>

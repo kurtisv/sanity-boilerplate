@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
-import { Card } from '@/components/ui'
 import * as S from './TeamBlock.styles'
 
 type SocialLinks = {
@@ -73,12 +72,12 @@ type TeamBlockProps = {
   layout: 'grid' | 'carousel' | 'list' | 'hero-grid'
   teamMembers?: TeamMember[]
   testimonials?: Testimonial[]
-  gridSettings: GridSettings
-  carouselSettings: CarouselSettings
-  cardStyle: 'minimal' | 'bordered' | 'shadow' | 'colored' | 'glass'
-  showSocialLinks: boolean
-  showSkills: boolean
-  styling: {
+  gridSettings?: GridSettings
+  carouselSettings?: CarouselSettings
+  cardStyle?: 'minimal' | 'bordered' | 'shadow' | 'colored' | 'glass'
+  showSocialLinks?: boolean
+  showSkills?: boolean
+  styling?: {
     backgroundColor: string
     textColor: string
     accentColor: string
@@ -111,50 +110,49 @@ export default function TeamBlock({
   subtitle,
   blockType = 'team',
   layout = 'grid',
-  teamMembers = [],
-  testimonials = [],
-  gridSettings = {
+  teamMembers,
+  testimonials,
+  gridSettings,
+  carouselSettings,
+  cardStyle,
+  showSocialLinks,
+  showSkills,
+  styling,
+}: TeamBlockProps) {
+  // Normaliser les props pour gérer les cas null/undefined de Sanity
+  const normalizedTeamMembers = teamMembers || []
+  const normalizedTestimonials = testimonials || []
+  const normalizedGridSettings = gridSettings || {
     columns: { desktop: 3, tablet: 2, mobile: 1 },
-    gap: 'medium'
-  },
-  carouselSettings = {
+    gap: 'medium' as const
+  }
+  const normalizedCarouselSettings = carouselSettings || {
     autoplay: true,
     autoplaySpeed: 5,
     showDots: true,
     showArrows: true
-  },
-  cardStyle = 'shadow',
-  showSocialLinks = true,
-  showSkills = true,
-  styling = {
+  }
+  const normalizedCardStyle = cardStyle || 'shadow'
+  const normalizedShowSocialLinks = showSocialLinks ?? true
+  const normalizedShowSkills = showSkills ?? true
+  const normalizedStyling = styling || {
     backgroundColor: '#ffffff',
     textColor: '#1f2937',
-    accentColor: '#2563eb',
-    spacing: 'normal'
-  },
-}: TeamBlockProps) {
+    accentColor: '#3b82f6',
+    spacing: 'normal' as const
+  }
   const [currentSlide, setCurrentSlide] = useState(0)
 
-  // Helper pour mapper les variants de Card
-  const getCardVariant = (style: string) => {
-    switch (style) {
-      case 'bordered': return 'outlined'
-      case 'shadow': return 'elevated'
-      case 'colored': return 'filled'
-      case 'glass': return 'elevated'
-      default: return 'default'
-    }
-  }
 
   // Trier les membres par ordre puis par featured
-  const sortedMembers = [...teamMembers].sort((a, b) => {
+  const sortedMembers = [...normalizedTeamMembers].sort((a, b) => {
     if (a.featured && !b.featured) return -1
     if (!a.featured && b.featured) return 1
     return a.order - b.order
   })
 
   // Trier les témoignages par featured puis par date
-  const sortedTestimonials = [...testimonials].sort((a, b) => {
+  const sortedTestimonials = [...normalizedTestimonials].sort((a, b) => {
     if (a.featured && !b.featured) return -1
     if (!a.featured && b.featured) return 1
     if (a.date && b.date) return new Date(b.date).getTime() - new Date(a.date).getTime()
@@ -183,7 +181,7 @@ export default function TeamBlock({
 
   // Rendu des réseaux sociaux
   const renderSocialLinks = (socialLinks?: SocialLinks) => {
-    if (!socialLinks || !showSocialLinks) return null
+    if (!socialLinks || !normalizedShowSocialLinks) return null
 
     const links = [
       { key: 'linkedin', url: socialLinks.linkedin, icon: '💼' },
@@ -203,7 +201,7 @@ export default function TeamBlock({
             href={link.key === 'email' ? `mailto:${link.url}` : link.url}
             target={link.key !== 'email' ? '_blank' : undefined}
             rel={link.key !== 'email' ? 'noopener noreferrer' : undefined}
-            $accentColor={styling.accentColor}
+            $accentColor={normalizedStyling.accentColor}
           >
             <span>{link.icon}</span>
           </S.SocialLink>
@@ -220,54 +218,52 @@ export default function TeamBlock({
     return (
       <S.MemberCard
         key={index}
-        $cardStyle={cardStyle}
+        $cardStyle={normalizedCardStyle}
         $featured={member.featured}
-        $accentColor={styling.accentColor}
+        $accentColor={normalizedStyling.accentColor}
       >
-        <Card variant={getCardVariant(cardStyle)} padding="lg" hoverable>
-          <S.MemberPhoto $featured={member.featured}>
-            <Image
-              src={imageUrl}
-              alt={member.name}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              style={{ objectFit: 'cover' }}
-            />
-          </S.MemberPhoto>
+        <S.MemberPhoto $featured={member.featured}>
+          <Image
+            src={imageUrl}
+            alt={member.name}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            style={{ objectFit: 'cover' }}
+          />
+        </S.MemberPhoto>
 
-          <S.MemberInfo>
-            <S.MemberName $textColor={styling.textColor} $featured={member.featured}>
-              {member.name}
-            </S.MemberName>
-            
-            <S.MemberPosition $accentColor={styling.accentColor}>
-              {member.position}
-            </S.MemberPosition>
+        <S.MemberInfo>
+          <S.MemberName $textColor={normalizedStyling.textColor} $featured={member.featured}>
+            {member.name}
+          </S.MemberName>
+          
+          <S.MemberPosition $accentColor={normalizedStyling.accentColor}>
+            {member.position}
+          </S.MemberPosition>
 
-            {member.bio && (
-              <S.MemberBio $textColor={styling.textColor}>
-                {member.bio}
-              </S.MemberBio>
-            )}
+          {member.bio && (
+            <S.MemberBio $textColor={normalizedStyling.textColor}>
+              {member.bio}
+            </S.MemberBio>
+          )}
 
-            {showSkills && member.skills && member.skills.length > 0 && (
-              <S.SkillsContainer>
-                {member.skills.slice(0, 4).map((skill, skillIndex) => (
-                  <S.Skill key={skillIndex} $accentColor={styling.accentColor}>
-                    {skill}
-                  </S.Skill>
-                ))}
-                {member.skills.length > 4 && (
-                  <S.Skill $accentColor={styling.accentColor}>
-                    +{member.skills.length - 4}
-                  </S.Skill>
-                )}
-              </S.SkillsContainer>
-            )}
+          {normalizedShowSkills && member.skills && member.skills.length > 0 && (
+            <S.SkillsContainer>
+              {member.skills.slice(0, 4).map((skill, skillIndex) => (
+                <S.Skill key={skillIndex} $accentColor={normalizedStyling.accentColor}>
+                  {skill}
+                </S.Skill>
+              ))}
+              {member.skills.length > 4 && (
+                <S.Skill $accentColor={normalizedStyling.accentColor}>
+                  +{member.skills.length - 4}
+                </S.Skill>
+              )}
+            </S.SkillsContainer>
+          )}
 
-            {renderSocialLinks(member.socialLinks)}
-          </S.MemberInfo>
-        </Card>
+          {renderSocialLinks(member.socialLinks)}
+        </S.MemberInfo>
       </S.MemberCard>
     )
   }
@@ -281,48 +277,46 @@ export default function TeamBlock({
     return (
       <S.TestimonialCard
         key={index}
-        $cardStyle={cardStyle}
+        $cardStyle={normalizedCardStyle}
         $featured={testimonial.featured}
-        $accentColor={styling.accentColor}
+        $accentColor={normalizedStyling.accentColor}
       >
-        <Card variant={getCardVariant(cardStyle)} padding="lg" hoverable>
-          <S.TestimonialContent>
-            <S.TestimonialQuote $textColor={styling.textColor}>
-              "{testimonial.content}"
-            </S.TestimonialQuote>
+        <S.TestimonialContent>
+          <S.TestimonialQuote $textColor={normalizedStyling.textColor}>
+            "{testimonial.content}"
+          </S.TestimonialQuote>
 
-            <S.TestimonialRating>
-              {renderStars(testimonial.rating)}
-            </S.TestimonialRating>
+          <S.TestimonialRating>
+            {renderStars(testimonial.rating)}
+          </S.TestimonialRating>
 
-            <S.TestimonialAuthor>
-              {authorImageUrl && (
-                <S.AuthorPhoto>
-                  <Image
-                    src={authorImageUrl}
-                    alt={testimonial.author.name}
-                    fill
-                    style={{ objectFit: 'cover' }}
-                  />
-                </S.AuthorPhoto>
-              )}
+          <S.TestimonialAuthor>
+            {authorImageUrl && (
+              <S.AuthorPhoto>
+                <Image
+                  src={authorImageUrl}
+                  alt={testimonial.author.name}
+                  fill
+                  style={{ objectFit: 'cover' }}
+                />
+              </S.AuthorPhoto>
+            )}
+            
+            <S.AuthorInfo>
+              <S.AuthorName $textColor={normalizedStyling.textColor}>
+                {testimonial.author.name}
+              </S.AuthorName>
               
-              <S.AuthorInfo>
-                <S.AuthorName $textColor={styling.textColor}>
-                  {testimonial.author.name}
-                </S.AuthorName>
-                
-                {(testimonial.author.position || testimonial.author.company) && (
-                  <S.AuthorDetails $textColor={styling.textColor}>
-                    {testimonial.author.position}
-                    {testimonial.author.position && testimonial.author.company && ' • '}
-                    {testimonial.author.company}
-                  </S.AuthorDetails>
-                )}
-              </S.AuthorInfo>
-            </S.TestimonialAuthor>
-          </S.TestimonialContent>
-        </Card>
+              {(testimonial.author.position || testimonial.author.company) && (
+                <S.AuthorDetails $textColor={normalizedStyling.textColor}>
+                  {testimonial.author.position}
+                  {testimonial.author.position && testimonial.author.company && ' • '}
+                  {testimonial.author.company}
+                </S.AuthorDetails>
+              )}
+            </S.AuthorInfo>
+          </S.TestimonialAuthor>
+        </S.TestimonialContent>
       </S.TestimonialCard>
     )
   }
@@ -343,18 +337,18 @@ export default function TeamBlock({
   }
 
   return (
-    <S.Section $backgroundColor={styling.backgroundColor} $spacing={styling.spacing}>
+    <S.Section $backgroundColor={normalizedStyling.backgroundColor} $spacing={normalizedStyling.spacing}>
       <S.Container>
         {/* En-tête */}
         {(title || subtitle) && (
           <S.Header>
             {title && (
-              <S.Title $textColor={styling.textColor}>
+              <S.Title $textColor={normalizedStyling.textColor}>
                 {title}
               </S.Title>
             )}
             {subtitle && (
-              <S.Subtitle $textColor={styling.textColor}>
+              <S.Subtitle $textColor={normalizedStyling.textColor}>
                 {subtitle}
               </S.Subtitle>
             )}
@@ -365,8 +359,8 @@ export default function TeamBlock({
         <S.ContentContainer $layout={layout}>
           {layout === 'grid' && (
             <S.Grid
-              $columns={gridSettings.columns}
-              $gap={gridSettings.gap}
+              $columns={normalizedGridSettings.columns}
+              $gap={normalizedGridSettings.gap}
             >
               {items.map((item, index) => renderItem(item, index))}
             </S.Grid>
@@ -378,7 +372,7 @@ export default function TeamBlock({
                 {items.map((item, index) => renderItem(item, index))}
               </S.CarouselTrack>
               
-              {carouselSettings.showArrows && (
+              {normalizedCarouselSettings.showArrows && (
                 <>
                   <S.CarouselArrow $position="left" onClick={prevSlide}>
                     ←
@@ -389,7 +383,7 @@ export default function TeamBlock({
                 </>
               )}
               
-              {carouselSettings.showDots && (
+              {normalizedCarouselSettings.showDots && (
                 <S.CarouselDots>
                   {items.map((_, index) => (
                     <S.CarouselDot
@@ -419,8 +413,8 @@ export default function TeamBlock({
               
               {items.length > 1 && (
                 <S.GridItems
-                  $columns={gridSettings.columns}
-                  $gap={gridSettings.gap}
+                  $columns={normalizedGridSettings.columns}
+                  $gap={normalizedGridSettings.gap}
                 >
                   {items.slice(1).map((item, index) => renderItem(item, index + 1))}
                 </S.GridItems>

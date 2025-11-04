@@ -8,10 +8,12 @@
     "start": "next start",
     "demo:import": "node scripts/import-demo.js",
     "demo:setup": "node scripts/setup-demo.js",
-    "demo:reset": "node scripts/import-demo.js --force"
+    "demo:reset": "node scripts/import-demo.js --force",
+    "fix:stats-keys": "node scripts/fix-stats-keys.js"
   },
   "dependencies": {
     "@portabletext/react": "^4.0.3",
+    "@sanity/client": "^7.12.0",
     "@sanity/image-url": "^1.2.0",
     "@sanity/vision": "^4.12.0",
     "@types/styled-components": "^5.1.35",

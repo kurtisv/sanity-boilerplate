@@ -24,17 +24,17 @@ type ContactBlockProps = {
   title?: string
   subtitle?: string
   layout: 'centered' | 'two-columns' | 'with-sidebar' | 'full-width'
-  formFields: FormField[]
-  submitButton: {
+  formFields?: FormField[]
+  submitButton?: {
     text: string
     loadingText: string
   }
-  successMessage: {
+  successMessage?: {
     title: string
     description: string
   }
-  contactInfo: ContactInfo
-  styling: {
+  contactInfo?: ContactInfo
+  styling?: {
     backgroundColor: string
     textColor: string
     spacing: 'compact' | 'normal' | 'large'
@@ -64,12 +64,18 @@ export default function ContactBlock({
   title,
   subtitle,
   layout = 'centered',
-  formFields = [],
-  submitButton = { text: 'Envoyer', loadingText: 'Envoi...' },
-  successMessage = { title: 'Envoyé !', description: 'Merci pour votre message.' },
-  contactInfo = { showContactInfo: false },
-  styling = { backgroundColor: '#ffffff', textColor: '#1f2937', spacing: 'normal' },
+  formFields,
+  submitButton,
+  successMessage,
+  contactInfo,
+  styling,
 }: ContactBlockProps) {
+  // Normaliser les props pour gérer les cas null/undefined de Sanity
+  const normalizedFormFields = formFields || []
+  const normalizedSubmitButton = submitButton || { text: 'Envoyer', loadingText: 'Envoi...' }
+  const normalizedSuccessMessage = successMessage || { title: 'Envoyé !', description: 'Merci pour votre message.' }
+  const normalizedContactInfo = contactInfo || { showContactInfo: false }
+  const normalizedStyling = styling || { backgroundColor: '#ffffff', textColor: '#1f2937', spacing: 'normal' as const }
   const [formData, setFormData] = useState<Record<string, string>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isLoading, setIsLoading] = useState(false)
@@ -104,7 +110,7 @@ export default function ContactBlock({
     
     // Effacer l'erreur si le champ devient valide
     if (errors[fieldType]) {
-      const field = formFields.find(f => f.fieldType === fieldType)
+      const field = normalizedFormFields.find(f => f.fieldType === fieldType)
       if (field) {
         const error = validateField(field, value)
         if (!error) {
@@ -122,7 +128,7 @@ export default function ContactBlock({
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {}
 
-    formFields.forEach(field => {
+    normalizedFormFields.forEach(field => {
       const value = formData[field.fieldType] || ''
       const error = validateField(field, value)
       if (error) {
@@ -202,15 +208,15 @@ export default function ContactBlock({
 
   if (isSuccess) {
     return (
-      <S.Section $backgroundColor={styling.backgroundColor} $spacing={styling.spacing}>
+      <S.Section $backgroundColor={normalizedStyling.backgroundColor} $spacing={normalizedStyling.spacing}>
         <S.Container>
           <S.SuccessCard>
             <S.SuccessIcon>✅</S.SuccessIcon>
-            <S.SuccessTitle $textColor={styling.textColor}>
-              {successMessage.title}
+            <S.SuccessTitle $textColor={normalizedStyling.textColor}>
+              {normalizedSuccessMessage.title}
             </S.SuccessTitle>
-            <S.SuccessDescription $textColor={styling.textColor}>
-              {successMessage.description}
+            <S.SuccessDescription $textColor={normalizedStyling.textColor}>
+              {normalizedSuccessMessage.description}
             </S.SuccessDescription>
             <Button 
               variant="outline" 
@@ -225,19 +231,19 @@ export default function ContactBlock({
   }
 
   return (
-    <S.Section $backgroundColor={styling.backgroundColor} $spacing={styling.spacing}>
+    <S.Section $backgroundColor={normalizedStyling.backgroundColor} $spacing={normalizedStyling.spacing}>
       <S.Container>
         <S.Content $layout={layout}>
           {/* En-tête */}
           {(title || subtitle) && (
             <S.Header $layout={layout}>
               {title && (
-                <S.Title $textColor={styling.textColor}>
+                <S.Title $textColor={normalizedStyling.textColor}>
                   {title}
                 </S.Title>
               )}
               {subtitle && (
-                <S.Subtitle $textColor={styling.textColor}>
+                <S.Subtitle $textColor={normalizedStyling.textColor}>
                   {subtitle}
                 </S.Subtitle>
               )}
@@ -250,8 +256,8 @@ export default function ContactBlock({
               <Card variant="outlined" padding="lg">
                 <form onSubmit={handleSubmit}>
                   <S.FormGrid $layout={layout}>
-                    {formFields.map(field => (
-                      <S.FieldWrapper key={field.fieldType} $width={field.width}>
+                    {normalizedFormFields.map((field, index) => (
+                      <S.FieldWrapper key={field.fieldType || `field-${index}`} $width={field.width}>
                         {renderField(field)}
                       </S.FieldWrapper>
                     ))}
@@ -266,7 +272,7 @@ export default function ContactBlock({
                       loading={isLoading}
                       disabled={isLoading}
                     >
-                      {isLoading ? submitButton.loadingText : submitButton.text}
+                      {isLoading ? normalizedSubmitButton.loadingText : normalizedSubmitButton.text}
                     </Button>
                   </S.SubmitWrapper>
                 </form>
@@ -274,46 +280,46 @@ export default function ContactBlock({
             </S.FormWrapper>
 
             {/* Informations de contact (sidebar) */}
-            {contactInfo.showContactInfo && layout === 'with-sidebar' && (
+            {normalizedContactInfo.showContactInfo && layout === 'with-sidebar' && (
               <S.ContactInfoWrapper>
                 <Card variant="filled" padding="lg">
-                  <S.ContactInfoTitle $textColor={styling.textColor}>
+                  <S.ContactInfoTitle $textColor={normalizedStyling.textColor}>
                     Informations de contact
                   </S.ContactInfoTitle>
 
                   <S.ContactInfoList>
-                    {contactInfo.address && (
+                    {normalizedContactInfo.address && (
                       <S.ContactInfoItem>
                         <S.ContactInfoIcon>📍</S.ContactInfoIcon>
-                        <S.ContactInfoText $textColor={styling.textColor}>
-                          {contactInfo.address}
+                        <S.ContactInfoText $textColor={normalizedStyling.textColor}>
+                          {normalizedContactInfo.address}
                         </S.ContactInfoText>
                       </S.ContactInfoItem>
                     )}
 
-                    {contactInfo.phone && (
+                    {normalizedContactInfo.phone && (
                       <S.ContactInfoItem>
                         <S.ContactInfoIcon>📞</S.ContactInfoIcon>
-                        <S.ContactInfoText $textColor={styling.textColor}>
-                          {contactInfo.phone}
+                        <S.ContactInfoText $textColor={normalizedStyling.textColor}>
+                          {normalizedContactInfo.phone}
                         </S.ContactInfoText>
                       </S.ContactInfoItem>
                     )}
 
-                    {contactInfo.email && (
+                    {normalizedContactInfo.email && (
                       <S.ContactInfoItem>
                         <S.ContactInfoIcon>📧</S.ContactInfoIcon>
-                        <S.ContactInfoText $textColor={styling.textColor}>
-                          {contactInfo.email}
+                        <S.ContactInfoText $textColor={normalizedStyling.textColor}>
+                          {normalizedContactInfo.email}
                         </S.ContactInfoText>
                       </S.ContactInfoItem>
                     )}
 
-                    {contactInfo.hours && (
+                    {normalizedContactInfo.hours && (
                       <S.ContactInfoItem>
                         <S.ContactInfoIcon>🕐</S.ContactInfoIcon>
-                        <S.ContactInfoText $textColor={styling.textColor}>
-                          {contactInfo.hours}
+                        <S.ContactInfoText $textColor={normalizedStyling.textColor}>
+                          {normalizedContactInfo.hours}
                         </S.ContactInfoText>
                       </S.ContactInfoItem>
                     )}
