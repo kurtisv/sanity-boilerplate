@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { client } from '@/sanity/lib/client'
+import { generateCtaKey } from '@/lib/generate-unique-keys'
 
 export async function POST(request: NextRequest) {
   try {
@@ -24,11 +25,13 @@ export async function POST(request: NextRequest) {
           
           ctaButtons: [
             {
+              _key: generateCtaKey('form'),
               text: '📝 Remplir le Formulaire',
               href: '#contact-form',
               variant: 'primary'
             },
             {
+              _key: generateCtaKey('phone'),
               text: '📞 Appeler Directement',
               href: 'tel:+33123456789',
               variant: 'secondary'
@@ -66,6 +69,7 @@ export async function POST(request: NextRequest) {
           
           formFields: [
             {
+              _key: 'field-name',
               fieldType: 'name',
               label: 'Nom complet',
               placeholder: 'Votre nom et prénom',
@@ -73,6 +77,7 @@ export async function POST(request: NextRequest) {
               width: 'full'
             },
             {
+              _key: 'field-email',
               fieldType: 'email',
               label: 'Adresse email',
               placeholder: 'votre@email.com',
@@ -80,6 +85,7 @@ export async function POST(request: NextRequest) {
               width: 'full'
             },
             {
+              _key: 'field-subject',
               fieldType: 'subject',
               label: 'Sujet',
               placeholder: 'Objet de votre message',
@@ -87,6 +93,7 @@ export async function POST(request: NextRequest) {
               width: 'full'
             },
             {
+              _key: 'field-message',
               fieldType: 'message',
               label: 'Message',
               placeholder: 'Décrivez votre demande...',

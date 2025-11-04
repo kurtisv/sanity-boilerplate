@@ -145,84 +145,7 @@ export async function POST(request: NextRequest) {
           }
         },
 
-        // 🖼️ GalleryBlock - Projets Récents (CONFORME AU SCHÉMA)
-        {
-          _type: 'galleryBlock',
-          _key: 'portfolio-gallery',
-          title: 'Projets Récents',
-          subtitle: 'Une sélection de nos dernières réalisations',
-          
-          // ✅ CONFORME : layout selon le schéma
-          layout: 'masonry',
-          
-          // ✅ CONFORME : images array selon le schéma
-          images: [
-            {
-              alt: 'Site e-commerce mode - Interface moderne et responsive',
-              caption: 'E-commerce Mode - Plateforme de vente en ligne',
-              category: 'e-commerce',
-              featured: true
-            },
-            {
-              alt: 'Application SaaS - Dashboard analytics',
-              caption: 'SaaS Analytics - Tableau de bord intelligent',
-              category: 'saas',
-              featured: false
-            },
-            {
-              alt: 'Site vitrine architecture - Design épuré',
-              caption: 'Cabinet Architecture - Site vitrine élégant',
-              category: 'vitrine',
-              featured: false
-            },
-            {
-              alt: 'Plateforme éducative - Interface d\'apprentissage',
-              caption: 'EdTech Platform - Apprentissage en ligne',
-              category: 'education',
-              featured: true
-            }
-          ],
-          
-          // ✅ CONFORME : gridSettings selon le schéma
-          gridSettings: {
-            columns: {
-              desktop: 3,
-              tablet: 2,
-              mobile: 1
-            },
-            aspectRatio: 'auto',
-            gap: 'medium'
-          },
-          
-          // ✅ CONFORME : filterOptions selon le schéma
-          filterOptions: {
-            enableFilters: true,
-            filterStyle: 'buttons',
-            showAllOption: true
-          },
-          
-          // ✅ CONFORME : lightboxOptions selon le schéma
-          lightboxOptions: {
-            enableLightbox: true,
-            showCaptions: true,
-            showCounter: true,
-            enableZoom: true
-          },
-          
-          // ✅ CONFORME : backgroundSettings selon themeFields
-          backgroundSettings: {
-            backgroundType: 'color',
-            backgroundColor: '#f8fafc'
-          },
-          
-          // ✅ CONFORME : styling selon themeFields
-          styling: {
-            alignment: 'center',
-            spacing: 'large'
-          }
-        },
-
-        // 📊 StatsBlock - Chiffres Clés (CONFORME AU SCHÉMA)
+        // 📊 StatsBlock - Nos Chiffres (CONFORME AU SCHÉMA)
         {
           _type: 'statsBlock',
           _key: 'portfolio-stats',
@@ -424,7 +347,7 @@ export async function POST(request: NextRequest) {
           formFields: [
             {
               _key: 'field-name',
-              fieldType: 'text',
+              fieldType: 'name',
               label: 'Nom complet',
               placeholder: 'Votre nom et prénom',
               required: true,
@@ -440,7 +363,7 @@ export async function POST(request: NextRequest) {
             },
             {
               _key: 'field-company',
-              fieldType: 'text',
+              fieldType: 'company',
               label: 'Entreprise',
               placeholder: 'Nom de votre entreprise',
               required: false,
@@ -448,35 +371,19 @@ export async function POST(request: NextRequest) {
             },
             {
               _key: 'field-budget',
-              fieldType: 'select',
+              fieldType: 'custom',
               label: 'Budget estimé',
-              placeholder: 'Sélectionnez votre budget',
+              placeholder: 'ex: 10 000€ - 15 000€',
               required: false,
-              width: 'half',
-              options: [
-                { label: 'Moins de 5 000€', value: 'budget-5k' },
-                { label: '5 000€ - 15 000€', value: 'budget-15k' },
-                { label: '15 000€ - 30 000€', value: 'budget-30k' },
-                { label: '30 000€ - 50 000€', value: 'budget-50k' },
-                { label: 'Plus de 50 000€', value: 'budget-50k-plus' },
-                { label: 'À discuter', value: 'budget-discuss' }
-              ]
+              width: 'half'
             },
             {
               _key: 'field-project-type',
-              fieldType: 'select',
+              fieldType: 'subject',
               label: 'Type de projet',
-              placeholder: 'Quel type de projet ?',
+              placeholder: 'ex: Site vitrine, E-commerce, Application web',
               required: true,
-              width: 'full',
-              options: [
-                { label: 'Site vitrine / Corporate', value: 'vitrine' },
-                { label: 'E-commerce / Boutique en ligne', value: 'ecommerce' },
-                { label: 'Application web / SaaS', value: 'webapp' },
-                { label: 'Application mobile / PWA', value: 'mobile' },
-                { label: 'Refonte de site existant', value: 'refonte' },
-                { label: 'Autre / Projet spécifique', value: 'other' }
-              ]
+              width: 'full'
             },
             {
               _key: 'field-description',

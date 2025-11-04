@@ -1,34 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@sanity/client'
+import { client } from '@/sanity/lib/client'
+import { generateCtaKey } from '@/lib/generate-unique-keys'
 import fs from 'fs'
 import path from 'path'
 
-// Client Sanity avec token pour les opérations d'écriture
-const writeClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  token: process.env.SANITY_API_TOKEN,
-  useCdn: false,
-  apiVersion: '2024-01-01'
-})
 
 // Configuration des blocs de démo - Design classique et professionnel
+// 7 blocs : Hero, Text, FeatureGrid, Stats, Team, Text (conclusion), Contact
 const demoBlocks = [
   // 1. Hero Block - Bannière d'accueil
   {
     _type: 'heroBlock',
     _key: 'hero-demo',
     title: 'Système de Blocs Universels',
-    subtitle: 'Démonstration complète des 8 blocs disponibles dans ce boilerplate professionnel Next.js + Sanity CMS',
+    subtitle: 'Démonstration complète de 7 types de blocs disponibles dans ce boilerplate professionnel Next.js + Sanity CMS',
     layout: 'centered',
     ctaButtons: [
       {
+        _key: generateCtaKey('explore'),
         text: 'Explorer les Blocs',
         href: '#blocs-info',
         variant: 'primary',
         size: 'lg'
       },
       {
+        _key: generateCtaKey('studio'),
         text: 'Ouvrir Studio',
         href: '/studio',
         variant: 'secondary',
@@ -177,22 +173,25 @@ const demoBlocks = [
     gridLayout: '3-balanced',
     features: [
       {
-        icon: 'star',
-        iconColor: '#2563eb',
+        _key: 'feature-1',
+        iconType: 'emoji',
+        iconEmoji: '⭐',
         title: 'Design Classique',
         description: 'Interface épurée et professionnelle qui inspire confiance à vos clients.',
         featured: false
       },
       {
-        icon: 'rocket',
-        iconColor: '#059669',
+        _key: 'feature-2',
+        iconType: 'emoji',
+        iconEmoji: '🚀',
         title: 'Facilité d\'Usage',
         description: 'Configuration simple via Sanity Studio, aucune compétence technique requise.',
         featured: true
       },
       {
-        icon: 'target',
-        iconColor: '#dc2626',
+        _key: 'feature-3',
+        iconType: 'emoji',
+        iconEmoji: '🎯',
         title: 'Personnalisable',
         description: 'Chaque élément peut être modifié : couleurs, textes, images et mise en page.',
         featured: false
@@ -219,9 +218,10 @@ const demoBlocks = [
     layout: 'grid-4col',
     stats: [
       {
-        number: 8,
+        _key: 'stat-1',
+        number: '9',
         label: 'Blocs Disponibles',
-        description: 'Couvrent tous les besoins',
+        description: 'Au total dans le boilerplate',
         icon: '🧩',
         featured: false,
         animationType: 'counter',
@@ -229,7 +229,8 @@ const demoBlocks = [
         order: 1
       },
       {
-        number: 95,
+        _key: 'stat-2',
+        number: '95',
         suffix: '%',
         label: 'Projets Couverts',
         description: 'Sites web classiques',
@@ -240,7 +241,8 @@ const demoBlocks = [
         order: 2
       },
       {
-        number: 100,
+        _key: 'stat-3',
+        number: '100',
         suffix: '%',
         label: 'TypeScript',
         description: 'Sécurité garantie',
@@ -251,7 +253,8 @@ const demoBlocks = [
         order: 3
       },
       {
-        number: 98,
+        _key: 'stat-4',
+        number: '98',
         suffix: '+',
         label: 'Performance',
         description: 'Score Lighthouse',
@@ -281,117 +284,20 @@ const demoBlocks = [
     }
   },
 
-  // 5. Contact Block - Formulaire de contact
-  {
-    _type: 'contactBlock',
-    _key: 'contact-demo',
-    title: 'Contactez-nous',
-    subtitle: 'Exemple de formulaire de contact intégré',
-    layout: 'split',
-    formFields: [
-      {
-        name: 'name',
-        label: 'Nom complet',
-        type: 'text',
-        required: true,
-        placeholder: 'Votre nom'
-      },
-      {
-        name: 'email',
-        label: 'Email',
-        type: 'email',
-        required: true,
-        placeholder: 'votre@email.com'
-      },
-      {
-        name: 'subject',
-        label: 'Sujet',
-        type: 'text',
-        required: false,
-        placeholder: 'Sujet de votre message'
-      },
-      {
-        name: 'message',
-        label: 'Message',
-        type: 'textarea',
-        required: true,
-        placeholder: 'Votre message...'
-      }
-    ],
-    contactInfo: {
-      title: 'Informations de Contact',
-      description: 'Ce bloc permet d\'intégrer facilement un formulaire de contact avec validation et envoi d\'emails.',
-      details: [
-        {
-          icon: 'mail',
-          label: 'Email',
-          value: 'contact@example.com'
-        },
-        {
-          icon: 'phone',
-          label: 'Téléphone',
-          value: '+33 1 23 45 67 89'
-        },
-        {
-          icon: 'location',
-          label: 'Adresse',
-          value: 'Paris, France'
-        }
-      ]
-    },
-    styling: {
-      backgroundColor: '#ffffff',
-      textColor: '#374151',
-      formStyle: 'modern',
-      spacing: 'comfortable'
-    }
-  },
-
-  // 6. Gallery Block - Galerie d'images
-  {
-    _type: 'galleryBlock',
-    _key: 'gallery-demo',
-    title: 'Galerie d\'Images',
-    subtitle: 'Présentation visuelle avec différents layouts',
-    layout: 'grid',
-    columns: 3,
-    images: [
-      {
-        alt: 'Image de démonstration 1',
-        caption: 'Exemple d\'image dans la galerie'
-      },
-      {
-        alt: 'Image de démonstration 2',
-        caption: 'Support de différents formats'
-      },
-      {
-        alt: 'Image de démonstration 3',
-        caption: 'Lightbox intégrée'
-      }
-    ],
-    settings: {
-      enableLightbox: true,
-      showCaptions: true,
-      aspectRatio: '16:9'
-    },
-    styling: {
-      backgroundColor: '#f8fafc',
-      spacing: 'normal',
-      borderRadius: 'medium'
-    }
-  },
-
-  // 7. Team Block - Présentation d'équipe
+  // 5. Team Block - Présentation d'équipe
   {
     _type: 'teamBlock',
     _key: 'team-demo',
     title: 'Notre Équipe',
     subtitle: 'Présentation des membres avec informations détaillées',
-    layout: 'grid-3col',
+    displayType: 'team',
+    layout: 'grid',
+    gridColumns: 3,
     members: [
       {
+        _key: 'member-1',
         name: 'Jean Dupont',
-        role: 'Développeur Frontend',
+        position: 'Développeur Frontend',
         bio: 'Expert en React et Next.js avec 5 ans d\'expérience.',
         socialLinks: {
           linkedin: 'https://linkedin.com',
@@ -400,8 +306,9 @@ const demoBlocks = [
         }
       },
       {
+        _key: 'member-2',
         name: 'Marie Martin',
-        role: 'Designer UX/UI',
+        position: 'Designer UX/UI',
         bio: 'Spécialisée dans l\'expérience utilisateur et le design system.',
         socialLinks: {
           linkedin: 'https://linkedin.com',
@@ -409,8 +316,9 @@ const demoBlocks = [
         }
       },
       {
+        _key: 'member-3',
         name: 'Pierre Durand',
-        role: 'Développeur Backend',
+        position: 'Développeur Backend',
         bio: 'Architecte logiciel passionné par les performances et la scalabilité.',
         socialLinks: {
           linkedin: 'https://linkedin.com',
@@ -426,7 +334,7 @@ const demoBlocks = [
     }
   },
 
-  // 8. Text Block final - Conclusion
+  // 6. Text Block final - Conclusion
   {
     _type: 'textBlock',
     _key: 'conclusion-demo',
@@ -472,14 +380,17 @@ const demoBlocks = [
       spacing: 'comfortable'
     }
   },
+
+  // 7. Contact Block - Formulaire de feedback
   {
     _type: 'contactBlock',
-    _key: 'contact-demo',
+    _key: 'contact-demo-form',
     title: 'Contactez-nous',
     subtitle: 'Exemple de formulaire de contact intégré - Entièrement personnalisable',
     layout: 'split',
     formFields: [
       {
+        _key: 'field-1',
         fieldType: 'name',
         label: 'Votre nom',
         placeholder: 'John Doe',
@@ -487,6 +398,7 @@ const demoBlocks = [
         width: 'half'
       },
       {
+        _key: 'field-2',
         fieldType: 'email',
         label: 'Email',
         placeholder: 'john@example.com',
@@ -494,6 +406,7 @@ const demoBlocks = [
         width: 'half'
       },
       {
+        _key: 'field-3',
         fieldType: 'subject',
         label: 'Sujet',
         placeholder: 'Feedback sur le boilerplate',
@@ -501,6 +414,7 @@ const demoBlocks = [
         width: 'full'
       },
       {
+        _key: 'field-4',
         fieldType: 'message',
         label: 'Message',
         placeholder: 'Partagez vos impressions, suggestions d\'amélioration...',
@@ -565,11 +479,11 @@ export async function POST(request: NextRequest) {
 
     // Vérification si la page demo existe déjà
     console.log('🔍 Vérification de l\'existence de la page demo')
-    const existingPage = await writeClient.fetch(`*[_type == "page" && slug.current == "demo"][0]`)
+    const existingPage = await client.fetch(`*[_type == "page" && slug.current == "demo"][0]`)
 
     if (existingPage) {
       console.log('🗑️ Suppression de l\'ancienne page demo:', existingPage._id)
-      await writeClient.delete(existingPage._id)
+      await client.delete(existingPage._id)
     }
 
     // Création de la nouvelle page de démo
@@ -584,7 +498,7 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('💾 Sauvegarde dans Sanity...')
-    const result = await writeClient.create(demoPage)
+    const result = await client.create(demoPage)
     console.log('✅ Page créée avec succès:', result._id)
 
     // Lecture du fichier DEMO_SETUP.md pour les métadonnées
@@ -621,7 +535,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     // Vérifier si la page demo existe
-    const existingPage = await writeClient.fetch(`*[_type == "page" && slug.current == "demo"][0]`)
+    const existingPage = await client.fetch(`*[_type == "page" && slug.current == "demo"][0]`)
     
     return NextResponse.json({
       exists: !!existingPage,

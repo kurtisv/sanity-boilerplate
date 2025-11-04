@@ -10,6 +10,8 @@ import * as S from './BlockRenderer.styles'
 // Imports de tous les composants de blocs
 import TextBlock from '@/components/blocks/TextBlock'
 import HeroBlock from '@/components/blocks/HeroBlock'
+import HeaderBlock from '@/components/blocks/HeaderBlock'
+import FooterBlock from '@/components/blocks/FooterBlock'
 import FeatureGridBlock from '@/components/blocks/FeatureGridBlock'
 import ContactBlock from '@/components/blocks/ContactBlock'
 import GalleryBlock from '@/components/blocks/GalleryBlock'
@@ -59,19 +61,11 @@ export default function BlockRenderer({ blocks }: BlockRendererProps) {
           case 'statsBlock':
             return <StatsBlock key={uniqueKey} {...(block as any)} />
           
-          // Blocs sans composants React (à implémenter)
           case 'headerBlock':
+            return <HeaderBlock key={uniqueKey} {...(block as any)} />
+          
           case 'footerBlock':
-            return (
-              <S.PlaceholderBlock key={uniqueKey} $variant="info">
-                <S.PlaceholderTitle $variant="info">
-                  🚧 {block._type} - Composant à implémenter
-                </S.PlaceholderTitle>
-                <S.PlaceholderText $variant="info">
-                  Titre: {block.title || 'Non défini'}
-                </S.PlaceholderText>
-              </S.PlaceholderBlock>
-            )
+            return <FooterBlock key={uniqueKey} {...(block as any)} />
           
           default:
             if (process.env.NODE_ENV === 'development') {

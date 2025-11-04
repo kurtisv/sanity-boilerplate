@@ -223,9 +223,9 @@ export type Block =
 export interface PageStyleSettings {
   pageBackgroundSettings?: BackgroundSettings
   pageLayout?: {
-    maxWidth?: string
-    padding?: string
-    blockSpacing?: string
+    maxWidth?: 'full' | 'xl' | 'lg' | 'md' | 'sm'
+    padding?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
+    gap?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
   }
   pageTypography?: TypographySettings
   pageColors?: {

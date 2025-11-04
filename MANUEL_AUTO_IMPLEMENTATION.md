@@ -58,6 +58,46 @@ export type Block =
 
 ---
 
+## 🔐 **Règles de Validation Sanity**
+
+> **⚠️ SECTION CRITIQUE - ABSOLUMENT OBLIGATOIRE**
+
+### 📏 **Longueurs de Texte Maximales**
+
+**Page**: seoDescription ≤ 160 chars
+**Hero**: title ≤ 100, subtitle ≤ 300, max 3 ctaButtons
+**Features**: title ≤ 100, description ≤ 100
+**Stats**: number STRING ≤ 20, label ≤ 100, description ≤ 200
+**Contact**: title ≤ 100, subtitle ≤ 100, label ≤ 50, placeholder ≤ 100
+**Team**: bio ≤ 500
+
+### 🔑 **Types de Champs ContactBlock**
+
+**✅ VALIDES**: name, email, phone, company, subject, message, textarea, url, custom
+**❌ INVALIDES**: text (→ name), tel (→ phone), select (→ subject/custom)
+
+### 🔑 **Champs _key Obligatoires**
+
+TOUS les éléments d'array DOIVENT avoir un `_key` unique :
+- features: `_key: generateFeatureKey('perf')`
+- stats: `_key: 'stat-1'`
+- members: `_key: 'member-1'`
+- formFields: `_key: generateFieldKey('name')`
+- ctaButtons: `_key: generateCtaKey('action')`
+
+### ⚠️ **GalleryBlock - NE PAS AUTO-GÉNÉRER**
+
+Le GalleryBlock nécessite l'upload d'images réelles. Ne PAS utiliser en auto-génération.
+
+### 📋 **Structure des Blocs**
+
+**TeamBlock**: `displayType: 'team'`, `layout: 'grid'`, `members` (PAS teamMembers), `position` (PAS role)
+**StatsBlock**: `number` en STRING (pas Number)
+**FeatureGridBlock**: `iconType + iconEmoji` obligatoires si emoji
+**ContactBlock**: `formFields` (PAS fields), fieldType valides uniquement
+
+---
+
 ## 🚨 Règles de Conformité Sanity
 
 > **⚠️ RÈGLE ABSOLUE - CONFORMITÉ OBLIGATOIRE AUX SCHÉMAS SANITY**

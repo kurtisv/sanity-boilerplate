@@ -2,6 +2,7 @@
 
 import React from 'react'
 import type { PageStyleSettings } from '@/lib/theme-utils'
+import { getPageStyles, getPageClasses, getPageVariables, getBackgroundStyles } from '@/lib/theme-utils'
 import * as S from './PageWrapper.styles'
 
 interface PageWrapperProps {
@@ -15,9 +16,19 @@ export default function PageWrapper({
   pageStyles, 
   className = '' 
 }: PageWrapperProps) {
-  // Extraire les informations de style
+  // Appliquer tous les styles de page via theme-utils
+  const pageStylesCSS = getPageStyles(pageStyles)
+  const pageVariables = getPageVariables(pageStyles)
+  const pageClasses = getPageClasses(pageStyles)
+  
+  // Combiner les styles inline et les variables CSS
+  const combinedStyles = {
+    ...pageStylesCSS,
+    ...pageVariables,
+  } as React.CSSProperties
+  
+  // Extraire les informations spécifiques pour styled-components
   const backgroundImage = pageStyles?.pageBackgroundSettings?.backgroundImage?.asset?.url
-  const backgroundColor = pageStyles?.pageBackgroundSettings?.backgroundColor
   const hasOverlay = pageStyles?.pageBackgroundSettings?.backgroundImage?.overlay?.enabled
   const overlayColor = pageStyles?.pageBackgroundSettings?.backgroundImage?.overlay?.color
   const overlayOpacity = pageStyles?.pageBackgroundSettings?.backgroundImage?.overlay?.opacity
@@ -25,9 +36,10 @@ export default function PageWrapper({
 
   return (
     <S.PageContainer
-      className={`page-styled ${className}`}
+      className={`page-styled ${pageClasses} ${className}`}
+      style={combinedStyles}
       $backgroundImage={backgroundImage}
-      $backgroundColor={backgroundColor}
+      $backgroundColor={pageStyles?.pageBackgroundSettings?.backgroundColor}
     >
       {/* Superposition pour image de fond */}
       {hasOverlay && (

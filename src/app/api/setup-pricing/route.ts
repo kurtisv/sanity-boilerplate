@@ -479,7 +479,7 @@ export async function POST(request: NextRequest) {
           formFields: [
             {
               _key: 'field-name',
-              fieldType: 'text',
+              fieldType: 'name',
               label: 'Nom complet',
               placeholder: 'Votre nom et prénom',
               required: true,
@@ -495,7 +495,7 @@ export async function POST(request: NextRequest) {
             },
             {
               _key: 'field-company',
-              fieldType: 'text',
+              fieldType: 'company',
               label: 'Entreprise',
               placeholder: 'Nom de votre entreprise',
               required: false,
@@ -503,7 +503,7 @@ export async function POST(request: NextRequest) {
             },
             {
               _key: 'field-phone',
-              fieldType: 'tel',
+              fieldType: 'phone',
               label: 'Téléphone',
               placeholder: '+33 6 12 34 56 78',
               required: false,
@@ -511,50 +511,27 @@ export async function POST(request: NextRequest) {
             },
             {
               _key: 'field-project-type',
-              fieldType: 'select',
+              fieldType: 'subject',
               label: 'Type de projet',
-              placeholder: 'Sélectionnez le type',
+              placeholder: 'ex: Site vitrine, E-commerce, Application web',
               required: true,
-              width: 'full',
-              options: [
-                { label: 'Site vitrine (3-8K€)', value: 'vitrine' },
-                { label: 'E-commerce (8-20K€)', value: 'ecommerce' },
-                { label: 'Application web (15K€+)', value: 'webapp' },
-                { label: 'Refonte de site existant', value: 'refonte' },
-                { label: 'Maintenance & support', value: 'maintenance' },
-                { label: 'Autre / Je ne sais pas', value: 'other' }
-              ]
+              width: 'full'
             },
             {
               _key: 'field-budget',
-              fieldType: 'select',
+              fieldType: 'custom',
               label: 'Budget estimé',
-              placeholder: 'Votre budget approximatif',
+              placeholder: 'ex: 10 000€ - 20 000€',
               required: false,
-              width: 'full',
-              options: [
-                { label: 'Moins de 5 000€', value: 'budget-5k' },
-                { label: '5 000€ - 10 000€', value: 'budget-10k' },
-                { label: '10 000€ - 20 000€', value: 'budget-20k' },
-                { label: '20 000€ - 50 000€', value: 'budget-50k' },
-                { label: 'Plus de 50 000€', value: 'budget-50k-plus' },
-                { label: 'À définir ensemble', value: 'budget-discuss' }
-              ]
+              width: 'full'
             },
             {
               _key: 'field-timeline',
-              fieldType: 'select',
+              fieldType: 'custom',
               label: 'Délai souhaité',
-              placeholder: 'Quand souhaitez-vous lancer ?',
+              placeholder: 'ex: Dans les 3 mois',
               required: false,
-              width: 'full',
-              options: [
-                { label: 'Dès que possible', value: 'asap' },
-                { label: 'Dans le mois', value: '1month' },
-                { label: 'Dans les 3 mois', value: '3months' },
-                { label: 'Plus de 3 mois', value: '3months-plus' },
-                { label: 'Pas de contrainte', value: 'flexible' }
-              ]
+              width: 'full'
             },
             {
               _key: 'field-description',

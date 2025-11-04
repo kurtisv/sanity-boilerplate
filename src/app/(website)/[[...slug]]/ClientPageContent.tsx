@@ -3,6 +3,7 @@
 import BlockRenderer from '@/components/BlockRenderer/BlockRenderer'
 import type { Block } from '@/types/blocks'
 import PageWrapper from '@/components/layout/PageWrapper'
+import ClientPageWrapper from './ClientPageWrapper'
 import type { PageStyleSettings } from '@/lib/theme-utils'
 import { 
   EmptyState, 
@@ -17,6 +18,8 @@ type Page = {
   pageBuilder?: Block[]
   seoTitle?: string
   seoDescription?: string
+  customCss?: string
+  customJs?: string
 } & PageStyleSettings
 
 interface ClientPageContentProps {
@@ -41,23 +44,27 @@ export default function ClientPageContent({ page }: ClientPageContentProps) {
 
   if (!page.pageBuilder || page.pageBuilder.length === 0) {
     return (
-      <PageWrapper pageStyles={page}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-          <EmptyState>
-            <PageTitle>{page.title}</PageTitle>
-            <PageMessage>
-              Cette page existe mais ne contient pas encore de blocs.
-              Ajoutez du contenu via Sanity Studio.
-            </PageMessage>
-          </EmptyState>
-        </div>
-      </PageWrapper>
+      <ClientPageWrapper page={page}>
+        <PageWrapper pageStyles={page}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
+            <EmptyState>
+              <PageTitle>{page.title}</PageTitle>
+              <PageMessage>
+                Cette page existe mais ne contient pas encore de blocs.
+                Ajoutez du contenu via Sanity Studio.
+              </PageMessage>
+            </EmptyState>
+          </div>
+        </PageWrapper>
+      </ClientPageWrapper>
     )
   }
 
   return (
-    <PageWrapper pageStyles={page}>
-      <BlockRenderer blocks={page.pageBuilder} />
-    </PageWrapper>
+    <ClientPageWrapper page={page}>
+      <PageWrapper pageStyles={page}>
+        <BlockRenderer blocks={page.pageBuilder} />
+      </PageWrapper>
+    </ClientPageWrapper>
   )
 }

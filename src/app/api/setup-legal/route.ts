@@ -512,7 +512,7 @@ export async function POST(request: NextRequest) {
           formFields: [
             {
               _key: 'field-name',
-              fieldType: 'text',
+              fieldType: 'name',
               label: 'Nom complet',
               placeholder: 'Votre nom et prénom',
               required: true,

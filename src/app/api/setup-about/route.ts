@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { client } from '@/sanity/lib/client'
+import { generateCtaKey, generateFeatureKey } from '@/lib/generate-unique-keys'
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +14,7 @@ export async function POST(request: NextRequest) {
         _type: 'slug'
       },
       seoTitle: 'À Propos - Notre Équipe et Expertise Technique',
-      seoDescription: 'Découvrez notre équipe passionnée, notre mission et notre expertise en développement web. Plus de 5 ans d\'expérience dans la création de solutions digitales innovantes.',
+      seoDescription: 'Découvrez notre équipe passionnée et notre expertise en développement web. Plus de 5 ans d\'expérience dans les solutions digitales.',
       
       // Page builder avec les 7 blocs - CONFORMITÉ SANITY STRICTE
       pageBuilder: [
@@ -27,11 +28,13 @@ export async function POST(request: NextRequest) {
           // ✅ CONFORME : ctaButtons array selon le schéma
           ctaButtons: [
             {
+              _key: generateCtaKey('team'),
               text: '👥 Rencontrer l\'Équipe',
               href: '#team',
               variant: 'primary'
             },
             {
+              _key: generateCtaKey('contact'),
               text: '💬 Nous Contacter',
               href: '/contact',
               variant: 'secondary'
@@ -88,6 +91,7 @@ export async function POST(request: NextRequest) {
           // ✅ CONFORME : features array selon le schéma
           features: [
             {
+              _key: generateFeatureKey('excellence'),
               iconType: 'emoji',
               iconEmoji: '⭐',
               iconSize: 'large',
@@ -97,6 +101,7 @@ export async function POST(request: NextRequest) {
               featured: true
             },
             {
+              _key: generateFeatureKey('innovation'),
               iconType: 'emoji',
               iconEmoji: '🚀',
               iconSize: 'large',
@@ -106,6 +111,7 @@ export async function POST(request: NextRequest) {
               featured: false
             },
             {
+              _key: generateFeatureKey('collaboration'),
               iconType: 'emoji',
               iconEmoji: '🤝',
               iconSize: 'large',
@@ -136,14 +142,17 @@ export async function POST(request: NextRequest) {
           title: 'Notre Équipe',
           subtitle: 'Des experts passionnés qui donnent vie à vos projets',
           
-          // ✅ CONFORME : blockType selon le schéma
-          blockType: 'team',
+          // ✅ CONFORME : displayType selon le schéma
+          displayType: 'team',
           
           // ✅ CONFORME : layout selon le schéma
           layout: 'grid',
           
-          // ✅ CONFORME : teamMembers array selon le schéma
-          teamMembers: [
+          // ✅ CONFORME : gridColumns selon le schéma
+          gridColumns: 3,
+          
+          // ✅ CONFORME : members array selon le schéma
+          members: [
             {
               _key: 'member-ceo',
               name: 'Alexandre Martin',
@@ -229,31 +238,6 @@ export async function POST(request: NextRequest) {
           
           // ✅ CONFORME : layout selon le schéma
           layout: 'grid-4col',
-          
-          // ✅ CONFORME : stats array selon le schéma
-          features: [
-            {
-              iconType: 'emoji',
-              icon: '🚀',
-              title: 'Innovation',
-              description: 'Nous adoptons les dernières technologies pour créer des solutions avant-gardistes.',
-              featured: false
-            },
-            {
-              iconType: 'emoji',
-              icon: '⭐',
-              title: 'Qualité',
-              description: 'Chaque projet est développé selon les plus hauts standards de qualité.',
-              featured: true
-            },
-            {
-              iconType: 'emoji',
-              icon: '🤝',
-              title: 'Support',
-              description: 'Un accompagnement personnalisé tout au long de votre projet.',
-              featured: false
-            }
-          ],
           
           // ✅ CONFORME : stats array selon le schéma
           stats: [
@@ -434,7 +418,7 @@ export async function POST(request: NextRequest) {
           formFields: [
             {
               _key: 'field-name',
-              fieldType: 'text',
+              fieldType: 'name',
               label: 'Nom complet',
               placeholder: 'Votre nom et prénom',
               required: true,
@@ -450,7 +434,7 @@ export async function POST(request: NextRequest) {
             },
             {
               _key: 'field-company',
-              fieldType: 'text',
+              fieldType: 'company',
               label: 'Entreprise',
               placeholder: 'Nom de votre entreprise',
               required: false,

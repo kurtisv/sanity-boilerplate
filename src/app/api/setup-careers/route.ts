@@ -377,7 +377,7 @@ export async function POST(request: NextRequest) {
           formFields: [
             {
               _key: 'field-name',
-              fieldType: 'text',
+              fieldType: 'name',
               label: 'Nom complet',
               placeholder: 'Votre nom et prénom',
               required: true,
@@ -393,7 +393,7 @@ export async function POST(request: NextRequest) {
             },
             {
               _key: 'field-phone',
-              fieldType: 'tel',
+              fieldType: 'phone',
               label: 'Téléphone',
               placeholder: '+33 6 12 34 56 78',
               required: false,
@@ -401,33 +401,19 @@ export async function POST(request: NextRequest) {
             },
             {
               _key: 'field-position',
-              fieldType: 'select',
+              fieldType: 'subject',
               label: 'Poste visé',
-              placeholder: 'Sélectionnez un poste',
+              placeholder: 'ex: Développeur Frontend Senior',
               required: true,
-              width: 'half',
-              options: [
-                { label: 'Développeur Frontend Senior', value: 'frontend-senior' },
-                { label: 'Designer UX/UI', value: 'designer-ux' },
-                { label: 'Développeur Full-Stack', value: 'fullstack' },
-                { label: 'Développeur Junior', value: 'junior' },
-                { label: 'Chef de Projet Tech', value: 'project-manager' },
-                { label: 'Autre poste', value: 'other' }
-              ]
+              width: 'half'
             },
             {
               _key: 'field-experience',
-              fieldType: 'select',
+              fieldType: 'custom',
               label: 'Expérience',
-              placeholder: 'Années d\'expérience',
+              placeholder: 'ex: 5 ans en développement web',
               required: true,
-              width: 'full',
-              options: [
-                { label: 'Débutant (0-1 an)', value: 'junior' },
-                { label: 'Intermédiaire (2-4 ans)', value: 'mid' },
-                { label: 'Senior (5+ ans)', value: 'senior' },
-                { label: 'Expert (10+ ans)', value: 'expert' }
-              ]
+              width: 'full'
             },
             {
               _key: 'field-motivation',

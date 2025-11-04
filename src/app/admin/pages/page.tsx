@@ -14,11 +14,13 @@ export default function AdminPagesPage() {
   const [globalStatus, setGlobalStatus] = useState<PageStatus>(null)
   
   const [pageStatuses, setPageStatuses] = useState<Record<string, PageStatus>>({
+    home: null,
     about: null,
     services: null,
     portfolio: null,
     pricing: null,
     contact: null,
+    'contact-simple': null,
     blog: null,
     faq: null,
     legal: null,
@@ -28,16 +30,18 @@ export default function AdminPagesPage() {
   })
 
   const pages = [
+    { key: 'home', title: 'Home', icon: '🏠', description: 'Page d\'accueil du site', apiName: 'import-home' },
+    { key: 'demo', title: 'Page Démo', icon: '🚀', description: 'Démonstration des blocs et fonctionnalités', apiName: 'import-demo' },
     { key: 'about', title: 'À Propos', icon: '👥', description: 'Équipe, mission et expertise technique' },
     { key: 'services', title: 'Services', icon: '🛠️', description: 'Nos prestations et processus de développement' },
     { key: 'portfolio', title: 'Portfolio', icon: '🎨', description: 'Réalisations et études de cas clients' },
     { key: 'pricing', title: 'Tarifs', icon: '💰', description: 'Plans tarifaires et devis personnalisés' },
-    { key: 'contact', title: 'Contact', icon: '📞', description: 'Formulaire de contact et coordonnées' },
+    { key: 'contact', title: 'Contact', icon: '📞', description: 'Formulaire de contact complet' },
+    { key: 'contact-simple', title: 'Contact Simple', icon: '📧', description: 'Formulaire de contact simplifié' },
     { key: 'blog', title: 'Blog', icon: '📝', description: 'Articles techniques et actualités' },
     { key: 'faq', title: 'FAQ', icon: '❓', description: 'Questions fréquentes et support' },
     { key: 'legal', title: 'Mentions Légales', icon: '⚖️', description: 'Informations légales et RGPD' },
     { key: 'careers', title: 'Carrières', icon: '💼', description: 'Offres d\'emploi et recrutement' },
-    { key: 'demo', title: 'Page Démo', icon: '🚀', description: 'Démonstration des blocs et fonctionnalités' },
     { key: 'studio-showcase', title: 'Vitrine Studio', icon: '✨', description: 'Présentation des capacités du Studio' }
   ]
 
@@ -47,7 +51,9 @@ export default function AdminPagesPage() {
     try {
       // Gérer les APIs spéciales
       let apiEndpoint = `/api/setup-${pageKey}`
-      if (pageKey === 'demo') {
+      if (pageKey === 'home') {
+        apiEndpoint = '/api/import-home'
+      } else if (pageKey === 'demo') {
         apiEndpoint = '/api/import-demo'
       } else if (pageKey === 'studio-showcase') {
         apiEndpoint = '/api/setup-studio-showcase'
@@ -105,7 +111,9 @@ export default function AdminPagesPage() {
       try {
         // Gérer les APIs spéciales
         let apiEndpoint = `/api/setup-${page.key}`
-        if (page.key === 'demo') {
+        if (page.key === 'home') {
+          apiEndpoint = '/api/import-home'
+        } else if (page.key === 'demo') {
           apiEndpoint = '/api/import-demo'
         } else if (page.key === 'studio-showcase') {
           apiEndpoint = '/api/setup-studio-showcase'
@@ -184,10 +192,10 @@ export default function AdminPagesPage() {
           fontSize: '1.1rem',
           color: '#6b7280',
           lineHeight: '1.6',
-          maxWidth: '600px',
+          maxWidth: '700px',
           margin: '0 auto'
         }}>
-          Créez instantanément toutes vos pages dans Sanity Studio avec du contenu professionnel
+          Créez instantanément <strong>13 pages professionnelles</strong> dans Sanity Studio avec du contenu validé à 100%
         </p>
       </div>
 
@@ -203,6 +211,7 @@ export default function AdminPagesPage() {
         justifyContent: 'center',
         flexWrap: 'wrap'
       }}>
+        <Link href="/admin" style={{ color: '#667eea', textDecoration: 'none', fontWeight: '600' }}>← Dashboard Admin</Link>
         <Link href="/" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>🏠 Accueil</Link>
         <Link href="/studio" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>🎨 Studio</Link>
         <Link href="/admin/cleanup" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '500' }}>🧹 Nettoyage</Link>

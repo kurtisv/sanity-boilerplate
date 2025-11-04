@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { client } from '@/sanity/lib/client'
+import { generateCtaKey, generateFeatureKey, generateBlockKey, generateSpanKey } from '@/lib/generate-unique-keys'
 
 export async function POST(request: NextRequest) {
   try {
@@ -27,11 +28,13 @@ export async function POST(request: NextRequest) {
           // ✅ CONFORME : ctaButtons array selon le schéma
           ctaButtons: [
             {
+              _key: generateCtaKey('services'),
               text: '🎨 Voir nos réalisations',
               href: '#services-list',
               variant: 'primary'
             },
             {
+              _key: generateCtaKey('devis'),
               text: '💰 Demander un devis',
               href: '/contact',
               variant: 'secondary'
@@ -88,6 +91,7 @@ export async function POST(request: NextRequest) {
           // ✅ CONFORME : features array selon le schéma
           features: [
             {
+              _key: generateFeatureKey('web-dev'),
               iconType: 'emoji',
               iconEmoji: '🌐',
               iconSize: 'large',
@@ -102,6 +106,7 @@ export async function POST(request: NextRequest) {
               featured: true
             },
             {
+              _key: generateFeatureKey('mobile-dev'),
               iconType: 'emoji',
               iconEmoji: '📱',
               iconSize: 'large',
@@ -116,6 +121,7 @@ export async function POST(request: NextRequest) {
               featured: false
             },
             {
+              _key: generateFeatureKey('ecommerce'),
               iconType: 'emoji',
               iconEmoji: '🛒',
               iconSize: 'large',
@@ -130,6 +136,7 @@ export async function POST(request: NextRequest) {
               featured: false
             },
             {
+              _key: generateFeatureKey('seo-marketing'),
               iconType: 'emoji',
               iconEmoji: '📈',
               iconSize: 'large',
@@ -400,7 +407,7 @@ export async function POST(request: NextRequest) {
           formFields: [
             {
               _key: 'field-name',
-              fieldType: 'text',
+              fieldType: 'name',
               label: 'Nom complet',
               placeholder: 'Votre nom et prénom',
               required: true,
@@ -416,41 +423,19 @@ export async function POST(request: NextRequest) {
             },
             {
               _key: 'field-company',
-              fieldType: 'text',
+              fieldType: 'company',
               label: 'Entreprise',
               placeholder: 'Nom de votre entreprise',
               required: false,
               width: 'half'
             },
             {
-              _key: 'field-budget',
-              fieldType: 'select',
-              label: 'Budget estimé',
-              placeholder: 'Sélectionnez votre budget',
-              required: false,
-              width: 'half',
-              options: [
-                { label: 'Moins de 5 000€', value: 'budget-5k' },
-                { label: '5 000€ - 15 000€', value: 'budget-15k' },
-                { label: '15 000€ - 30 000€', value: 'budget-30k' },
-                { label: 'Plus de 30 000€', value: 'budget-30k-plus' }
-              ]
-            },
-            {
-              _key: 'field-service',
-              fieldType: 'select',
-              label: 'Service souhaité',
-              placeholder: 'Quel service vous intéresse ?',
+              _key: 'field-subject',
+              fieldType: 'subject',
+              label: 'Sujet',
+              placeholder: 'Budget et service souhaités',
               required: true,
-              width: 'full',
-              options: [
-                { label: 'Développement web', value: 'web' },
-                { label: 'Application mobile', value: 'mobile' },
-                { label: 'E-commerce', value: 'ecommerce' },
-                { label: 'SEO & Marketing', value: 'seo' },
-                { label: 'Refonte de site', value: 'refonte' },
-                { label: 'Conseil & Audit', value: 'conseil' }
-              ]
+              width: 'full'
             },
             {
               _key: 'field-description',

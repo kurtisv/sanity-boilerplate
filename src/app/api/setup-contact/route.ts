@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { client } from '@/sanity/lib/client'
+import { generateCtaKey, generateFeatureKey, generateFieldKey } from '@/lib/generate-unique-keys'
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,16 +23,18 @@ export async function POST(request: NextRequest) {
           _type: 'heroBlock',
           _key: 'contact-hero',
           title: 'Contactez-Nous',
-          subtitle: 'Prêt à donner vie à votre projet digital ? Notre équipe est là pour vous accompagner de l\'idée à la réalisation. Parlons de vos ambitions !',
+          subtitle: 'Notre équipe est là pour vous accompagner. Parlons de votre projet digital !',
           
           // ✅ CONFORME : ctaButtons array selon le schéma
           ctaButtons: [
             {
+              _key: generateCtaKey('form'),
               text: '📝 Remplir le Formulaire',
               href: '#contact-form',
               variant: 'primary'
             },
             {
+              _key: generateCtaKey('phone'),
               text: '📞 Appeler Directement',
               href: 'tel:+33123456789',
               variant: 'secondary'
@@ -88,6 +91,7 @@ export async function POST(request: NextRequest) {
           // ✅ CONFORME : features array selon le schéma
           features: [
             {
+              _key: generateFeatureKey('email'),
               iconType: 'emoji',
               iconEmoji: '📧',
               iconSize: 'large',
@@ -102,6 +106,7 @@ export async function POST(request: NextRequest) {
               featured: false
             },
             {
+              _key: generateFeatureKey('phone'),
               iconType: 'emoji',
               iconEmoji: '📞',
               iconSize: 'large',
@@ -116,6 +121,7 @@ export async function POST(request: NextRequest) {
               featured: true
             },
             {
+              _key: generateFeatureKey('meeting'),
               iconType: 'emoji',
               iconEmoji: '🤝',
               iconSize: 'large',
@@ -149,7 +155,7 @@ export async function POST(request: NextRequest) {
           _type: 'contactBlock',
           _key: 'contact-main-form',
           title: 'Parlez-nous de Votre Projet',
-          subtitle: 'Plus vous nous en dites, mieux nous pourrons vous conseiller et vous proposer une solution adaptée.',
+          subtitle: 'Plus vous nous en dites, mieux nous pourrons vous conseiller.',
           
           // ✅ CONFORME : layout selon le schéma contactBlock
           layout: 'with-sidebar',
@@ -157,6 +163,7 @@ export async function POST(request: NextRequest) {
           // ✅ CONFORME : formFields array selon le schéma
           formFields: [
             {
+              _key: generateFieldKey('name'),
               fieldType: 'name',
               label: 'Nom complet',
               placeholder: 'Votre nom et prénom',
@@ -164,6 +171,7 @@ export async function POST(request: NextRequest) {
               width: 'half'
             },
             {
+              _key: generateFieldKey('email'),
               fieldType: 'email',
               label: 'Email professionnel',
               placeholder: 'votre@entreprise.com',
@@ -171,6 +179,7 @@ export async function POST(request: NextRequest) {
               width: 'half'
             },
             {
+              _key: generateFieldKey('company'),
               fieldType: 'company',
               label: 'Entreprise',
               placeholder: 'Nom de votre entreprise',
@@ -178,6 +187,7 @@ export async function POST(request: NextRequest) {
               width: 'half'
             },
             {
+              _key: generateFieldKey('phone'),
               fieldType: 'phone',
               label: 'Téléphone',
               placeholder: '+33 1 23 45 67 89',
@@ -186,52 +196,27 @@ export async function POST(request: NextRequest) {
             },
             {
               _key: 'field-project-type',
-              fieldType: 'select',
+              fieldType: 'subject',
               label: 'Type de projet',
-              placeholder: 'Sélectionnez le type de projet',
+              placeholder: 'Site web, app mobile, e-commerce, etc.',
               required: true,
-              width: 'full',
-              options: [
-                { label: 'Site vitrine / Corporate', value: 'vitrine' },
-                { label: 'E-commerce / Boutique en ligne', value: 'ecommerce' },
-                { label: 'Application web / SaaS', value: 'webapp' },
-                { label: 'Application mobile', value: 'mobile' },
-                { label: 'Refonte de site existant', value: 'refonte' },
-                { label: 'SEO / Marketing digital', value: 'seo' },
-                { label: 'Conseil / Audit technique', value: 'conseil' },
-                { label: 'Autre', value: 'other' }
-              ]
+              width: 'full'
             },
             {
               _key: 'field-budget',
-              fieldType: 'select',
+              fieldType: 'custom',
               label: 'Budget estimé',
-              placeholder: 'Quel est votre budget ?',
+              placeholder: 'ex: 10 000€ - 20 000€',
               required: false,
-              width: 'full',
-              options: [
-                { label: 'Moins de 5 000€', value: 'budget-5k' },
-                { label: '5 000€ - 10 000€', value: 'budget-10k' },
-                { label: '10 000€ - 20 000€', value: 'budget-20k' },
-                { label: '20 000€ - 50 000€', value: 'budget-50k' },
-                { label: 'Plus de 50 000€', value: 'budget-50k-plus' },
-                { label: 'À discuter', value: 'budget-discuss' }
-              ]
+              width: 'full'
             },
             {
               _key: 'field-timeline',
-              fieldType: 'select',
+              fieldType: 'custom',
               label: 'Délai souhaité',
-              placeholder: 'Quand souhaitez-vous lancer ?',
+              placeholder: 'ex: Dans les 3 mois',
               required: false,
-              width: 'full',
-              options: [
-                { label: 'Dès que possible', value: 'asap' },
-                { label: 'Dans le mois', value: '1month' },
-                { label: 'Dans les 3 mois', value: '3months' },
-                { label: 'Dans les 6 mois', value: '6months' },
-                { label: 'Pas de contrainte', value: 'flexible' }
-              ]
+              width: 'full'
             },
             {
               _key: 'field-description',
@@ -260,7 +245,7 @@ export async function POST(request: NextRequest) {
           // ✅ CONFORME : successMessage selon le schéma
           successMessage: {
             title: 'Demande Envoyée avec Succès !',
-            description: 'Merci pour la confiance que vous nous accordez ! Nous analysons votre projet et vous recontactons sous 24h avec une première analyse et des recommandations personnalisées.'
+            description: 'Nous analysons votre projet et vous recontactons sous 24h.'
           },
           
           // ✅ CONFORME : contactInfo selon le schéma

@@ -1,14 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@sanity/client'
+import { client } from '@/sanity/lib/client'
+import { generateCtaKey } from '@/lib/generate-unique-keys'
 
-// Client Sanity avec token pour les opérations d'écriture
-const writeClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
-  token: process.env.SANITY_API_TOKEN,
-  useCdn: false,
-  apiVersion: '2024-01-01'
-})
 
 // Configuration des blocs pour la page d'accueil
 const homeBlocks = [
@@ -20,12 +13,14 @@ const homeBlocks = [
     layout: 'centered',
     ctaButtons: [
       {
+        _key: generateCtaKey('features'),
         text: 'Découvrir les fonctionnalités',
         href: '#features',
         variant: 'primary',
         size: 'lg'
       },
       {
+        _key: generateCtaKey('demo'),
         text: 'Voir la démo',
         href: '/demo',
         variant: 'secondary',
@@ -56,27 +51,31 @@ const homeBlocks = [
     features: [
       {
         _key: 'feature-1',
+        iconType: 'emoji',
+        iconEmoji: '🧩',
         title: 'Système de Blocs',
-        description: 'Architecture modulaire avec 8+ blocs prêts à l\'emploi',
-        icon: '🧩'
+        description: 'Architecture modulaire avec 8+ blocs prêts à l\'emploi'
       },
       {
         _key: 'feature-2',
+        iconType: 'emoji',
+        iconEmoji: '🎨',
         title: 'Design Professionnel',
-        description: 'Interface moderne avec CSS Modules et design system',
-        icon: '🎨'
+        description: 'Interface moderne avec CSS Modules et design system'
       },
       {
         _key: 'feature-3',
+        iconType: 'emoji',
+        iconEmoji: '⚡',
         title: 'Performance Optimisée',
-        description: 'Next.js 16 avec App Router et Server Components',
-        icon: '⚡'
+        description: 'Next.js 16 avec App Router et Server Components'
       },
       {
         _key: 'feature-4',
+        iconType: 'emoji',
+        iconEmoji: '🔧',
         title: 'TypeScript Complet',
-        description: 'Sécurité de type sur tout le projet',
-        icon: '🔧'
+        description: 'Sécurité de type sur tout le projet'
       }
     ],
     layout: 'grid',
@@ -116,28 +115,28 @@ const homeBlocks = [
     title: 'Prêt à Commencer ?',
     subtitle: 'Explorez toutes les fonctionnalités ou contactez-nous pour en savoir plus',
     layout: 'centered',
-    fields: [
+    formFields: [
       {
         _key: 'name-field',
-        name: 'name',
+        fieldType: 'name',
         label: 'Votre nom',
-        type: 'text',
+        placeholder: 'Votre nom complet',
         required: true,
         width: 'half'
       },
       {
         _key: 'email-field',
-        name: 'email',
+        fieldType: 'email',
         label: 'Email',
-        type: 'email',
+        placeholder: 'votre@email.com',
         required: true,
         width: 'half'
       },
       {
         _key: 'message-field',
-        name: 'message',
+        fieldType: 'message',
         label: 'Message',
-        type: 'textarea',
+        placeholder: 'Votre message...',
         required: true,
         width: 'full'
       }
@@ -189,11 +188,11 @@ export async function POST(request: NextRequest) {
 
     // Vérification si la page home existe déjà
     console.log('🔍 Vérification de l\'existence de la page home')
-    const existingPage = await writeClient.fetch(`*[_type == "page" && slug.current == "home"][0]`)
+    const existingPage = await client.fetch(`*[_type == "page" && slug.current == "home"][0]`)
 
     if (existingPage) {
       console.log('🗑️ Suppression de l\'ancienne page home:', existingPage._id)
-      await writeClient.delete(existingPage._id)
+      await client.delete(existingPage._id)
     }
 
     // Création de la nouvelle page d'accueil
@@ -209,7 +208,7 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('💾 Sauvegarde dans Sanity...')
-    const result = await writeClient.create(homePage)
+    const result = await client.create(homePage)
     console.log('✅ Page home créée avec succès:', result._id)
 
     return NextResponse.json({
@@ -237,7 +236,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   try {
     // Vérifier si la page home existe
-    const existingPage = await writeClient.fetch(`*[_type == "page" && slug.current == "home"][0]`)
+    const existingPage = await client.fetch(`*[_type == "page" && slug.current == "home"][0]`)
     
     return NextResponse.json({
       exists: !!existingPage,

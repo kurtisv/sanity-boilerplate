@@ -78,25 +78,6 @@ function getPresetByName(name: string) {
 }
 
 /**
- * Fonction principale pour appliquer les thèmes
- */
-export function applyTheme(settings: {
-  backgroundSettings?: ThemeSettings['backgroundSettings']
-  styling?: ThemeSettings['styling']
-  typography?: ThemeSettings['typography']
-}) {
-  const backgroundStyles = getBackgroundStyles(settings.backgroundSettings)
-  
-  return {
-    containerStyle: Object.entries(backgroundStyles)
-      .map(([key, value]) => `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${value};`)
-      .join(' '),
-    containerClasses: '',
-    backgroundStyles
-  }
-}
-
-/**
  * Génère les styles CSS pour les arrière-plans
  */
 export function getBackgroundStyles(backgroundSettings?: ThemeSettings['backgroundSettings']): React.CSSProperties {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { client } from '@/sanity/lib/client'
+import { generateCtaKey } from '@/lib/generate-unique-keys'
 
 export async function GET() {
   try {
@@ -56,11 +57,13 @@ export async function POST(request: NextRequest) {
           
           ctaButtons: [
             {
+              _key: generateCtaKey('studio'),
               text: '🎨 Ouvrir Sanity Studio',
               href: '/studio',
               variant: 'primary'
             },
             {
+              _key: generateCtaKey('docs'),
               text: '📋 Voir la Documentation',
               href: '#features',
               variant: 'secondary'
