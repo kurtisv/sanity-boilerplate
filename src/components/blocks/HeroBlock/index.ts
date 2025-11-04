@@ -1,1 +1,1 @@
-export { default } from './HeroBlock'
+export { default } from './HeroBlock-fixed'

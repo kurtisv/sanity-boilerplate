@@ -79,7 +79,12 @@ export default defineType({
               options: {
                 hotspot: true,
               },
-              validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'imageUrl',
+              title: 'URL de l\'image (alternative)',
+              type: 'url',
+              description: 'URL d\'une image externe (utilisée si aucune photo n\'est uploadée)',
             }),
             defineField({
               name: 'bio',
@@ -250,7 +255,7 @@ export default defineType({
               return {
                 title: `${content?.substring(0, 60)}...` || 'Témoignage',
                 subtitle: `${authorName || 'Anonyme'}${company ? ` - ${company}` : ''} ${stars}${featured ? ' • Mis en avant' : ''}`,
-                media: 'message-circle',
+                media: undefined,
               }
             },
           },
@@ -391,7 +396,7 @@ export default defineType({
       return {
         title: title || `${type}`,
         subtitle: `${layout} • ${count || 0} éléments`,
-        media: blockType === 'team' ? 'users' : blockType === 'testimonials' ? 'message-circle' : 'theater',
+        media: undefined,
       }
     },
   },

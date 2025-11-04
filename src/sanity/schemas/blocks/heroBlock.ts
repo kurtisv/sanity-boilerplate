@@ -147,6 +147,20 @@ export default defineType({
           },
           initialValue: 'center',
         },
+        {
+          name: 'textAlignment',
+          title: 'Alignement du texte',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'Gauche', value: 'left' },
+              { title: 'Centre', value: 'center' },
+              { title: 'Droite', value: 'right' },
+            ],
+            layout: 'radio',
+          },
+          initialValue: 'center',
+        },
       ],
     }),
 

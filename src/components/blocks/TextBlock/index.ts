@@ -1,2 +1,1 @@
-import TextBlock from './TextBlock'
-export default TextBlock
+export { default } from './TextBlock-fixed'

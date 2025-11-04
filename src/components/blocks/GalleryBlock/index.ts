@@ -1,1 +1,1 @@
-export { default } from './GalleryBlock'
+export { default } from './GalleryBlock-fixed'

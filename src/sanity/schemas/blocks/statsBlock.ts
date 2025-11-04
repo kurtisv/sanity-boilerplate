@@ -53,9 +53,9 @@ export default defineType({
             defineField({
               name: 'number',
               title: 'Nombre',
-              type: 'number',
-              description: 'La valeur numérique (sera animée)',
-              validation: (Rule) => Rule.required().min(0),
+              type: 'string',
+              description: 'La valeur à afficher (ex: 50+, 98%, 2k€, etc.)',
+              validation: (Rule) => Rule.required().max(20),
             }),
             defineField({
               name: 'suffix',
@@ -153,7 +153,7 @@ export default defineType({
               return {
                 title: `${icon ? icon + ' ' : ''}${displayNumber}`,
                 subtitle: `${label || 'Sans label'}${featured ? ' • ⭐ Mis en avant' : ''}`,
-                media: featured ? 'chart-bar' : 'trending-up',
+                media: undefined,
               }
             },
           },
@@ -264,7 +264,7 @@ export default defineType({
       return {
         title: title || 'Bloc de statistiques',
         subtitle: `${layout} • ${statsCount || 0} stats${enableAnimations ? ' • Animé' : ''}`,
-        media: 'chart-bar',
+        media: undefined,
       }
     },
   },

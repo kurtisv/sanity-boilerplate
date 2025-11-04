@@ -39,9 +39,9 @@ export default defineType({
     }),
     defineField({
       name: 'images',
-      title: 'Images',
+      title: '📷 Images de la Galerie',
       type: 'array',
-      description: 'Collection d\'images pour la galerie',
+      description: '🎯 Ajoutez vos photos ici ! Glissez-déposez des fichiers ou utilisez le bouton + pour ajouter des images. Vous pouvez aussi prendre des photos directement avec votre caméra.',
       of: [
         {
           type: 'object',
@@ -52,8 +52,14 @@ export default defineType({
               type: 'image',
               options: {
                 hotspot: true,
+                accept: 'image/*',
+                storeOriginalFilename: true,
               },
-              validation: (Rule) => Rule.required(),
+              description: '📷 Téléchargez une image ou utilisez votre caméra pour prendre une photo. Formats acceptés: JPG, PNG, WebP, GIF',
+              validation: (Rule) => Rule.required().custom((image) => {
+                if (!image) return 'Une image est requise pour la galerie'
+                return true
+              }),
             }),
             defineField({
               name: 'alt',
@@ -102,6 +108,29 @@ export default defineType({
         },
       ],
       validation: (Rule) => Rule.min(1).max(50).error('Entre 1 et 50 images maximum'),
+      initialValue: [
+        {
+          _key: 'default-image-1',
+          alt: 'Image d\'exemple 1',
+          caption: 'Première image de démonstration',
+          category: 'exemple',
+          featured: false
+        },
+        {
+          _key: 'default-image-2', 
+          alt: 'Image d\'exemple 2',
+          caption: 'Deuxième image de démonstration',
+          category: 'exemple',
+          featured: true
+        },
+        {
+          _key: 'default-image-3',
+          alt: 'Image d\'exemple 3', 
+          caption: 'Troisième image de démonstration',
+          category: 'exemple',
+          featured: false
+        }
+      ]
     }),
     defineField({
       name: 'gridSettings',
@@ -315,7 +344,7 @@ export default defineType({
       return {
         title: title || 'Galerie d\'images',
         subtitle: `${layout} • ${imagesCount || 0} images`,
-        media: media || 'image',
+        media: media,
       }
     },
   },

@@ -21,7 +21,7 @@ export default function StudioShowcaseAdminPage() {
   // Vérifier le statut de la page studio
   const checkStudioStatus = async () => {
     try {
-      const response = await fetch('/api/setup-studio-page')
+      const response = await fetch('/api/setup-studio-showcase')
       const data = await response.json()
       setStudioStatus({
         exists: data.exists,
@@ -42,7 +42,7 @@ export default function StudioShowcaseAdminPage() {
     setStatus(null)
 
     try {
-      const response = await fetch('/api/setup-studio-page', {
+      const response = await fetch('/api/setup-studio-showcase', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -54,7 +54,7 @@ export default function StudioShowcaseAdminPage() {
       if (response.ok) {
         setStatus({
           type: 'success',
-          message: `✅ Page Studio créée avec succès ! ${data.data.blocksCount} blocs configurés.`
+          message: `✅ Page Vitrine Studio créée avec succès ! Slug: ${data.slug}`
         })
         await checkStudioStatus()
       } else {

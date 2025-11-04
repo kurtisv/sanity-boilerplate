@@ -1,8 +1,24 @@
 'use client'
 
-import { ThemeToggle } from '@/components/ui'
 import { useTheme } from '@/contexts/ThemeContext'
 import styled from 'styled-components'
+
+// Simple ThemeToggle replacement
+const SimpleThemeToggle = styled.button`
+  padding: 0.5rem 1rem;
+  background: var(--color-primary, #3b82f6);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: var(--color-primary-dark, #2563eb);
+    transform: translateY(-1px);
+  }
+`
 
 const DemoContainer = styled.div`
   max-width: 800px;
@@ -136,7 +152,9 @@ export function ThemeDemo() {
     <DemoContainer>
       <DemoHeader>
         <DemoTitle>Démonstration du Système de Thème</DemoTitle>
-        <ThemeToggle variant="dropdown" />
+        <SimpleThemeToggle>
+          {theme === 'light' ? '🌙' : '☀️'} {theme || 'Auto'}
+        </SimpleThemeToggle>
       </DemoHeader>
 
       <ThemeInfo>
@@ -149,28 +167,6 @@ export function ThemeDemo() {
           <InfoValue>{resolvedTheme === 'light' ? 'Clair' : 'Sombre'}</InfoValue>
         </InfoCard>
       </ThemeInfo>
-
-      <ToggleSection>
-        <SectionTitle>Variantes du ThemeToggle</SectionTitle>
-        <ToggleGrid>
-          <ToggleCard>
-            <ToggleLabel>Bouton Simple</ToggleLabel>
-            <ThemeToggle variant="button" size="md" />
-          </ToggleCard>
-          <ToggleCard>
-            <ToggleLabel>Dropdown</ToggleLabel>
-            <ThemeToggle variant="dropdown" size="md" />
-          </ToggleCard>
-          <ToggleCard>
-            <ToggleLabel>Petit Bouton</ToggleLabel>
-            <ThemeToggle variant="button" size="sm" />
-          </ToggleCard>
-          <ToggleCard>
-            <ToggleLabel>Grand Bouton</ToggleLabel>
-            <ThemeToggle variant="button" size="lg" />
-          </ToggleCard>
-        </ToggleGrid>
-      </ToggleSection>
 
       <ToggleSection>
         <SectionTitle>Palette de Couleurs Actuelle</SectionTitle>

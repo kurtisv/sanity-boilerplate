@@ -11,10 +11,10 @@ import * as S from './BlockRenderer.styles'
 import TextBlock from '@/components/blocks/TextBlock'
 import HeroBlock from '@/components/blocks/HeroBlock'
 import FeatureGridBlock from '@/components/blocks/FeatureGridBlock'
-import ContactBlock from '@/components/blocks/ContactBlock/ContactBlock'
-import GalleryBlock from '@/components/blocks/GalleryBlock/GalleryBlock'
-import TeamBlock from '@/components/blocks/TeamBlock/TeamBlock'
-import StatsBlock from '@/components/blocks/StatsBlock/StatsBlock'
+import ContactBlock from '@/components/blocks/ContactBlock'
+import GalleryBlock from '@/components/blocks/GalleryBlock'
+import TeamBlock from '@/components/blocks/TeamBlock'
+import StatsBlock from '@/components/blocks/StatsBlock'
 
 // Type pour les données de blocs Sanity
 type BlockData = {

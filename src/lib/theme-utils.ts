@@ -2,7 +2,7 @@
 
 export interface ThemeSettings {
   backgroundSettings?: {
-    backgroundType?: 'solid' | 'gradient' | 'image' | 'transparent'
+    backgroundType?: 'solid' | 'color' | 'gradient' | 'image' | 'transparent'
     backgroundColor?: string
     gradientSettings?: {
       gradientType?: 'preset' | 'custom'
@@ -75,6 +75,25 @@ const gradientPresets: Record<string, { from: string; to: string; direction: str
 // Fonction pour récupérer un preset par nom
 function getPresetByName(name: string) {
   return gradientPresets[name] || null
+}
+
+/**
+ * Fonction principale pour appliquer les thèmes
+ */
+export function applyTheme(settings: {
+  backgroundSettings?: ThemeSettings['backgroundSettings']
+  styling?: ThemeSettings['styling']
+  typography?: ThemeSettings['typography']
+}) {
+  const backgroundStyles = getBackgroundStyles(settings.backgroundSettings)
+  
+  return {
+    containerStyle: Object.entries(backgroundStyles)
+      .map(([key, value]) => `${key.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${value};`)
+      .join(' '),
+    containerClasses: '',
+    backgroundStyles
+  }
 }
 
 /**

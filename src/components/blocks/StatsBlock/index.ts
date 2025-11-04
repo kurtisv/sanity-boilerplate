@@ -1,1 +1,1 @@
-export { default } from './StatsBlock'
+export { default } from './StatsBlock-fixed'

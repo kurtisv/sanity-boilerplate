@@ -143,7 +143,7 @@ export const Overlay = styled.div<{ $color: string; $opacity: number }>`
   right: 0;
   bottom: 0;
   background-color: ${props => props.$color};
-  opacity: ${props => props.$opacity / 100};
+  opacity: ${props => Math.max(0, Math.min(1, (props.$opacity || 50) / 100))};
   z-index: 1;
 `
 

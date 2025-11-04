@@ -429,6 +429,369 @@ export default function SimpleHomePage() {
               </Link>
             </div>
           </div>
+          
+          {/* Toutes les Pages */}
+          <div style={{ marginTop: '4rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+              <h3 style={{
+                fontSize: '1.8rem',
+                fontWeight: '600',
+                color: '#1a202c',
+                marginBottom: '1rem'
+              }}>
+                Toutes les Pages Disponibles
+              </h3>
+              <p style={{
+                fontSize: '1rem',
+                color: '#4a5568',
+                lineHeight: '1.6'
+              }}>
+                Explorez l'ensemble des pages créées pour ce boilerplate professionnel
+              </p>
+            </div>
+
+            {/* Pages Business */}
+            <div style={{ marginBottom: '3rem' }}>
+              <h4 style={{
+                fontSize: '1.2rem',
+                fontWeight: '600',
+                color: '#2d3748',
+                marginBottom: '1.5rem',
+                textAlign: 'center'
+              }}>
+                📊 Pages Business
+              </h4>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                gap: '1rem'
+              }}>
+                <Link href="/about" style={{
+                  background: 'white',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  padding: '1.2rem',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.8rem',
+                  transition: 'all 0.3s',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.2rem'
+                  }}>👥</div>
+                  <div>
+                    <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#1a202c', margin: '0 0 0.3rem' }}>
+                      À Propos
+                    </h5>
+                    <p style={{ fontSize: '0.8rem', color: '#4a5568', margin: '0' }}>
+                      Équipe & mission
+                    </p>
+                  </div>
+                </Link>
+
+                <Link href="/services" style={{
+                  background: 'white',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  padding: '1.2rem',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.8rem',
+                  transition: 'all 0.3s',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'linear-gradient(135deg, #059669 0%, #047857 100%)',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.2rem'
+                  }}>🛠️</div>
+                  <div>
+                    <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#1a202c', margin: '0 0 0.3rem' }}>
+                      Services
+                    </h5>
+                    <p style={{ fontSize: '0.8rem', color: '#4a5568', margin: '0' }}>
+                      Nos expertises
+                    </p>
+                  </div>
+                </Link>
+
+                <Link href="/pricing" style={{
+                  background: 'white',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  padding: '1.2rem',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.8rem',
+                  transition: 'all 0.3s',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.2rem'
+                  }}>💰</div>
+                  <div>
+                    <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#1a202c', margin: '0 0 0.3rem' }}>
+                      Tarifs
+                    </h5>
+                    <p style={{ fontSize: '0.8rem', color: '#4a5568', margin: '0' }}>
+                      Plans & devis
+                    </p>
+                  </div>
+                </Link>
+
+                <Link href="/contact" style={{
+                  background: 'white',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  padding: '1.2rem',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.8rem',
+                  transition: 'all 0.3s',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.2rem'
+                  }}>📞</div>
+                  <div>
+                    <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#1a202c', margin: '0 0 0.3rem' }}>
+                      Contact
+                    </h5>
+                    <p style={{ fontSize: '0.8rem', color: '#4a5568', margin: '0' }}>
+                      Nous joindre
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            </div>
+
+            {/* Pages Contenu */}
+            <div style={{ marginBottom: '3rem' }}>
+              <h4 style={{
+                fontSize: '1.2rem',
+                fontWeight: '600',
+                color: '#2d3748',
+                marginBottom: '1.5rem',
+                textAlign: 'center'
+              }}>
+                📝 Pages Contenu
+              </h4>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                gap: '1rem'
+              }}>
+                <Link href="/portfolio" style={{
+                  background: 'white',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  padding: '1.2rem',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.8rem',
+                  transition: 'all 0.3s',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.2rem'
+                  }}>🎨</div>
+                  <div>
+                    <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#1a202c', margin: '0 0 0.3rem' }}>
+                      Portfolio
+                    </h5>
+                    <p style={{ fontSize: '0.8rem', color: '#4a5568', margin: '0' }}>
+                      Nos réalisations
+                    </p>
+                  </div>
+                </Link>
+
+                <Link href="/blog" style={{
+                  background: 'white',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  padding: '1.2rem',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.8rem',
+                  transition: 'all 0.3s',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'linear-gradient(135deg, #2d1b69 0%, #11998e 100%)',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.2rem'
+                  }}>📝</div>
+                  <div>
+                    <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#1a202c', margin: '0 0 0.3rem' }}>
+                      Blog
+                    </h5>
+                    <p style={{ fontSize: '0.8rem', color: '#4a5568', margin: '0' }}>
+                      Articles tech
+                    </p>
+                  </div>
+                </Link>
+
+                <Link href="/faq" style={{
+                  background: 'white',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  padding: '1.2rem',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.8rem',
+                  transition: 'all 0.3s',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.2rem'
+                  }}>❓</div>
+                  <div>
+                    <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#1a202c', margin: '0 0 0.3rem' }}>
+                      FAQ
+                    </h5>
+                    <p style={{ fontSize: '0.8rem', color: '#4a5568', margin: '0' }}>
+                      Questions/réponses
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            </div>
+
+            {/* Pages Légales & Autres */}
+            <div>
+              <h4 style={{
+                fontSize: '1.2rem',
+                fontWeight: '600',
+                color: '#2d3748',
+                marginBottom: '1.5rem',
+                textAlign: 'center'
+              }}>
+                ⚖️ Pages Légales & Autres
+              </h4>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                gap: '1rem'
+              }}>
+                <Link href="/legal" style={{
+                  background: 'white',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  padding: '1.2rem',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.8rem',
+                  transition: 'all 0.3s',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'linear-gradient(135deg, #2d3748 0%, #4a5568 100%)',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.2rem'
+                  }}>⚖️</div>
+                  <div>
+                    <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#1a202c', margin: '0 0 0.3rem' }}>
+                      Mentions Légales
+                    </h5>
+                    <p style={{ fontSize: '0.8rem', color: '#4a5568', margin: '0' }}>
+                      Légal & RGPD
+                    </p>
+                  </div>
+                </Link>
+
+                <Link href="/careers" style={{
+                  background: 'white',
+                  border: '1px solid #e2e8f0',
+                  borderRadius: '12px',
+                  padding: '1.2rem',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.8rem',
+                  transition: 'all 0.3s',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)'
+                }}>
+                  <div style={{
+                    width: '40px',
+                    height: '40px',
+                    background: 'linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '1.2rem'
+                  }}>💼</div>
+                  <div>
+                    <h5 style={{ fontSize: '1rem', fontWeight: '600', color: '#1a202c', margin: '0 0 0.3rem' }}>
+                      Carrières
+                    </h5>
+                    <p style={{ fontSize: '0.8rem', color: '#4a5568', margin: '0' }}>
+                      Offres d'emploi
+                    </p>
+                  </div>
+                </Link>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 

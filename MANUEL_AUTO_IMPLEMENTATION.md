@@ -5,6 +5,7 @@
 
 - [🎯 Introduction](#-introduction)
 - [📖 Stack Technique](#-stack-technique)
+- [🚨 Règles de Conformité Sanity](#-règles-de-conformité-sanity)
 - [⚠️ Imports Critiques](#️-imports-critiques)
 - [⚙️ Procédure d'Auto-Implémentation](#️-procédure-dauto-implémentation)
 - [🎨 Système de Thème Unifié](#-système-de-thème-unifié)
@@ -54,6 +55,436 @@ export type Block =
   | TeamBlockData      // 👥 Équipes et témoignages
   | StatsBlockData     // 📊 Statistiques et compteurs
 ```
+
+---
+
+## 🚨 Règles de Conformité Sanity
+
+> **⚠️ RÈGLE ABSOLUE - CONFORMITÉ OBLIGATOIRE AUX SCHÉMAS SANITY**
+
+### 📐 Principe Fondamental
+**TOUTES les implémentations (APIs, composants, types) DOIVENT suivre EXACTEMENT les schémas Sanity définis.**
+
+### ✅ Règles de Conformité Obligatoires
+
+#### **1. Structure des Données**
+```typescript
+// ✅ CORRECT - Respecte le schéma heroBlock.ts
+{
+  _type: 'heroBlock',
+  title: 'Mon Titre',
+  heroSettings: {           // ✅ Objet défini dans le schéma
+    height: 'large',
+    verticalAlignment: 'center',
+    textAlignment: 'center'
+  },
+  ctaButtons: [             // ✅ Array défini dans le schéma
+    {
+      text: 'Mon Bouton',
+      href: '/contact',
+      variant: 'primary'
+    }
+  ]
+}
+
+// ❌ INCORRECT - Ne respecte pas le schéma
+{
+  _type: 'heroBlock',
+  title: 'Mon Titre',
+  height: 'large',          // ❌ Devrait être dans heroSettings
+  textAlignment: 'center',  // ❌ Devrait être dans heroSettings
+  primaryButton: {          // ❌ Devrait être ctaButtons array
+    text: 'Mon Bouton'
+  }
+}
+```
+
+#### **2. Champs Requis vs Optionnels**
+```typescript
+// ✅ CORRECT - Tous les champs requis présents
+animationSettings: {
+  enableAnimations: true,     // ✅ Requis
+  triggerOffset: 50,         // ✅ Requis pour IntersectionObserver
+  animationType: 'countUp',  // ✅ Requis
+  duration: 2000,           // ✅ Requis
+  staggerDelay: 200,        // ✅ Requis
+  easing: 'easeOutQuart'    // ✅ Requis
+}
+
+// ❌ INCORRECT - Champs manquants
+animationSettings: {
+  enableAnimations: true,
+  // ❌ triggerOffset manquant → erreur IntersectionObserver
+  // ❌ staggerDelay manquant → animations cassées
+}
+```
+
+#### **3. Types de Données**
+```typescript
+// ✅ CORRECT - Types respectés
+{
+  number: '150+',           // ✅ string (pour StatsBlock)
+  imageUrl: 'https://...',  // ✅ url (pour TeamBlock)
+  featured: true,           // ✅ boolean
+  skills: ['React', 'TS']   // ✅ array of strings
+}
+
+// ❌ INCORRECT - Types incorrects
+{
+  number: 150,              // ❌ number au lieu de string
+  imageUrl: { asset: {} },  // ❌ objet au lieu d'url
+  featured: 'true',         // ❌ string au lieu de boolean
+  skills: 'React, TS'       // ❌ string au lieu d'array
+}
+```
+
+### 🔍 Procédure de Vérification
+
+#### **Avant Toute Implémentation :**
+1. **Lire le schéma** correspondant dans `/src/sanity/schemas/blocks/`
+2. **Identifier les champs requis** et leurs types exacts
+3. **Vérifier la structure** des objets imbriqués
+4. **Respecter les noms** de champs exactement (case-sensitive)
+5. **Tester la conformité** avant déploiement
+
+#### **Outils de Vérification :**
+```bash
+# Vérifier les schémas Sanity
+find src/sanity/schemas -name "*.ts" -exec grep -l "defineField" {} \;
+
+# Vérifier les APIs
+find src/app/api -name "*.ts" -exec grep -l "_type:" {} \;
+```
+
+### 🚫 Erreurs Communes à Éviter
+
+#### **1. Champs au Mauvais Niveau**
+```typescript
+// ❌ ERREUR COMMUNE
+{
+  _type: 'heroBlock',
+  height: 'large',          // ❌ Devrait être dans heroSettings
+  textAlignment: 'center'   // ❌ Devrait être dans heroSettings
+}
+```
+
+#### **2. Noms de Champs Incorrects**
+```typescript
+// ❌ ERREUR COMMUNE
+{
+  _type: 'teamBlock',
+  members: [...],           // ❌ Devrait être 'teamMembers'
+  role: 'Developer'         // ❌ Devrait être 'position'
+}
+```
+
+#### **3. Valeurs Non-Finies**
+```typescript
+// ❌ ERREUR COMMUNE - Cause des erreurs IntersectionObserver
+const threshold = triggerOffset / 100  // ❌ Si triggerOffset est undefined
+
+// ✅ CORRECT - Valeurs sécurisées
+const threshold = Math.max(0, Math.min(1, (triggerOffset || 50) / 100))
+```
+
+#### **4. Contraintes de Validation Manquées**
+```typescript
+// ❌ ERREUR - Dépassement des limites de validation
+{
+  _type: 'heroBlock',
+  title: 'Un titre extrêmement long qui dépasse les 100 caractères autorisés par le schéma Sanity et qui causera une erreur de validation',  // ❌ Max 100 caractères
+  ctaButtons: [
+    { text: 'Bouton 1' },
+    { text: 'Bouton 2' },
+    { text: 'Bouton 3' },
+    { text: 'Bouton 4' }    // ❌ Max 3 boutons autorisés
+  ]
+}
+
+// ✅ CORRECT - Respecte les limites
+{
+  _type: 'heroBlock',
+  title: 'Titre respectant la limite',  // ✅ < 100 caractères
+  ctaButtons: [
+    { text: 'Bouton 1' },
+    { text: 'Bouton 2' },
+    { text: 'Bouton 3' }    // ✅ Max 3 boutons
+  ]
+}
+```
+
+#### **5. Types de Données Incorrects**
+```typescript
+// ❌ ERREUR - Types incorrects selon les schémas
+{
+  _type: 'statsBlock',
+  stats: [
+    {
+      number: 150,          // ❌ Doit être string selon le schéma
+      featured: 'true',     // ❌ Doit être boolean
+      color: 'blue'         // ❌ Doit être format HEX (#rrggbb)
+    }
+  ]
+}
+
+// ✅ CORRECT - Types conformes
+{
+  _type: 'statsBlock',
+  stats: [
+    {
+      number: '150+',       // ✅ string
+      featured: true,       // ✅ boolean
+      color: '#3b82f6'      // ✅ format HEX
+    }
+  ]
+}
+```
+
+#### **6. Champs Conditionnels Manqués**
+```typescript
+// ❌ ERREUR - Champs conditionnels manqués
+{
+  _type: 'featureGridBlock',
+  features: [
+    {
+      iconType: 'emoji',
+      // ❌ iconEmoji manquant quand iconType = 'emoji'
+      title: 'Ma fonctionnalité'
+    }
+  ]
+}
+
+// ✅ CORRECT - Champs conditionnels présents
+{
+  _type: 'featureGridBlock',
+  features: [
+    {
+      iconType: 'emoji',
+      iconEmoji: '🚀',      // ✅ Présent quand iconType = 'emoji'
+      title: 'Ma fonctionnalité'
+    }
+  ]
+}
+```
+
+### 🔑 Règle Critique des Clés Uniques
+
+> **⚠️ ERREUR REACT COMMUNE - CLÉS DUPLIQUÉES**
+
+#### **Problème Fréquent**
+```
+Encountered two children with the same key, `text`. 
+Keys should be unique so that components maintain their identity across updates.
+```
+
+#### **Cause**
+Dans Sanity, **chaque élément dans un array doit avoir un `_key` unique** :
+
+```typescript
+// ❌ ERREUR - Spans sans _key
+children: [
+  {
+    _type: 'span',
+    text: 'Mon texte',  // ❌ Pas de _key
+    marks: []
+  },
+  {
+    _type: 'span', 
+    text: 'Autre texte', // ❌ Pas de _key
+    marks: ['strong']
+  }
+]
+
+// ✅ CORRECT - Chaque span a un _key unique
+children: [
+  {
+    _type: 'span',
+    _key: 'intro-text',     // ✅ Clé unique
+    text: 'Mon texte',
+    marks: []
+  },
+  {
+    _type: 'span',
+    _key: 'strong-text',    // ✅ Clé unique différente
+    text: 'Autre texte',
+    marks: ['strong']
+  }
+]
+```
+
+#### **Solution Obligatoire**
+**TOUS les éléments d'array doivent avoir un `_key` unique :**
+
+```typescript
+// ✅ Blocs de contenu
+content: [
+  {
+    _type: 'block',
+    _key: 'title-block',        // ✅ Clé unique
+    children: [
+      {
+        _type: 'span',
+        _key: 'title-span',      // ✅ Clé unique
+        text: 'Mon titre'
+      }
+    ]
+  }
+]
+
+// ✅ Features
+features: [
+  {
+    _key: 'feature-performance',  // ✅ Clé unique
+    title: 'Performance'
+  },
+  {
+    _key: 'feature-design',       // ✅ Clé unique
+    title: 'Design'
+  }
+]
+
+// ✅ Stats
+stats: [
+  {
+    _key: 'stat-projects',        // ✅ Clé unique
+    number: '150+'
+  }
+]
+
+// ✅ Team Members
+teamMembers: [
+  {
+    _key: 'member-sarah',         // ✅ Clé unique
+    name: 'Sarah Martin'
+  }
+]
+```
+
+### 📏 Contraintes de Validation Critiques
+
+> **⚠️ LIMITES STRICTES - RESPECTER ABSOLUMENT**
+
+#### **Limites de Caractères par Bloc**
+
+```typescript
+// HeroBlock
+{
+  title: 'Max 100 caractères',           // validation: Rule.max(100)
+  subtitle: 'Max 300 caractères',        // validation: Rule.max(300)
+  ctaButtons: [...],                     // validation: Rule.max(3)
+}
+
+// ContactBlock  
+{
+  formFields: [
+    {
+      label: 'Max 50 caractères',         // validation: Rule.max(50)
+      placeholder: 'Max 100 caractères',  // validation: Rule.max(100)
+    }
+  ],
+  submitButton: {
+    text: 'Max 30 caractères',           // validation: Rule.max(30)
+    loadingText: 'Max 30 caractères',    // validation: Rule.max(30)
+  }
+}
+
+// StatsBlock
+{
+  stats: [
+    {
+      number: 'Max 20 caractères',       // validation: Rule.max(20)
+      label: 'Max 100 caractères',       // validation: Rule.max(100)
+      description: 'Max 200 caractères', // validation: Rule.max(200)
+      color: '#3b82f6',                  // validation: Rule.regex(/^#[0-9A-Fa-f]{6}$/)
+    }
+  ]
+}
+
+// FeatureGridBlock
+{
+  features: [
+    {
+      title: 'Max 60 caractères',        // validation: Rule.max(60)
+      description: 'Max 200 caractères', // validation: Rule.max(200)
+    }
+  ]
+}
+```
+
+#### **Limites de Quantité**
+
+```typescript
+// Limites d'éléments dans les arrays
+{
+  ctaButtons: [...],        // Max 3 éléments (heroBlock)
+  formFields: [...],        // Pas de limite spécifique (contactBlock)
+  stats: [...],            // Min 1, Max 12 éléments (statsBlock)
+  features: [...],         // Min 1, Max 12 éléments (featureGridBlock)
+  teamMembers: [...],      // Généralement Max 20 éléments
+}
+```
+
+#### **Formats Requis**
+
+```typescript
+// Formats spécifiques obligatoires
+{
+  color: '#3b82f6',                    // Format HEX obligatoire: /^#[0-9A-Fa-f]{6}$/
+  email: 'user@example.com',           // Format email valide
+  triggerOffset: 50,                   // Nombre entre 0 et 100
+  animationDuration: 2000,             // Nombre entre 100 et 10000 (ms)
+  staggerDelay: 200,                   // Nombre entre 0 et 1000 (ms)
+}
+```
+
+#### **Champs Conditionnels Obligatoires**
+
+```typescript
+// Si iconType = 'emoji', alors iconEmoji requis
+{
+  iconType: 'emoji',
+  iconEmoji: '🚀',          // ⚠️ OBLIGATOIRE si iconType = 'emoji'
+}
+
+// Si iconType = 'lucide', alors iconLucide requis  
+{
+  iconType: 'lucide',
+  iconLucide: 'star',       // ⚠️ OBLIGATOIRE si iconType = 'lucide'
+}
+
+// Si backgroundType = 'gradient', alors gradientSettings requis
+{
+  backgroundType: 'gradient',
+  gradientSettings: {       // ⚠️ OBLIGATOIRE si backgroundType = 'gradient'
+    gradientType: 'preset',
+    preset: 'ocean'
+  }
+}
+
+// Si showContactInfo = true, alors champs contact requis
+{
+  contactInfo: {
+    showContactInfo: true,
+    email: 'contact@example.com',  // ⚠️ OBLIGATOIRE si showContactInfo = true
+    phone: '+33123456789',         // ⚠️ OBLIGATOIRE si showContactInfo = true
+  }
+}
+```
+
+### 📋 Checklist de Conformité
+
+- [ ] **Structure** : Tous les champs sont au bon niveau hiérarchique
+- [ ] **Noms** : Tous les noms de champs correspondent exactement au schéma
+- [ ] **Types** : Tous les types de données sont respectés (string, number, boolean, array)
+- [ ] **Requis** : Tous les champs requis sont présents
+- [ ] **Optionnels** : Les champs optionnels ont des valeurs par défaut sécurisées
+- [ ] **Imbrication** : Les objets imbriqués respectent la structure du schéma
+- [ ] **Arrays** : Les tableaux contiennent les bons types d'éléments
+- [ ] **Clés Uniques** : **TOUS les éléments d'array ont un `_key` unique** ⚠️
+- [ ] **Limites** : **Respecter toutes les limites de caractères et quantités** ⚠️
+- [ ] **Formats** : **Couleurs HEX, emails, nombres dans les bonnes plages** ⚠️
+- [ ] **Conditionnels** : **Champs conditionnels présents selon les dépendances** ⚠️
+- [ ] **Validation** : Les valeurs respectent les contraintes de validation
 
 ---
 
@@ -1117,6 +1548,16 @@ Fichiers complets TypeScript/TSX, compilables, avec normalisation des props et d
 - Imports critiques clarifiés et mis en avant
 - Normalisation des props systématisée
 - Gestion des erreurs runtime documentée
+
+### Version 2024.11.04 - Règles de Conformité Sanity
+✅ **Section Conformité Sanity** ajoutée avec règles absolues  
+✅ **Vérification schémas obligatoire** avant toute implémentation  
+✅ **Exemples d'erreurs communes** avec corrections détaillées  
+✅ **Checklist de conformité** pour validation systématique  
+✅ **Procédure de vérification** étape par étape  
+✅ **Protection valeurs non-finies** pour IntersectionObserver  
+✅ **Structure hiérarchique** des champs respectée (heroSettings, etc.)  
+✅ **Types de données** strictement alignés sur les schémas Sanity
 
 ---
 

@@ -52,15 +52,18 @@ export default defineType({
               type: 'string',
               options: {
                 list: [
-                  { title: 'Nom', value: 'name' },
-                  { title: 'Email', value: 'email' },
-                  { title: 'Téléphone', value: 'phone' },
-                  { title: 'Entreprise', value: 'company' },
-                  { title: 'Sujet', value: 'subject' },
-                  { title: 'Message', value: 'message' },
-                  { title: 'Champ personnalisé', value: 'custom' },
+                  { title: '👤 Nom', value: 'name' },
+                  { title: '📧 Email', value: 'email' },
+                  { title: '📞 Téléphone', value: 'phone' },
+                  { title: '🏢 Entreprise', value: 'company' },
+                  { title: '📝 Sujet', value: 'subject' },
+                  { title: '💬 Message', value: 'message' },
+                  { title: '⚙️ Champ personnalisé', value: 'custom' },
                 ],
+                layout: 'dropdown',
               },
+              description: 'Sélectionnez le type de champ à ajouter au formulaire',
+              initialValue: 'name',
               validation: (Rule) => Rule.required(),
             }),
             defineField({
@@ -107,7 +110,7 @@ export default defineType({
               return {
                 title: label || fieldType,
                 subtitle: `${fieldType}${required ? ' (obligatoire)' : ''}`,
-                media: required ? 'alert-circle' : 'circle',
+                media: undefined,
               }
             },
           },
@@ -242,7 +245,6 @@ export default defineType({
       return {
         title: title || 'Formulaire de contact',
         subtitle: `${layout} • ${fieldsCount || 0} champs`,
-        media: 'mail',
       }
     },
   },

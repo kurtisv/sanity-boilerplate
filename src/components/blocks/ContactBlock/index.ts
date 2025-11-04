@@ -1,1 +1,1 @@
-export { default } from './ContactBlock'
+export { default } from './ContactBlock-fixed'

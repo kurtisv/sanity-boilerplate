@@ -31,26 +31,7 @@ type FooterProps = {
 
 export default function Footer({
   footerText = "Solution professionnelle Next.js + Sanity CMS prête à l'emploi pour créer des sites web modernes et performants.",
-  footerColumns = [
-    {
-      title: "Navigation",
-      links: [
-        { title: "Accueil", link: "/" },
-        { title: "Démonstration", link: "/demo" },
-        { title: "Studio Sanity", link: "/studio" },
-        { title: "Administration", link: "/admin/home" }
-      ]
-    },
-    {
-      title: "Technologies",
-      links: [
-        { title: "Next.js 16", link: "#" },
-        { title: "Sanity CMS", link: "#" },
-        { title: "TypeScript", link: "#" },
-        { title: "CSS Modules", link: "#" }
-      ]
-    }
-  ],
+  footerColumns = [],
   copyrightText = "Sanity Boilerplate. Conçu pour les développeurs modernes.",
   socialLinks,
   footerBackgroundColor = '#f8fafc',
