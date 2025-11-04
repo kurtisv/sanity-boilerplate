@@ -584,264 +584,36 @@ noIndex: true  // Active <meta name="robots" content="noindex">
 sanity-boilerplate/
 ├── public/                      # Ressources statiques
 ├── src/
-│   ├── app/                     # Next.js App Router
-│   │   ├── (sanity)/           # Groupe de routes pour Sanity Studio
-│   │   │   ├── studio/         # Sanity Studio à /studio
-│   │   │   └── layout.tsx      # Layout spécifique au Studio
-│   │   ├── (website)/          # Groupe de routes pour le site public
-│   │   │   ├── [[...slug]]/    # Routes dynamiques catch-all
-│   │   │   │   └── page.tsx    # Rendu de page dynamique
-│   │   │   └── layout.tsx      # Layout du site (Header/Footer)
-│   │   ├── favicon.ico
-│   │   └── globals.css         # CSS global reset
-│   │
-│   ├── components/
-│   │   ├── BlockRenderer/      # Système de rendu dynamique des blocs
-│   │   │   ├── BlockRenderer.tsx
-│   │   │   └── index.ts
-│   │   ├── blocks/             # Blocs de contenu (composants page builder)
-│   │   │   └── TextBlock/      # Composant bloc de texte riche
-│   │   │       ├── TextBlock.tsx
-│   │   │       ├── TextBlock.styles.ts
-│   │   │       └── index.ts
-│   │   ├── common/             # Composants UI réutilisables
-│   │   └── layout/             # Composants de layout
-│   │       ├── Header/
-│   │       └── Footer/
-│   │
-│   ├── sanity/                 # Configuration Sanity CMS
-│   │   ├── env.ts              # Variables d'environnement
-│   │   ├── lib/                # Utilitaires Sanity
-│   │   │   ├── client.ts       # Client API Sanity
-│   │   │   ├── image.ts        # Constructeur d'URL d'images
-│   │   │   ├── queries.ts      # Requêtes GROQ
-│   │   │   └── live.ts         # Mises à jour en temps réel
-│   │   ├── schemas/            # Schémas de contenu
-│   │   │   ├── page.ts         # Schéma document de page
-│   │   │   ├── blocks/         # Schémas de blocs
-│   │   │   │   ├── textBlock.ts
-│   │   │   │   ├── heroBlock.ts
-│   │   │   │   ├── featureGridBlock.ts
-│   │   │   │   ├── headerBlock.ts
-│   │   │   │   └── footerBlock.ts
-│   │   │   └── settings/       # Paramètres globaux
-│   │   │       ├── headerSettings.ts
-│   │   │       └── footerSettings.ts
-│   │   ├── schemaTypes/        # Registre des schémas
-│   │   │   └── index.ts
-│   │   └── structure.ts        # Structure du Studio
-│   │
-│   └── styles/
-│       └── brand.css           # Design tokens (variables CSS)
-│
-├── sanity.config.ts            # Configuration Sanity Studio
-├── next.config.ts              # Configuration Next.js
-├── tsconfig.json               # Configuration TypeScript
-└── package.json                # Dépendances
-```
-
----
-
-## 🧩 Comment ça Fonctionne : Le Système de Blocs
-
-### Concept
-
-Ce boilerplate utilise une **Architecture Basée sur les Blocs** où :
-
-1. **Les gestionnaires de contenu** ajoutent des blocs de contenu dans Sanity Studio
-2. **Les blocs** sont des composants modulaires (7 blocs disponibles)
-3. **BlockRenderer** rend dynamiquement le bon composant selon le type de bloc
-4. **Les pages** sont composées de plusieurs blocs dans n'importe quel ordre
-
-### 🧩 Blocs Disponibles (7 blocs)
-
-| Bloc | Description | Utilisation |
-|------|-------------|-------------|
-| 📝 **TextBlock** | Contenu riche avec éditeur visuel | Articles, descriptions, contenu éditorial |
-| 🦸 **HeroBlock** | Sections héro avec boutons CTA | En-têtes de pages, sections d'accueil |
-| ⭐ **FeatureGridBlock** | Grilles de fonctionnalités et services | Présentation de services, avantages |
-| 📞 **ContactBlock** | Formulaires de contact et informations | Pages contact, formulaires de demande |
-| 🖼️ **GalleryBlock** | Galeries d'images et portfolios | Portfolios, galeries de projets |
-| 👥 **TeamBlock** | Membres d'équipe et témoignages | Pages équipe, témoignages clients |
-| 📊 **StatsBlock** | Statistiques et compteurs | Chiffres clés, métriques, performances |
-
-### Flux de Données
-
-```
-┌─────────────────┐
-│  Sanity Studio  │ ← Content managers create pages
-└────────┬────────┘
-         │
-         ↓ (Saves to Sanity Cloud)
-┌─────────────────┐
-│  Sanity CMS     │
-└────────┬────────┘
-         │
-         ↓ (GROQ Query via API)
-┌─────────────────┐
-│  Next.js Page   │ ← Fetches page data
-└────────┬────────┘
-         │
-         ↓ (Passes blocks array)
-┌─────────────────┐
-│ BlockRenderer   │ ← Switches on block._type
-└────────┬────────┘
-         │
-         ↓ (Renders specific component)
-┌─────────────────┐
-│  TextBlock      │ ← Displays content
-│  HeroBlock      │ ← Hero banners
-│  FeatureGrid    │ ← Feature grids
-└─────────────────┘
-```
-
-### Exemple : Comment une Page est Rendue
-
-1. **L'utilisateur visite** `votresite.com/about`
-
-2. **Le composant Page** récupère les données :
-```typescript
-const pageData = await client.fetch(pageBySlugQuery, { slug: 'about' })
-// Returns: { title: "About", pageBuilder: [{ _type: 'textBlock', content: [...] }] }
-```
-
-3. **BlockRenderer** reçoit les blocs :
-```typescript
-<BlockRenderer blocks={pageData.pageBuilder} />
-```
-
-4. **L'instruction switch** sélectionne le composant :
-```typescript
-switch (block._type) {
-  case 'textBlock':
-    return <TextBlock {...block} />
-}
-```
-
-5. **TextBlock** rend le contenu :
-```typescript
-<PortableText value={content} components={customComponents} />
-```
-
----
-
-## 🚀 Démarrage
-
-### Prérequis
-
-- Node.js 18+ installé
-- npm, yarn, ou pnpm
-- Un compte Sanity (gratuit sur [sanity.io](https://sanity.io))
-
-### Installation
-
-1. **Cloner le repository**
-```bash
-git clone <your-repo-url>
 cd sanity-boilerplate
-```
-
-2. **Installer les dépendances**
-```bash
 npm install
 ```
 
-3. **Configurer les variables d'environnement**
-
-Créer un fichier `.env.local` :
+### 2. Configuration Sanity
 ```bash
-# Configuration Sanity (Obligatoire)
+npx sanity@latest init
+# Suivre les instructions (créer compte, projet, dataset "production")
+```
+
+### 3. Variables d'environnement
+```bash
+cp env.example .env.local
+```
+
+Éditer `.env.local` :
+```env
 NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
 NEXT_PUBLIC_SANITY_DATASET=production
-NEXT_PUBLIC_SANITY_API_VERSION=2025-10-30
-
-# Mode Preview (Optionnel mais recommandé)
-SANITY_API_READ_TOKEN=sk_test_xxxxx  # Token avec permissions de lecture
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-
-# Production (Optionnel)
-NEXT_PUBLIC_SITE_URL=https://yoursite.com
+SANITY_API_TOKEN=your-editor-token  # NOTE: Créer avec scope "Editor"
 ```
 
-**Obtenir votre configuration Sanity :**
-- **Projet ID** : Tableau de bord Sanity → https://www.sanity.io/manage
-- **Read Token** : Sanity Dashboard → API → Tokens → "Add API token"
-  - Nom : "Preview Token"  
-  - Permissions : "Viewer"
-
-4. **Lancer le serveur de développement**
+### 4. Lancement
 ```bash
 npm run dev
+# Ouvrir http://localhost:3000
 ```
 
-5. **Accéder aux applications**
-- **Site web** : http://localhost:3000
-- **Sanity Studio** : http://localhost:3000/studio
+## Architecture
 
----
-
-## 📝 Ce qui a été Construit
-
-### ✅ Infrastructure de Base
-
-#### 1. **Intégration Sanity**
-- Configuration du client Sanity
-- Requêtes GROQ pour récupérer les données
-- Intégration CDN d'images
-- Support des mises à jour en temps réel
-
-#### 2. **Configuration Next.js App Router**
-- Groupes de routes pour Studio vs Site web
-- Routage dynamique catch-all
-- Server and client component patterns
-- Styled Components integration
-
-#### 3. **Design System**
-- CSS custom properties (design tokens)
-- Responsive spacing system
-- Color palette
-- Typography scale
-- Brand variables in `src/styles/brand.css`
-
-### ✅ Content Models (Schemas)
-
-#### 1. **Header Settings** (`src/sanity/schemas/settings/headerSettings.ts`)
-Document pour la configuration de l'en-tête du site.
-
-- **`logoType`** (Choix: image | text)
-  - Type de logo à afficher
-  
-- **`logo`** (Image - si logoType=image)
-  - Logo image avec support hotspot
-  
-- **`logoText`** (String - si logoType=text)
-  - Texte du logo comme alternative à l'image
-  
-- **`navigationMenu`** (Array d'objets)
-  - **`title`**: Texte du lien (requis)
-  - **`link`**: URL ou slug (requis)
-  - **`submenu`**: Menu déroulant optionnel
-  
-- **`cta`** (Objet - optionnel)
-  - **`text`**: Texte du bouton d'action
-  - **`link`**: URL du bouton
-  
-- **`backgroundColor`** / **`textColor`** (String HEX)
-  - Couleurs personnalisables
-
-#### 2. **Footer Settings** (`src/sanity/schemas/settings/footerSettings.ts`)
-Document pour la configuration du pied de page.
-
-- **`text`** (Texte)
-  - Description principale du footer
-  
-- **`columns`** (Array de colonnes)
-  - **`title`**: Titre de la colonne
-  - **`links`**: Array de liens avec titre et URL
-  
-- **`socialLinks`** (Objet)
-  - Liens vers réseaux sociaux (Facebook, Twitter, Instagram, LinkedIn, YouTube)
-  
 - **`copyrightText`** (String)
   - Texte de copyright
   

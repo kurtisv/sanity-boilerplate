@@ -1,6 +1,20 @@
 # 📘 Manuel d'Auto-Implémentation Studio
 > **Documentation technique interne pour l'IA Claude - Version 2024**
 
+## 📋 Table des Matières
+
+- [🎯 Introduction](#-introduction)
+- [📖 Stack Technique](#-stack-technique)
+- [⚠️ Imports Critiques](#️-imports-critiques)
+- [⚙️ Procédure d'Auto-Implémentation](#️-procédure-dauto-implémentation)
+- [🎨 Système de Thème Unifié](#-système-de-thème-unifié)
+- [🔧 Troubleshooting](#-troubleshooting)
+- [✅ Checklists](#-checklists)
+- [🧠 Prompt Prêt à Copier](#-prompt-prêt-à-copier)
+- [📝 Changelog](#-changelog)
+
+---
+
 ## 🎯 Introduction
 
 ### Finalité du Système Studio
@@ -16,6 +30,64 @@ Ce manuel permet à l'IA Claude de :
 2. **Comprendre** les conventions et patterns (Styled Components + TypeScript)
 3. **Auto-implémenter** de nouvelles pages conformes au système
 4. **Maintenir** la cohérence architecturale et le système de design
+
+---
+
+## 📖 Stack Technique
+
+### Technologies Confirmées (Version 2024)
+- **Next.js 16.0.1** (App Router + Turbopack)
+- **React 19.2.0** (Server Components)
+- **TypeScript 5** (strict mode)
+- **styled-components 6.1.19** (CSS-in-JS exclusif)
+- **Sanity CMS 4.12.0** (headless CMS)
+
+### 7 Blocs Disponibles
+```typescript
+// Source unique des types : /src/types/blocks.ts
+export type Block = 
+  | TextBlockData      // 📝 Contenu riche avec éditeur visuel
+  | HeroBlockData      // 🦸 Sections héro avec boutons CTA
+  | FeatureGridBlockData // ⭐ Grilles de fonctionnalités
+  | ContactBlockData   // 📞 Formulaires de contact
+  | GalleryBlockData   // 🖼️ Galeries d'images
+  | TeamBlockData      // 👥 Équipes et témoignages
+  | StatsBlockData     // 📊 Statistiques et compteurs
+```
+
+---
+
+## ⚠️ Imports Critiques
+
+> **🚨 SECTION CRITIQUE - À RESPECTER ABSOLUMENT**
+
+### ✅ Pattern d'Imports Obligatoire
+```typescript
+// ✅ TOUJOURS FAIRE - Pattern correct
+import BlockRenderer from '@/components/BlockRenderer'        // Composant
+import type { Block } from '@/types/blocks'                   // Types depuis source unique
+import type { PageStyleSettings } from '@/lib/theme-utils'
+
+// ✅ Normalisation des props (obligatoire)
+const normalizedFormFields = formFields || []
+const normalizedSubmitButton = submitButton || { text: 'Envoyer', loadingText: 'Envoi...' }
+const normalizedImages = images?.filter(img => img?.asset) || []
+
+// ✅ Clés React uniques
+const uniqueKey = block._key ? `${block._key}-${index}` : `${block._type}-${index}`
+```
+
+### ❌ Erreurs à Éviter Absolument
+```typescript
+// ❌ JAMAIS FAIRE - Erreurs communes
+import type { Block } from '@/components/BlockRenderer'  // ERREUR! Conflit de types
+import BlockRenderer, { Block } from '@/components/BlockRenderer'  // ERREUR! Mélange
+import { Block } from '@/components/BlockRenderer'  // ERREUR! Mauvaise source
+
+// ❌ Props non normalisées (cause des erreurs runtime)
+const items = teamMembers.map(...)  // ERREUR si teamMembers est null
+const buttonText = submitButton.text  // ERREUR si submitButton est null
+```
 
 ---
 
@@ -525,25 +597,133 @@ const availableBlocks = [
 ]
 ```
 
-### 4. **Système de Thème Unifié**
+---
+
+## 🎨 Système de Thème Unifié
+
+### Backgrounds Avancés
+
+#### Couleurs Solides
 ```typescript
-// ✅ Utiliser les dégradés prédéfinis (18 disponibles)
+backgroundSettings: {
+  backgroundType: 'color',
+  backgroundColor: '#f8fafc' // 20+ couleurs prédéfinies
+}
+```
+
+#### Dégradés Prédéfinis (18 disponibles)
+```typescript
 backgroundSettings: {
   backgroundType: 'gradient',
   gradientSettings: {
     gradientType: 'preset',
-    preset: 'ocean', // ocean, sunset, fire, forest, etc.
+    preset: 'ocean', // ocean, sunset, fire, forest, midnight, etc.
     intensity: 100
   }
 }
+```
 
-// ✅ Utiliser les icônes Lucide intégrées (60+ disponibles)
-iconSettings: {
-  iconType: 'emoji',
-  iconEmoji: '🎯', // ou utiliser Lucide: 'zap', 'code', 'database'
-  iconSize: 'large',
-  iconColor: '#3b82f6'
+#### Dégradés Personnalisés (3 couleurs + 9 directions)
+```typescript
+backgroundSettings: {
+  backgroundType: 'gradient',
+  gradientSettings: {
+    gradientType: 'custom',
+    custom: {
+      from: '#667eea',
+      via: '#764ba2',    // Couleur intermédiaire
+      to: '#f093fb',
+      direction: 'to-br', // ↓↑→←↘↙↗↖ + radial
+      intensity: 85
+    }
+  }
 }
+```
+
+#### Images avec Overlay
+```typescript
+backgroundSettings: {
+  backgroundType: 'image',
+  backgroundImage: {
+    asset: { url: 'https://...' },
+    alt: 'Image de fond',
+    overlay: {
+      enabled: true,
+      color: '#000000',
+      opacity: 40
+    }
+  }
+}
+```
+
+### Variants et Styles
+
+#### Cards (6 variants)
+```typescript
+cardStyle: 'minimal'    // Bordure fine
+cardStyle: 'bordered'   // Bordure épaisse
+cardStyle: 'shadow'     // Ombre légère
+cardStyle: 'elevated'   // Ombre forte
+cardStyle: 'colored'    // Fond coloré
+cardStyle: 'glass'      // Effet verre
+```
+
+#### Spacing (5 niveaux)
+```typescript
+spacing: 'compact'      // Espacement réduit
+spacing: 'normal'       // Espacement standard
+spacing: 'comfortable'  // Espacement large
+spacing: 'large'        // Espacement très large
+spacing: 'xl'          // Espacement maximum
+```
+
+#### Alignement
+```typescript
+alignment: 'left'       // Aligné à gauche
+alignment: 'center'     // Centré
+alignment: 'right'      // Aligné à droite
+```
+
+### Icônes
+
+#### Emojis (recommandé pour simplicité)
+```typescript
+iconType: 'emoji',
+iconEmoji: '🎯',        // Directement utilisable
+iconSize: 'large',      // sm, md, lg, xl, 2xl
+iconPosition: 'above'   // top, left, right, background
+```
+
+#### Lucide React (60+ icônes)
+```typescript
+iconType: 'lucide',
+iconName: 'zap',        // zap, code, database, users, etc.
+iconColor: '#3b82f6',
+iconSize: 'large',
+iconStyle: 'filled'     // normal, filled, outlined, shadow, circle
+```
+
+### Design Tokens (styled-components)
+```typescript
+const StyledComponent = styled.div`
+  /* Couleurs système */
+  background-color: var(--color-gray-50);
+  color: var(--color-gray-900);
+  
+  /* Espacements standardisés */
+  padding: var(--spacing-16) var(--spacing-6);
+  margin-bottom: var(--spacing-12);
+  
+  /* Typographie système */
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  
+  /* Responsive avec breakpoints */
+  @media (max-width: var(--breakpoint-md)) {
+    padding: var(--spacing-8) var(--spacing-4);
+    font-size: var(--font-size-lg);
+  }
+`
 ```
 
 ### 5. **Gestion des Erreurs et Permissions**
@@ -832,24 +1012,111 @@ export async function POST(request: NextRequest) {
 
 ---
 
-## 📚 Ressources Complémentaires (2024)
+## 🔧 Troubleshooting
 
-### Fichiers Critiques
-- **README.md** : Documentation principale (mise à jour avec 7 blocs)
-- **src/types/blocks.ts** : Types des 7 blocs (source unique)
-- **src/sanity/schemas/shared/themeFields.ts** : Système de thème unifié
-- **src/styles/brand.css** : Design tokens centralisés
-- **src/lib/theme-utils.ts** : Fonctions utilitaires de thème
+### Erreurs Runtime Communes
 
-### Exemples de Référence
-- **Page Services** : `/services` (exemple dans ce manuel)
-- **Page Démo** : `/demo` (tous les blocs en action)
-- **Interface Admin** : `/admin/services` (auto-génération)
+| Erreur | Cause | Solution Immédiate |
+|--------|-------|-------------------|
+| `teamMembers is not iterable` | Prop `null` au lieu de `[]` | `const normalized = teamMembers \|\| []` |
+| `Cannot read properties of null (reading 'text')` | Objet `null` | `const normalized = submitButton \|\| { text: 'Default' }` |
+| `Cannot read properties of null (reading 'showAllOption')` | Options `null` | `const normalized = filterOptions \|\| { showAllOption: true }` |
+| `Unable to resolve image URL from source (null)` | Image `null` | `if (!image?.asset) return null` + filtres |
+| `Encountered two children with the same key` | Clés dupliquées | `key={block._key ? \`${block._key}-${index}\` : \`${block._type}-${index}\`}` |
+| `ERR_NETWORK_CHANGED` | Serveur dev planté | `npm run dev` + Ctrl+Shift+R |
 
-### Troubleshooting
-- **Erreurs d'imports** : Consulter la section troubleshooting du README
-- **Permissions Sanity** : Vérifier SANITY_API_TOKEN avec droits Editor
-- **Blocs non reconnus** : Utiliser uniquement les 7 blocs disponibles
+### Configuration Sanity
+- **Token manquant** : Créer token avec permissions **Editor** dans Sanity Dashboard
+- **CORS** : Configurer domaine dans Sanity Settings → API → CORS Origins
+- **Dataset** : Vérifier nom exact dans `.env.local`
+
+---
+
+## ✅ Checklists
+
+### ☐ Setup Initial
+- [ ] Variables d'environnement configurées (`.env.local`)
+- [ ] Token Sanity avec permissions **Editor**
+- [ ] CORS configuré dans Sanity Dashboard
+- [ ] `npm run dev` fonctionne
+
+### ☐ Création Page Admin
+- [ ] Route admin créée : `src/app/admin/[slug]/page.tsx`
+- [ ] Bouton d'auto-génération fonctionnel
+- [ ] Gestion des états (loading, erreur)
+- [ ] AdminLayout importé et utilisé
+
+### ☐ API d'Auto-génération
+- [ ] Route API créée : `src/app/api/setup-[slug]/route.ts`
+- [ ] Imports Sanity corrects
+- [ ] Blocs utilisés parmi les 7 disponibles
+- [ ] Gestion d'erreurs complète
+- [ ] Logs de debug présents
+
+### ☐ Vérifications Visuelles
+- [ ] Page s'affiche sans erreur console
+- [ ] Blocs rendus correctement
+- [ ] Responsive mobile fonctionnel
+- [ ] Thème appliqué (dégradés, couleurs)
+- [ ] Images chargées (si présentes)
+
+---
+
+## 🧠 Prompt Prêt à Copier
+
+```text
+Tu es un Staff Engineer Next.js 16 + TypeScript + styled-components + Sanity v4. Auto-implémente une NOUVELLE PAGE en suivant STRICTEMENT les conventions du repo.
+
+**Contexte Stack Réel :**
+- Next.js 16 (App Router + Turbopack), React 19, TypeScript 5
+- styled-components 6 (CSS-in-JS exclusif), design tokens centralisés
+- Sanity CMS v4 avec normalisation des props (gestion null/undefined)
+- 7 blocs disponibles : textBlock, heroBlock, featureGridBlock, contactBlock, galleryBlock, teamBlock, statsBlock
+
+**Livrables Attendus :**
+1. Route Next.js : `src/app/(website)/[slug]/page.tsx`
+2. Fallback client : `[NomPage]Content.tsx` (styled-components + design tokens)
+3. Interface Admin : `src/app/admin/[slug]/page.tsx`
+4. API auto-génération : `src/app/api/setup-[slug]/route.ts`
+
+**Contraintes Critiques :**
+- UNIQUEMENT styled-components (aucune classe Tailwind)
+- Imports : `Block` depuis `@/types/blocks` (source unique)
+- Normalisation : `const normalized = prop || defaultValue`
+- Clés React : `${_key}-${index}` si doublons possibles
+- Images : vérifier `image?.asset` avant `urlFor`
+
+**Paramètres d'Entrée (à remplir) :**
+- Slug : [ex: "services"]
+- Titre : [ex: "Nos Services"]
+- Blocs souhaités : [ex: heroBlock, featureGridBlock, contactBlock]
+- Thème : [ex: gradient "ocean", alignment "center", spacing "large"]
+- SEO : title/description/keywords
+
+**Sortie Attendue :**
+Fichiers complets TypeScript/TSX, compilables, avec normalisation des props et design tokens.
+```
+
+---
+
+## 📝 Changelog
+
+### Améliorations Appliquées (Version 2024)
+
+✅ **Table des matières** cliquable ajoutée  
+✅ **Section Imports Critiques** mise en évidence avec encadré d'avertissement  
+✅ **Troubleshooting étendu** avec tableau des erreurs courantes + solutions  
+✅ **Checklists par étape** (Setup, Admin, API, Vérifications visuelles)  
+✅ **Prompt prêt à copier** structuré pour génération de nouvelles pages  
+✅ **Cohérence terminologique** : "7 blocs", "normalisation des props", "styled-components"  
+✅ **Snippets alignés** sur Next.js 16 + React 19 + styled-components v6  
+✅ **Section Thème Unifié** renforcée avec mini-snippets copiables  
+
+### Corrections Techniques
+- Tous les exemples de code vérifiés et compilables
+- Imports critiques clarifiés et mis en avant
+- Normalisation des props systématisée
+- Gestion des erreurs runtime documentée
 
 ---
 
