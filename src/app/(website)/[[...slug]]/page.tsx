@@ -29,11 +29,14 @@ type Props = {
 
 // Génération des métadonnées pour le SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  // Déterminer le slug : seuls / et /home pointent vers 'home'
-  const isHomePage = !params.slug || params.slug.length === 0 || 
-    (params.slug.length === 1 && params.slug[0] === 'home')
+  // Next.js 16 - params est maintenant une Promise
+  const resolvedParams = await params
   
-  const slug = isHomePage ? 'home' : (params.slug || []).join('/')
+  // Déterminer le slug : seuls / et /home pointent vers 'home'
+  const isHomePage = !resolvedParams.slug || resolvedParams.slug.length === 0 || 
+    (resolvedParams.slug.length === 1 && resolvedParams.slug[0] === 'home')
+  
+  const slug = isHomePage ? 'home' : (resolvedParams.slug || []).join('/')
 
   // Si c'est la page d'accueil et qu'elle n'existe pas dans Sanity, utiliser des métadonnées par défaut
   if (isHomePage) {
@@ -121,11 +124,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export const revalidate = 60
 
 export default async function DynamicPage({ params }: Props) {
-  // Déterminer le slug : seuls / et /home pointent vers 'home'
-  const isHomePage = !params.slug || params.slug.length === 0 || 
-    (params.slug.length === 1 && params.slug[0] === 'home')
+  // Next.js 16 - params est maintenant une Promise
+  const resolvedParams = await params
   
-  const slug = isHomePage ? 'home' : (params.slug || []).join('/')
+  // Déterminer le slug : seuls / et /home pointent vers 'home'
+  const isHomePage = !resolvedParams.slug || resolvedParams.slug.length === 0 || 
+    (resolvedParams.slug.length === 1 && resolvedParams.slug[0] === 'home')
+  
+  const slug = isHomePage ? 'home' : (resolvedParams.slug || []).join('/')
   
   // Si c'est la page d'accueil, vérifier si elle existe dans Sanity
   if (isHomePage) {
