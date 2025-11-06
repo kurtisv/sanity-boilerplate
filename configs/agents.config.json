@@ -1,0 +1,21 @@
+{
+  "dryRun": true,
+  "defaultModel": "claude-3-5-sonnet-20241022",
+  "writeWhitelist": [
+    "src/sanity/schemas",
+    "src/sanity/schemaTypes",
+    "src/components/blocks",
+    "src/app/api",
+    "src/lib",
+    "src/styles",
+    "agents"
+  ],
+  "sanity": {
+    "pushMode": "draft",
+    "datasets": ["production"]
+  },
+  "cleanup": {
+    "aggressiveness": "prudent",
+    "exclude": ["scripts", "public", "content-*", "**/*.md"]
+  }
+}

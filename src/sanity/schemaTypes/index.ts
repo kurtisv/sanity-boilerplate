@@ -34,6 +34,7 @@ import videoBlock from '../schemas/blocks/videoBlock'
 import accordionBlock from '../schemas/blocks/accordionBlock'
 import tabsBlock from '../schemas/blocks/tabsBlock'
 import newsletterBlock from '../schemas/blocks/newsletterBlock'
+import logoGridBlock from '../schemas/blocks/logoGridBlock'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -71,5 +72,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     accordionBlock,
     tabsBlock,
     newsletterBlock,
+    logoGridBlock,
   ],
 }

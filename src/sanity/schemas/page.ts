@@ -70,6 +70,7 @@ export default defineType({
         { type: 'accordionBlock' },
         { type: 'tabsBlock' },
         { type: 'newsletterBlock' },
+        { type: 'logoGridBlock' },
       ],
       group: 'content',
     }),

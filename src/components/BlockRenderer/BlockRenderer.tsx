@@ -29,6 +29,7 @@ import AccordionBlock from '@/components/blocks/AccordionBlock/AccordionBlock'
 import TabsBlock from '@/components/blocks/TabsBlock/TabsBlock'
 import NewsletterBlock from '@/components/blocks/NewsletterBlock/NewsletterBlock'
 import BlogBlock from '@/components/blocks/BlogBlock/BlogBlock'
+import LogoGridBlock from '@/components/blocks/LogoGridBlock/LogoGridBlock'
 
 // Type pour les données de blocs Sanity
 type BlockData = {
@@ -108,6 +109,9 @@ export default function BlockRenderer({ blocks }: BlockRendererProps) {
           
           case 'blogBlock':
             return <BlogBlock key={uniqueKey} {...(block as any)} />
+          
+          case 'logoGridBlock':
+            return <LogoGridBlock key={uniqueKey} data={block} />
           
           default:
             if (process.env.NODE_ENV === 'development') {
