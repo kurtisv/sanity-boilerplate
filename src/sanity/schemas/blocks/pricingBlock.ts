@@ -1,311 +1,292 @@
 import { defineType, defineField } from 'sanity'
-import { getThemeFields } from '../shared/themeFields'
 
 export default defineType({
   name: 'pricingBlock',
   title: 'Pricing Block',
   type: 'object',
-  description: 'Grille de plans tarifaires avec fonctionnalités',
+  icon: () => '💰',
   fields: [
     defineField({
       name: 'title',
-      title: 'Titre de la section',
+      title: 'Title',
       type: 'string',
-      description: 'Titre principal de la section tarifs',
-      validation: (Rule) => Rule.max(100),
+      validation: Rule => Rule.required().max(100)
     }),
     defineField({
       name: 'subtitle',
-      title: 'Sous-titre',
+      title: 'Subtitle',
       type: 'text',
-      description: 'Description de la section tarifs',
-      rows: 3,
-      validation: (Rule) => Rule.max(300),
+      validation: Rule => Rule.max(200),
+      rows: 3
     }),
     defineField({
-      name: 'layout',
-      title: 'Disposition',
+      name: 'billingPeriod',
+      title: 'Billing Period',
       type: 'string',
-      description: 'Style d\'affichage des plans',
       options: {
         list: [
-          { title: '2 colonnes', value: 'grid-2' },
-          { title: '3 colonnes', value: 'grid-3' },
-          { title: '4 colonnes', value: 'grid-4' },
-          { title: 'Carousel', value: 'carousel' },
-          { title: 'Comparaison tableau', value: 'table' },
+          { title: 'Monthly', value: 'monthly' },
+          { title: 'Annual', value: 'annual' },
+          { title: 'Both', value: 'both' }
         ],
-        layout: 'radio',
+        layout: 'radio'
       },
-      initialValue: 'grid-3',
+      initialValue: 'monthly',
+      validation: Rule => Rule.required()
     }),
     defineField({
       name: 'plans',
-      title: 'Plans tarifaires',
+      title: 'Pricing Plans',
       type: 'array',
-      description: 'Ajoutez vos plans tarifaires',
       of: [
         {
           type: 'object',
           fields: [
-            {
+            defineField({
               name: 'name',
-              title: 'Nom du plan',
+              title: 'Plan Name',
               type: 'string',
-              validation: (Rule) => Rule.required().max(50),
-            },
-            {
+              validation: Rule => Rule.required().max(50)
+            }),
+            defineField({
               name: 'description',
-              title: 'Description',
+              title: 'Plan Description',
               type: 'text',
-              rows: 2,
-              validation: (Rule) => Rule.max(150),
-            },
-            {
-              name: 'price',
-              title: 'Prix',
-              type: 'string',
-              description: 'Prix affiché (ex: 29, 99, Gratuit)',
-              validation: (Rule) => Rule.required().max(20),
-            },
-            {
+              validation: Rule => Rule.max(150),
+              rows: 2
+            }),
+            defineField({
+              name: 'monthlyPrice',
+              title: 'Monthly Price',
+              type: 'number',
+              validation: Rule => Rule.required().min(0)
+            }),
+            defineField({
+              name: 'annualPrice',
+              title: 'Annual Price',
+              type: 'number',
+              validation: Rule => Rule.min(0)
+            }),
+            defineField({
               name: 'currency',
-              title: 'Devise',
+              title: 'Currency',
               type: 'string',
-              options: {
-                list: [
-                  { title: '$ USD', value: 'USD' },
-                  { title: '€ EUR', value: 'EUR' },
-                  { title: '$ CAD', value: 'CAD' },
-                  { title: '£ GBP', value: 'GBP' },
-                  { title: '¥ JPY', value: 'JPY' },
-                ],
-              },
-              initialValue: 'USD',
-            },
-            {
-              name: 'period',
-              title: 'Période',
+              initialValue: 'EUR',
+              validation: Rule => Rule.required().max(3)
+            }),
+            defineField({
+              name: 'isPopular',
+              title: 'Popular Plan',
+              type: 'boolean',
+              initialValue: false
+            }),
+            defineField({
+              name: 'popularBadgeText',
+              title: 'Popular Badge Text',
               type: 'string',
-              description: 'Période de facturation',
-              options: {
-                list: [
-                  { title: 'Par mois', value: 'month' },
-                  { title: 'Par an', value: 'year' },
-                  { title: 'Par semaine', value: 'week' },
-                  { title: 'Par jour', value: 'day' },
-                  { title: 'Unique', value: 'once' },
-                  { title: 'Personnalisé', value: 'custom' },
-                ],
-              },
-              initialValue: 'month',
-            },
-            {
-              name: 'customPeriod',
-              title: 'Période personnalisée',
+              initialValue: 'Most Popular',
+              validation: Rule => Rule.max(30),
+              hidden: ({ parent }) => !parent?.isPopular
+            }),
+            defineField({
+              name: 'badgeColor',
+              title: 'Badge Color',
               type: 'string',
-              validation: (Rule) => Rule.max(30),
-              hidden: ({ parent }) => parent?.period !== 'custom',
-            },
-            {
+              description: 'Hex color code (e.g., #3B82F6)',
+              initialValue: '#3B82F6',
+              validation: Rule => Rule.regex(/^#[0-9A-F]{6}$/i, { name: 'hex color' }),
+              hidden: ({ parent }) => !parent?.isPopular
+            }),
+            defineField({
               name: 'features',
-              title: 'Fonctionnalités',
+              title: 'Features',
               type: 'array',
               of: [
                 {
                   type: 'object',
                   fields: [
-                    {
+                    defineField({
                       name: 'text',
-                      title: 'Texte',
+                      title: 'Feature Text',
                       type: 'string',
-                      validation: (Rule) => Rule.required().max(100),
-                    },
-                    {
+                      validation: Rule => Rule.required().max(100)
+                    }),
+                    defineField({
                       name: 'included',
-                      title: 'Inclus',
+                      title: 'Included',
                       type: 'boolean',
-                      description: 'Cette fonctionnalité est-elle incluse ?',
-                      initialValue: true,
-                    },
-                    {
+                      initialValue: true
+                    }),
+                    defineField({
                       name: 'highlight',
-                      title: 'Mettre en évidence',
+                      title: 'Highlight Feature',
                       type: 'boolean',
-                      description: 'Mettre cette fonctionnalité en évidence',
-                      initialValue: false,
-                    },
+                      initialValue: false
+                    })
                   ],
                   preview: {
                     select: {
                       title: 'text',
                       included: 'included',
+                      highlight: 'highlight'
                     },
-                    prepare({ title, included }) {
+                    prepare({ title, included, highlight }) {
+                      const status = included ? '✅' : '❌'
+                      const highlightIcon = highlight ? '⭐' : ''
                       return {
-                        title: title || 'Fonctionnalité',
-                        subtitle: included ? '✓ Inclus' : '✗ Non inclus',
+                        title: title || 'Feature',
+                        subtitle: `${status} ${highlightIcon}`.trim()
                       }
-                    },
-                  },
-                },
+                    }
+                  }
+                }
               ],
-              validation: (Rule) => Rule.min(1).max(20),
-            },
-            {
+              validation: Rule => Rule.required().min(1)
+            }),
+            defineField({
               name: 'ctaButton',
-              title: 'Bouton d\'action',
+              title: 'CTA Button',
               type: 'object',
               fields: [
-                {
+                defineField({
                   name: 'text',
-                  title: 'Texte du bouton',
+                  title: 'Button Text',
                   type: 'string',
-                  validation: (Rule) => Rule.required().max(50),
-                  initialValue: 'Choisir ce plan',
-                },
-                {
-                  name: 'href',
-                  title: 'Lien',
-                  type: 'string',
-                  validation: (Rule) => Rule.required(),
-                },
-                {
-                  name: 'variant',
-                  title: 'Style du bouton',
+                  initialValue: 'Get Started',
+                  validation: Rule => Rule.required().max(30)
+                }),
+                defineField({
+                  name: 'url',
+                  title: 'Button URL',
+                  type: 'url',
+                  validation: Rule => Rule.required()
+                }),
+                defineField({
+                  name: 'style',
+                  title: 'Button Style',
                   type: 'string',
                   options: {
                     list: [
-                      { title: 'Principal', value: 'primary' },
-                      { title: 'Secondaire', value: 'secondary' },
-                      { title: 'Fantôme', value: 'ghost' },
+                      { title: 'Primary', value: 'primary' },
+                      { title: 'Secondary', value: 'secondary' },
+                      { title: 'Outline', value: 'outline' }
                     ],
+                    layout: 'radio'
                   },
-                  initialValue: 'primary',
-                },
+                  initialValue: 'primary'
+                })
               ],
-            },
-            {
-              name: 'featured',
-              title: 'Plan en vedette',
-              type: 'boolean',
-              description: 'Mettre ce plan en évidence',
-              initialValue: false,
-            },
-            {
-              name: 'badge',
-              title: 'Badge',
-              type: 'string',
-              description: 'Badge affiché sur le plan (ex: Populaire, Meilleure valeur)',
-              validation: (Rule) => Rule.max(30),
-            },
-            {
-              name: 'badgeColor',
-              title: 'Couleur du badge',
-              type: 'string',
-              options: {
-                list: [
-                  { title: 'Bleu', value: '#3b82f6' },
-                  { title: 'Vert', value: '#10b981' },
-                  { title: 'Rouge', value: '#ef4444' },
-                  { title: 'Jaune', value: '#eab308' },
-                  { title: 'Violet', value: '#8b5cf6' },
-                  { title: 'Rose', value: '#ec4899' },
-                  { title: 'Orange', value: '#f97316' },
-                ],
-              },
-              initialValue: '#3b82f6',
-              hidden: ({ parent }) => !parent?.badge,
-            },
+              validation: Rule => Rule.required()
+            }),
+            defineField({
+              name: 'order',
+              title: 'Display Order',
+              type: 'number',
+              initialValue: 1,
+              validation: Rule => Rule.required().min(1)
+            })
           ],
           preview: {
             select: {
               name: 'name',
-              price: 'price',
-              period: 'period',
-              featured: 'featured',
+              monthlyPrice: 'monthlyPrice',
+              currency: 'currency',
+              isPopular: 'isPopular'
             },
-            prepare({ name, price, period, featured }) {
+            prepare({ name, monthlyPrice, currency, isPopular }) {
+              const popularIcon = isPopular ? '⭐' : ''
               return {
-                title: name || 'Plan sans nom',
-                subtitle: `${price}/${period}${featured ? ' • En vedette' : ''}`,
+                title: name || 'Pricing Plan',
+                subtitle: `${monthlyPrice || 0}${currency || 'EUR'}/month ${popularIcon}`.trim()
               }
-            },
-          },
-        },
+            }
+          }
+        }
       ],
-      validation: (Rule) => Rule.min(1).max(6),
+      validation: Rule => Rule.required().min(1).max(6)
     }),
     defineField({
-      name: 'cardStyle',
-      title: 'Style des cartes',
+      name: 'showComparison',
+      title: 'Show Feature Comparison',
+      type: 'boolean',
+      initialValue: false
+    }),
+    defineField({
+      name: 'comparisonFeatures',
+      title: 'Comparison Features',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'category',
+              title: 'Category',
+              type: 'string',
+              validation: Rule => Rule.required().max(50)
+            }),
+            defineField({
+              name: 'features',
+              title: 'Features',
+              type: 'array',
+              of: [{ type: 'string' }],
+              validation: Rule => Rule.required().min(1)
+            })
+          ],
+          preview: {
+            select: {
+              title: 'category',
+              features: 'features'
+            },
+            prepare({ title, features }) {
+              return {
+                title: title || 'Feature Category',
+                subtitle: `${features?.length || 0} features`
+              }
+            }
+          }
+        }
+      ],
+      hidden: ({ parent }) => !parent?.showComparison,
+      validation: Rule => Rule.custom((value, context) => {
+        const parent = context.parent as any
+        if (parent?.showComparison && (!value || value.length === 0)) {
+          return 'Comparison features are required when comparison is enabled'
+        }
+        return true
+      })
+    }),
+    defineField({
+      name: 'backgroundColor',
+      title: 'Background Color',
       type: 'string',
-      description: 'Apparence des cartes de tarifs',
       options: {
         list: [
-          { title: 'Minimal', value: 'minimal' },
-          { title: 'Avec bordure', value: 'bordered' },
-          { title: 'Avec ombre', value: 'shadow' },
-          { title: 'Élevé', value: 'elevated' },
-          { title: 'Avec fond coloré', value: 'colored' },
-          { title: 'Glassmorphism', value: 'glass' },
+          { title: 'White', value: 'white' },
+          { title: 'Light Gray', value: 'gray-50' },
+          { title: 'Dark', value: 'gray-900' }
         ],
-        layout: 'radio',
+        layout: 'radio'
       },
-      initialValue: 'elevated',
+      initialValue: 'white'
     }),
     defineField({
-      name: 'billingToggle',
-      title: 'Basculer mensuel/annuel',
-      type: 'object',
-      description: 'Permettre de basculer entre tarifs mensuels et annuels',
-      fields: [
-        {
-          name: 'enabled',
-          title: 'Activer',
-          type: 'boolean',
-          initialValue: false,
-        },
-        {
-          name: 'monthlyLabel',
-          title: 'Label mensuel',
-          type: 'string',
-          initialValue: 'Mensuel',
-          hidden: ({ parent }) => !parent?.enabled,
-        },
-        {
-          name: 'yearlyLabel',
-          title: 'Label annuel',
-          type: 'string',
-          initialValue: 'Annuel',
-          hidden: ({ parent }) => !parent?.enabled,
-        },
-        {
-          name: 'savingsText',
-          title: 'Texte d\'économies',
-          type: 'string',
-          description: 'Ex: Économisez 20%',
-          validation: (Rule) => Rule.max(50),
-          hidden: ({ parent }) => !parent?.enabled,
-        },
-      ],
-    }),
-    
-    // Champs de thème unifiés
-    ...getThemeFields(),
+      name: 'centerAlign',
+      title: 'Center Align Content',
+      type: 'boolean',
+      initialValue: true
+    })
   ],
   preview: {
     select: {
       title: 'title',
-      plans: 'plans',
-      layout: 'layout',
+      plansCount: 'plans.length'
     },
-    prepare({ title, plans, layout }) {
-      const planCount = plans?.length || 0
+    prepare({ title, plansCount }) {
       return {
-        title: title || 'Plans tarifaires',
-        subtitle: `${planCount} plan(s) • ${layout}`,
+        title: title || 'Pricing Block',
+        subtitle: `${plansCount || 0} pricing plans`
       }
-    },
-  },
+    }
+  }
 })

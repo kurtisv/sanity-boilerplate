@@ -1,351 +1,239 @@
 import { defineType, defineField } from 'sanity'
-import { getThemeFields } from '../shared/themeFields'
 
 export default defineType({
   name: 'galleryBlock',
   title: 'Gallery Block',
-  type: 'object',
-  description: 'Galerie d\'images avec lightbox, filtres et layouts multiples',
+  type: 'document',
   fields: [
     defineField({
       name: 'title',
-      title: 'Titre',
+      title: 'Gallery Title',
       type: 'string',
-      description: 'Titre principal de la galerie',
-      validation: (Rule) => Rule.max(100),
+      validation: (Rule) => Rule.required().max(100)
     }),
     defineField({
-      name: 'subtitle',
-      title: 'Sous-titre',
+      name: 'description',
+      title: 'Description',
       type: 'text',
-      description: 'Description de la galerie',
       rows: 3,
-      validation: (Rule) => Rule.max(300),
+      validation: (Rule) => Rule.max(300)
     }),
     defineField({
       name: 'layout',
-      title: 'Mise en page',
+      title: 'Gallery Layout',
       type: 'string',
-      description: 'Style d\'affichage de la galerie',
       options: {
         list: [
-          { title: 'Grille classique', value: 'grid' },
-          { title: 'Masonry (Pinterest)', value: 'masonry' },
-          { title: 'Carrousel', value: 'carousel' },
-          { title: 'Mosaïque', value: 'mosaic' },
-        ],
+          { title: 'Grid', value: 'grid' },
+          { title: 'Masonry', value: 'masonry' },
+          { title: 'Carousel', value: 'carousel' }
+        ]
       },
       initialValue: 'grid',
+      validation: (Rule) => Rule.required()
     }),
     defineField({
-      name: 'images',
-      title: '📷 Images de la Galerie',
+      name: 'columns',
+      title: 'Grid Columns',
+      type: 'number',
+      options: {
+        list: [2, 3, 4, 5]
+      },
+      initialValue: 3,
+      hidden: ({ document }) => document?.layout !== 'grid'
+    }),
+    defineField({
+      name: 'enableFilters',
+      title: 'Enable Category Filters',
+      type: 'boolean',
+      initialValue: true
+    }),
+    defineField({
+      name: 'categories',
+      title: 'Categories',
       type: 'array',
-      description: '🎯 Ajoutez vos photos ici ! Glissez-déposez des fichiers ou utilisez le bouton + pour ajouter des images. Vous pouvez aussi prendre des photos directement avec votre caméra.',
       of: [
         {
           type: 'object',
           fields: [
             defineField({
+              name: 'name',
+              title: 'Category Name',
+              type: 'string',
+              validation: (Rule) => Rule.required().max(50)
+            }),
+            defineField({
+              name: 'slug',
+              title: 'Category Slug',
+              type: 'slug',
+              options: {
+                source: 'name',
+                maxLength: 96
+              },
+              validation: (Rule) => Rule.required()
+            })
+          ],
+          preview: {
+            select: {
+              title: 'name'
+            }
+          }
+        }
+      ],
+      hidden: ({ document }) => !document?.enableFilters,
+      validation: (Rule) => Rule.max(10)
+    }),
+    defineField({
+      name: 'items',
+      title: 'Gallery Items',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            defineField({
+              name: 'type',
+              title: 'Media Type',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Image', value: 'image' },
+                  { title: 'Video', value: 'video' }
+                ]
+              },
+              initialValue: 'image',
+              validation: (Rule) => Rule.required()
+            }),
+            defineField({
               name: 'image',
               title: 'Image',
               type: 'image',
               options: {
-                hotspot: true,
-                accept: 'image/*',
-                storeOriginalFilename: true,
+                hotspot: true
               },
-              description: '📷 Téléchargez une image ou utilisez votre caméra pour prendre une photo. Formats acceptés: JPG, PNG, WebP, GIF',
-              validation: (Rule) => Rule.required().custom((image) => {
-                if (!image) return 'Une image est requise pour la galerie'
-                return true
-              }),
+              fields: [
+                defineField({
+                  name: 'alt',
+                  title: 'Alt Text',
+                  type: 'string',
+                  validation: (Rule) => Rule.required().max(100)
+                })
+              ],
+              hidden: ({ parent }) => parent?.type !== 'image',
+              validation: (Rule) => Rule.custom((image, context) => {
+                const parent = context?.parent as any
+                return parent?.type === 'image' && !image ? 'Image is required' : true
+              })
             }),
             defineField({
-              name: 'alt',
-              title: 'Texte alternatif',
-              type: 'string',
-              description: 'Description de l\'image pour l\'accessibilité',
-              validation: (Rule) => Rule.required().max(100),
+              name: 'video',
+              title: 'Video',
+              type: 'file',
+              options: {
+                accept: 'video/*'
+              },
+              hidden: ({ parent }) => parent?.type !== 'video',
+              validation: (Rule) => Rule.custom((video, context) => {
+                const parent = context?.parent as any
+                return parent?.type === 'video' && !video ? 'Video is required' : true
+              })
+            }),
+            defineField({
+              name: 'videoUrl',
+              title: 'Video URL (YouTube/Vimeo)',
+              type: 'url',
+              description: 'Alternative to file upload',
+              hidden: ({ parent }) => parent?.type !== 'video'
+            }),
+            defineField({
+              name: 'thumbnail',
+              title: 'Video Thumbnail',
+              type: 'image',
+              options: {
+                hotspot: true
+              },
+              hidden: ({ parent }) => parent?.type !== 'video'
             }),
             defineField({
               name: 'caption',
-              title: 'Légende',
+              title: 'Caption',
               type: 'string',
-              description: 'Légende affichée sous l\'image',
-              validation: (Rule) => Rule.max(200),
+              validation: (Rule) => Rule.max(200)
             }),
             defineField({
               name: 'category',
-              title: 'Catégorie',
-              type: 'string',
-              description: 'Catégorie pour le filtrage',
-              validation: (Rule) => Rule.max(50),
+              title: 'Category',
+              type: 'reference',
+              to: [{ type: 'galleryBlock' }],
+              options: {
+                filter: ({ document }) => {
+                  return {
+                    filter: '_id == $id',
+                    params: { id: document._id }
+                  }
+                }
+              },
+              hidden: ({ document }) => !document?.enableFilters
             }),
             defineField({
-              name: 'featured',
-              title: 'Image mise en avant',
-              type: 'boolean',
-              description: 'Afficher cette image en plus grand',
-              initialValue: false,
-            }),
+              name: 'categorySlug',
+              title: 'Category',
+              type: 'string',
+              options: {
+                list: ({ document }) => {
+                  const categories = document?.categories || []
+                  return categories.map((cat: any) => ({
+                    title: cat.name,
+                    value: cat.slug?.current
+                  }))
+                }
+              },
+              hidden: ({ document }) => !document?.enableFilters
+            })
           ],
           preview: {
             select: {
-              title: 'alt',
-              subtitle: 'caption',
+              title: 'caption',
               media: 'image',
-              featured: 'featured',
+              type: 'type'
             },
-            prepare({ title, subtitle, media, featured }) {
+            prepare({ title, media, type }) {
               return {
-                title: title || 'Image sans titre',
-                subtitle: `${subtitle || 'Pas de légende'}${featured ? ' • ⭐ Mise en avant' : ''}`,
-                media: media,
+                title: title || 'Untitled item',
+                subtitle: type === 'video' ? 'Video' : 'Image',
+                media
               }
-            },
-          },
-        },
-      ],
-      validation: (Rule) => Rule.min(1).max(50).error('Entre 1 et 50 images maximum'),
-      initialValue: [
-        {
-          _key: 'default-image-1',
-          alt: 'Image d\'exemple 1',
-          caption: 'Première image de démonstration',
-          category: 'exemple',
-          featured: false
-        },
-        {
-          _key: 'default-image-2', 
-          alt: 'Image d\'exemple 2',
-          caption: 'Deuxième image de démonstration',
-          category: 'exemple',
-          featured: true
-        },
-        {
-          _key: 'default-image-3',
-          alt: 'Image d\'exemple 3', 
-          caption: 'Troisième image de démonstration',
-          category: 'exemple',
-          featured: false
+            }
+          }
         }
-      ]
+      ],
+      validation: (Rule) => Rule.required().min(1).max(50)
     }),
     defineField({
-      name: 'gridSettings',
-      title: 'Paramètres de grille',
-      type: 'object',
-      description: 'Configuration pour les layouts en grille',
-      fields: [
-        defineField({
-          name: 'columns',
-          title: 'Nombre de colonnes',
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'desktop',
-              title: 'Desktop',
-              type: 'number',
-              initialValue: 3,
-              validation: (Rule) => Rule.min(1).max(6),
-            }),
-            defineField({
-              name: 'tablet',
-              title: 'Tablette',
-              type: 'number',
-              initialValue: 2,
-              validation: (Rule) => Rule.min(1).max(4),
-            }),
-            defineField({
-              name: 'mobile',
-              title: 'Mobile',
-              type: 'number',
-              initialValue: 1,
-              validation: (Rule) => Rule.min(1).max(2),
-            }),
-          ],
-        }),
-        defineField({
-          name: 'aspectRatio',
-          title: 'Ratio d\'aspect',
-          type: 'string',
-          options: {
-            list: [
-              { title: 'Carré (1:1)', value: '1:1' },
-              { title: 'Paysage (4:3)', value: '4:3' },
-              { title: 'Cinéma (16:9)', value: '16:9' },
-              { title: 'Portrait (3:4)', value: '3:4' },
-              { title: 'Naturel', value: 'auto' },
-            ],
-          },
-          initialValue: '4:3',
-        }),
-        defineField({
-          name: 'gap',
-          title: 'Espacement',
-          type: 'string',
-          options: {
-            list: [
-              { title: 'Aucun', value: 'none' },
-              { title: 'Petit', value: 'small' },
-              { title: 'Moyen', value: 'medium' },
-              { title: 'Grand', value: 'large' },
-            ],
-          },
-          initialValue: 'medium',
-        }),
-      ],
-      hidden: ({ parent }) => parent?.layout === 'carousel',
+      name: 'lightboxEnabled',
+      title: 'Enable Lightbox',
+      type: 'boolean',
+      initialValue: true
     }),
     defineField({
-      name: 'carouselSettings',
-      title: 'Paramètres du carrousel',
-      type: 'object',
-      description: 'Configuration pour le layout carrousel',
-      fields: [
-        defineField({
-          name: 'autoplay',
-          title: 'Lecture automatique',
-          type: 'boolean',
-          initialValue: false,
-        }),
-        defineField({
-          name: 'autoplaySpeed',
-          title: 'Vitesse (secondes)',
-          type: 'number',
-          initialValue: 5,
-          validation: (Rule) => Rule.min(2).max(10),
-          hidden: ({ parent }) => !parent?.autoplay,
-        }),
-        defineField({
-          name: 'showDots',
-          title: 'Afficher les points',
-          type: 'boolean',
-          initialValue: true,
-        }),
-        defineField({
-          name: 'showArrows',
-          title: 'Afficher les flèches',
-          type: 'boolean',
-          initialValue: true,
-        }),
-        defineField({
-          name: 'slidesToShow',
-          title: 'Images visibles',
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'desktop',
-              title: 'Desktop',
-              type: 'number',
-              initialValue: 3,
-              validation: (Rule) => Rule.min(1).max(5),
-            }),
-            defineField({
-              name: 'tablet',
-              title: 'Tablette',
-              type: 'number',
-              initialValue: 2,
-              validation: (Rule) => Rule.min(1).max(3),
-            }),
-            defineField({
-              name: 'mobile',
-              title: 'Mobile',
-              type: 'number',
-              initialValue: 1,
-              validation: (Rule) => Rule.min(1).max(2),
-            }),
-          ],
-        }),
-      ],
-      hidden: ({ parent }) => parent?.layout !== 'carousel',
-    }),
-    defineField({
-      name: 'filterOptions',
-      title: 'Options de filtrage',
-      type: 'object',
-      fields: [
-        defineField({
-          name: 'enableFilters',
-          title: 'Activer les filtres',
-          type: 'boolean',
-          initialValue: false,
-        }),
-        defineField({
-          name: 'filterStyle',
-          title: 'Style des filtres',
-          type: 'string',
-          options: {
-            list: [
-              { title: 'Boutons', value: 'buttons' },
-              { title: 'Menu déroulant', value: 'dropdown' },
-              { title: 'Tags', value: 'tags' },
-            ],
-          },
-          initialValue: 'buttons',
-          hidden: ({ parent }) => !parent?.enableFilters,
-        }),
-        defineField({
-          name: 'showAllOption',
-          title: 'Afficher "Tout"',
-          type: 'boolean',
-          initialValue: true,
-          hidden: ({ parent }) => !parent?.enableFilters,
-        }),
-      ],
-    }),
-    defineField({
-      name: 'lightboxOptions',
-      title: 'Options lightbox',
-      type: 'object',
-      fields: [
-        defineField({
-          name: 'enableLightbox',
-          title: 'Activer la lightbox',
-          type: 'boolean',
-          initialValue: true,
-        }),
-        defineField({
-          name: 'showCaptions',
-          title: 'Afficher les légendes',
-          type: 'boolean',
-          initialValue: true,
-          hidden: ({ parent }) => !parent?.enableLightbox,
-        }),
-        defineField({
-          name: 'showCounter',
-          title: 'Afficher le compteur',
-          type: 'boolean',
-          initialValue: true,
-          hidden: ({ parent }) => !parent?.enableLightbox,
-        }),
-        defineField({
-          name: 'enableZoom',
-          title: 'Activer le zoom',
-          type: 'boolean',
-          initialValue: true,
-          hidden: ({ parent }) => !parent?.enableLightbox,
-        }),
-      ],
-    }),
-
-    // Champs de thème unifiés
-    ...getThemeFields(),
+      name: 'lazyLoading',
+      title: 'Enable Lazy Loading',
+      type: 'boolean',
+      initialValue: true
+    })
   ],
   preview: {
     select: {
       title: 'title',
-      layout: 'layout',
-      imagesCount: 'images.length',
-      media: 'images.0.image',
+      itemCount: 'items',
+      layout: 'layout'
     },
-    prepare({ title, layout, imagesCount, media }) {
+    prepare({ title, itemCount, layout }) {
+      const count = itemCount?.length || 0
       return {
-        title: title || 'Galerie d\'images',
-        subtitle: `${layout} • ${imagesCount || 0} images`,
-        media: media,
+        title: title || 'Gallery Block',
+        subtitle: `${count} items • ${layout} layout`
       }
-    },
-  },
+    }
+  }
 })

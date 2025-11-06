@@ -73,31 +73,88 @@ function buildPrompt(userIdea) {
 
 "${userIdea}"
 
-RÈGLES STRICTES:
-1. Le schéma doit utiliser defineType et defineField de 'sanity'
-2. Type du document: 'document' (pas 'object')
-3. Tous les arrays doivent avoir des éléments avec _key (Sanity les génère auto)
-4. Validation: Rule.required(), Rule.max(N)
-5. Preview avec select et prepare
-6. Le composant React doit:
-   - Utiliser TypeScript
-   - Props: { data: any } ou interface typée
-   - Utiliser Tailwind CSS pour le style
-   - Être responsive
-   - Gérer les cas vides (logos?.length || 0)
+⚠️ RÈGLES SANITY CRITIQUES - À RESPECTER ABSOLUMENT:
+
+1. EXPORTS:
+   - ✅ TOUJOURS: export default defineType({...})
+   - ❌ JAMAIS: export const monBlockSchema = defineType({...})
+
+2. TYPES DE CHAMPS VALIDES UNIQUEMENT:
+   - ✅ string, text, number, boolean, date, datetime, url, email, slug, array, object, image, file, reference, document, block
+   - ❌ INTERDITS: color, select, textarea, dropdown
+   - Pour couleurs: type: 'string' avec description: 'Hex color code'
+   - Pour listes déroulantes: type: 'string' avec options.list
+
+3. ICÔNES:
+   - ✅ icon: () => '🎨'  (fonction retournant emoji)
+   - ❌ JAMAIS importer depuis @sanity/icons, @heroicons/react, etc.
+
+4. CHAMPS _key:
+   - ✅ Sanity les génère automatiquement pour les arrays
+   - ❌ JAMAIS définir _key comme champ dans le schéma
+
+5. VALIDATION:
+   - Utiliser Rule.required(), Rule.max(N), Rule.min(N)
+   - Limites courantes: title max 100, subtitle max 200, description max 300
+   - Pour statsBlock: number doit être STRING (max 20)
+
+6. OPTIONS:
+   - Utiliser initialValue (PAS defaultValue)
+   - Format: options: { list: [{title: 'X', value: 'x'}], layout: 'radio' }
+
+7. BLOCS SPÉCIAUX:
+   - ContactBlock fieldTypes valides: name, email, phone, company, subject, message, textarea, url, custom
+   - FeatureGrid: nécessite iconType: 'emoji' et iconEmoji: '🎨'
+   - TeamBlock: utiliser 'position' (PAS 'role'), ajouter displayType, layout, gridColumns
+   - StatsBlock: number est STRING
+
+8. TYPE DE BLOC:
+   - type: 'object' pour blocs dans pageBuilder
+   - type: 'document' pour documents indépendants
+
+9. PREVIEW OBLIGATOIRE:
+   - Toujours inclure preview avec select et prepare
+   - Gérer les valeurs nulles/undefined
 
 STRUCTURE DE RÉPONSE:
 Réponds EXACTEMENT dans ce format:
 
 \`\`\`schema
-[CODE DU SCHÉMA SANITY ICI]
+import { defineType, defineField } from 'sanity'
+
+export default defineType({
+  name: 'monBlock',
+  title: 'Mon Block',
+  type: 'document',
+  icon: () => '🎨',
+  fields: [
+    // Vos champs avec validations correctes
+  ],
+  preview: {
+    select: { title: 'title' },
+    prepare({ title }) {
+      return {
+        title: title || 'Mon Block',
+        subtitle: 'Description'
+      }
+    }
+  }
+})
 \`\`\`
 
 \`\`\`component
-[CODE DU COMPOSANT REACT ICI]
+export default function MonBlock({ data }: { data: any }) {
+  const { title } = data || {}
+  
+  return (
+    <section className="py-12">
+      {/* Composant responsive avec Tailwind */}
+    </section>
+  )
+}
 \`\`\`
 
-Génère du code production-ready, propre et bien commenté.`
+Génère du code production-ready qui passe toutes les validations Sanity!`
 }
 
 function parseClaudeResponse(output) {
@@ -118,26 +175,36 @@ export default defineType({
   name: '${name}',
   title: '${title}',
   type: 'document',
+  icon: () => '🎨',
   fields: [
     defineField({
       name: 'title',
-      title: 'Titre',
+      title: 'Title',
       type: 'string',
-      validation: (Rule) => Rule.max(100)
+      validation: Rule => Rule.required().max(100)
+    }),
+    defineField({
+      name: 'subtitle',
+      title: 'Subtitle',
+      type: 'text',
+      validation: Rule => Rule.max(200)
     }),
     defineField({
       name: 'description',
       title: 'Description',
       type: 'text',
-      validation: (Rule) => Rule.max(500)
+      validation: Rule => Rule.max(300)
     })
   ],
   preview: {
-    select: { title: 'title' },
-    prepare({ title }) {
+    select: {
+      title: 'title',
+      subtitle: 'subtitle'
+    },
+    prepare({ title, subtitle }) {
       return {
         title: title || '${title}',
-        subtitle: 'Bloc générique'
+        subtitle: subtitle || 'Generic block'
       }
     }
   }

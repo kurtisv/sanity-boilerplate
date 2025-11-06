@@ -1,4 +1,4 @@
-export default function TestimonialsBlock({ data }: { data: any }) {
+export default function GalleryBlock({ data }: { data: any }) {
   const { title, description } = data || {}
 
   return (

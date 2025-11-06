@@ -3,19 +3,40 @@ import { defineType, defineField } from 'sanity'
 export default defineType({
   name: 'socialProofBlock',
   title: 'Social Proof Block',
-  type: 'document',
+  type: 'object',
+  icon: () => '⭐',
   fields: [
     defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: Rule => Rule.required().max(100)
+      validation: Rule => Rule.max(100)
     }),
     defineField({
-      name: 'description',
-      title: 'Description',
+      name: 'subtitle',
+      title: 'Subtitle',
       type: 'text',
-      validation: Rule => Rule.max(300)
+      validation: Rule => Rule.max(200)
+    }),
+    defineField({
+      name: 'layout',
+      title: 'Layout Style',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Minimal', value: 'minimal' },
+          { title: 'Cards', value: 'cards' },
+          { title: 'Carousel', value: 'carousel' }
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'minimal'
+    }),
+    defineField({
+      name: 'enableAnimations',
+      title: 'Enable Animations',
+      type: 'boolean',
+      initialValue: true
     }),
     defineField({
       name: 'clientLogos',
@@ -25,36 +46,32 @@ export default defineType({
         {
           type: 'object',
           fields: [
-            defineField({
-              name: 'name',
+            {
+              name: 'logo',
+              title: 'Logo',
+              type: 'image'
+            },
+            {
+              name: 'clientName',
               title: 'Client Name',
               type: 'string',
-              validation: Rule => Rule.required()
-            }),
-            defineField({
-              name: 'image',
-              title: 'Logo Image',
-              type: 'image',
-              options: {
-                hotspot: true
-              },
-              validation: Rule => Rule.required()
-            }),
-            defineField({
-              name: 'url',
-              title: 'Client URL',
+              validation: Rule => Rule.required().max(50)
+            },
+            {
+              name: 'website',
+              title: 'Website URL',
               type: 'url'
-            })
+            }
           ],
           preview: {
             select: {
-              title: 'name',
-              media: 'image'
+              title: 'clientName',
+              media: 'logo'
             }
           }
         }
       ],
-      validation: Rule => Rule.max(20)
+      validation: Rule => Rule.max(12)
     }),
     defineField({
       name: 'keyStats',
@@ -64,40 +81,37 @@ export default defineType({
         {
           type: 'object',
           fields: [
-            defineField({
+            {
               name: 'number',
               title: 'Number',
               type: 'string',
-              validation: Rule => Rule.required()
-            }),
-            defineField({
+              description: 'e.g., "100+", "5M", "99%"',
+              validation: Rule => Rule.required().max(20)
+            },
+            {
               name: 'label',
               title: 'Label',
               type: 'string',
-              validation: Rule => Rule.required()
-            }),
-            defineField({
-              name: 'icon',
-              title: 'Icon',
+              validation: Rule => Rule.required().max(50)
+            },
+            {
+              name: 'description',
+              title: 'Description',
+              type: 'text',
+              validation: Rule => Rule.max(100)
+            },
+            {
+              name: 'iconEmoji',
+              title: 'Icon Emoji',
               type: 'string',
-              options: {
-                list: [
-                  { title: 'Users', value: 'users' },
-                  { title: 'Star', value: 'star' },
-                  { title: 'Trophy', value: 'trophy' },
-                  { title: 'Chart', value: 'chart' },
-                  { title: 'Globe', value: 'globe' },
-                  { title: 'Heart', value: 'heart' },
-                  { title: 'Shield', value: 'shield' },
-                  { title: 'Zap', value: 'zap' }
-                ]
-              }
-            })
+              description: 'Single emoji',
+              validation: Rule => Rule.max(2)
+            }
           ],
           preview: {
             select: {
-              title: 'label',
-              subtitle: 'number'
+              title: 'number',
+              subtitle: 'label'
             }
           }
         }
@@ -106,101 +120,90 @@ export default defineType({
     }),
     defineField({
       name: 'testimonials',
-      title: 'Testimonials',
+      title: 'Short Testimonials',
       type: 'array',
       of: [
         {
           type: 'object',
           fields: [
-            defineField({
+            {
               name: 'quote',
               title: 'Quote',
               type: 'text',
-              validation: Rule => Rule.required().max(300)
-            }),
-            defineField({
-              name: 'author',
+              validation: Rule => Rule.required().max(250)
+            },
+            {
+              name: 'authorName',
               title: 'Author Name',
               type: 'string',
-              validation: Rule => Rule.required()
-            }),
-            defineField({
-              name: 'photo',
+              validation: Rule => Rule.required().max(50)
+            },
+            {
+              name: 'authorPosition',
+              title: 'Author Position',
+              type: 'string',
+              validation: Rule => Rule.max(50)
+            },
+            {
+              name: 'authorCompany',
+              title: 'Author Company',
+              type: 'string',
+              validation: Rule => Rule.max(50)
+            },
+            {
+              name: 'authorImage',
               title: 'Author Photo',
-              type: 'image',
-              options: {
-                hotspot: true
-              }
-            }),
-            defineField({
-              name: 'company',
-              title: 'Company',
-              type: 'string'
-            }),
-            defineField({
+              type: 'image'
+            },
+            {
               name: 'rating',
-              title: 'Rating (1-5 stars)',
+              title: 'Star Rating',
               type: 'number',
-              validation: Rule => Rule.required().min(1).max(5)
-            })
+              validation: Rule => Rule.min(1).max(5)
+            }
           ],
           preview: {
             select: {
-              title: 'author',
-              subtitle: 'company',
-              media: 'photo'
+              title: 'authorName',
+              subtitle: 'authorCompany',
+              media: 'authorImage'
             }
           }
         }
       ],
-      validation: Rule => Rule.max(10)
+      validation: Rule => Rule.max(8)
     }),
     defineField({
-      name: 'layout',
-      title: 'Layout',
+      name: 'backgroundColor',
+      title: 'Background Color',
+      type: 'string',
+      description: 'Hex color code (e.g., #f9fafb)',
+      validation: Rule => Rule.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).error('Must be a valid hex color')
+    }),
+    defineField({
+      name: 'textColor',
+      title: 'Text Color',
       type: 'string',
       options: {
         list: [
-          { title: 'Logos Only', value: 'logos-only' },
-          { title: 'Stats Only', value: 'stats-only' },
-          { title: 'Testimonials Only', value: 'testimonials-only' },
-          { title: 'Combined', value: 'combined' }
+          { title: 'Dark', value: 'dark' },
+          { title: 'Light', value: 'light' }
         ]
       },
-      validation: Rule => Rule.required(),
-      initialValue: 'combined'
-    }),
-    defineField({
-      name: 'style',
-      title: 'Style',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Minimal', value: 'minimal' },
-          { title: 'Cards', value: 'cards' },
-          { title: 'Carousel', value: 'carousel' }
-        ]
-      },
-      validation: Rule => Rule.required(),
-      initialValue: 'cards'
-    }),
-    defineField({
-      name: 'enableAnimations',
-      title: 'Enable Animations',
-      type: 'boolean',
-      initialValue: true
+      initialValue: 'dark'
     })
   ],
   preview: {
     select: {
       title: 'title',
       layout: 'layout',
-      style: 'style'
+      statsCount: 'keyStats.length',
+      testimonialsCount: 'testimonials.length'
     },
-    prepare({ title, layout, style }) {
+    prepare({ title, layout, statsCount = 0, testimonialsCount = 0 }) {
       return {
         title: title || 'Social Proof Block',
-        subtitle: `${layout} - ${style}`
+        subtitle: `${layout} • ${statsCount} stats • ${testimonialsCount} testimonials`
       }
     }
   }
