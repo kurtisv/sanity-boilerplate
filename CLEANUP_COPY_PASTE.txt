@@ -1,0 +1,250 @@
+================================================================================
+  NETTOYAGE DU PROJET - COMMANDES À COPIER-COLLER UNE PAR UNE
+================================================================================
+
+⚠️ IMPORTANT: 
+1. Ouvrez votre terminal Windows (CMD) dans le dossier du projet
+2. Copiez-collez UNE commande à la fois
+3. Testez avec "npm run dev" après chaque étape importante
+
+================================================================================
+📝 ÉTAPE 1: SUPPRIMER LES DOCUMENTS MARKDOWN (14 fichiers)
+================================================================================
+
+del 00_LIRE_EN_PREMIER.md
+
+del 01_REGLES_CRITIQUES.md
+
+del 02_TOUTES_LES_ERREURS.md
+
+del CLEANUP_SUMMARY.md
+
+del CONFORMITY_REPORT.md
+
+del DOCUMENTATION_INDEX.md
+
+del FICHIERS_IMPORTANTS.md
+
+del GUIDE_APPROPRIATION.md
+
+del MANUEL_AUTO_IMPLEMENTATION.md
+
+del NOUVEAUX_BLOCS_COMPLETS.md
+
+del NOUVEAUX_COMPOSANTS_REACT.md
+
+del TESTING_PLAN.md
+
+del WEBHOOK_SETUP.md
+
+del README_FINAL.md
+
+
+================================================================================
+🗑️ ÉTAPE 2: SUPPRIMER LES SCRIPTS OBSOLÈTES (8 fichiers)
+================================================================================
+
+del scripts\add-common-fields.js
+
+del scripts\validate-schemas.js
+
+del cleanup-orphaned-docs.js
+
+del simple-test.js
+
+del test-apis.js
+
+del cleanup.bat
+
+del demo-content.json
+
+del setup-env.bat
+
+
+================================================================================
+📂 ÉTAPE 3: SUPPRIMER LES DOSSIERS VIDES (11 dossiers)
+================================================================================
+
+rmdir /q content-massotherapie
+
+rmdir /q src\app\admin\create-demos
+
+rmdir /q src\app\admin\kvks-manager
+
+rmdir /q src\app\admin\massage-site-manager
+
+rmdir /q src\app\admin\regenerate
+
+rmdir /q src\app\api\admin
+
+rmdir /q src\app\api\create-kvks-site
+
+rmdir /q src\app\api\create-massage-site
+
+rmdir /q src\app\api\get-all-pages
+
+rmdir /q src\components\pages
+
+rmdir /q src\components\ui
+
+>>> TESTEZ MAINTENANT: npm run dev
+
+
+================================================================================
+🧪 ÉTAPE 4: SUPPRIMER LES PAGES ADMIN DE TEST (5 dossiers)
+================================================================================
+
+rmdir /s /q src\app\admin\demo
+
+rmdir /s /q src\app\admin\fix-apis
+
+rmdir /s /q src\app\admin\fix-keys
+
+rmdir /s /q src\app\admin\migration
+
+rmdir /s /q src\app\admin\navigation
+
+
+================================================================================
+🌐 ÉTAPE 5: SUPPRIMER LES PAGES WEBSITE DE TEST (5 dossiers)
+================================================================================
+
+rmdir /s /q "src\app\(website)\modern-home"
+
+rmdir /s /q "src\app\(website)\styled-home"
+
+rmdir /s /q "src\app\(website)\test-404"
+
+rmdir /s /q "src\app\(website)\theme-demo"
+
+rmdir /s /q "src\app\(website)\routing-analysis"
+
+
+================================================================================
+🔧 ÉTAPE 6: SUPPRIMER LES APIS DE TEST (4 dossiers)
+================================================================================
+
+rmdir /s /q src\app\api\migrate-all-blocks
+
+rmdir /s /q src\app\api\migrate-hero-blocks
+
+rmdir /s /q src\app\api\test-stats
+
+rmdir /s /q src\app\api\cleanup-studio
+
+>>> TESTEZ MAINTENANT: npm run dev
+
+
+================================================================================
+⚠️ ÉTAPE 7 (OPTIONNEL): PAGES ADMIN REDONDANTES (9 dossiers)
+⚠️ Supprimez SEULEMENT si vous utilisez exclusivement auto-generate
+================================================================================
+
+rmdir /s /q src\app\admin\about
+
+rmdir /s /q src\app\admin\faq
+
+rmdir /s /q src\app\admin\home
+
+rmdir /s /q src\app\admin\legal
+
+rmdir /s /q src\app\admin\pages
+
+rmdir /s /q src\app\admin\portfolio
+
+rmdir /s /q src\app\admin\pricing
+
+rmdir /s /q src\app\admin\services
+
+rmdir /s /q src\app\admin\site-settings
+
+
+================================================================================
+⚠️ ÉTAPE 8 (OPTIONNEL): APIS SETUP REDONDANTES (14 dossiers)
+⚠️ Supprimez SEULEMENT si vous utilisez exclusivement auto-generate
+================================================================================
+
+rmdir /s /q src\app\api\setup-about
+
+rmdir /s /q src\app\api\setup-blog
+
+rmdir /s /q src\app\api\setup-careers
+
+rmdir /s /q src\app\api\setup-contact
+
+rmdir /s /q src\app\api\setup-contact-simple
+
+rmdir /s /q src\app\api\setup-faq
+
+rmdir /s /q src\app\api\setup-footer
+
+rmdir /s /q src\app\api\setup-header
+
+rmdir /s /q src\app\api\setup-legal
+
+rmdir /s /q src\app\api\setup-portfolio
+
+rmdir /s /q src\app\api\setup-pricing
+
+rmdir /s /q src\app\api\setup-services
+
+rmdir /s /q src\app\api\setup-studio-showcase
+
+rmdir /s /q src\app\api\import-home
+
+>>> TESTEZ MAINTENANT: npm run dev
+
+
+================================================================================
+✅ VÉRIFICATIONS FINALES
+================================================================================
+
+1. Tester le site:
+   npm run dev
+   http://localhost:3000
+
+2. Tester Sanity Studio:
+   http://localhost:3000/studio
+
+3. Tester l'auto-génération:
+   http://localhost:3000/admin/auto-generate
+
+4. Tester la page démo:
+   http://localhost:3000/demo
+
+
+================================================================================
+📊 RÉSUMÉ DU NETTOYAGE
+================================================================================
+
+✅ Étape 1: 14 documents markdown supprimés
+✅ Étape 2: 8 scripts obsolètes supprimés
+✅ Étape 3: 11 dossiers vides supprimés
+✅ Étape 4: 5 pages admin de test supprimées
+✅ Étape 5: 5 pages website de test supprimées
+✅ Étape 6: 4 APIs de test supprimées
+⚠️ Étape 7: 9 pages admin (optionnel)
+⚠️ Étape 8: 14 APIs setup (optionnel)
+
+GAIN D'ESPACE: ~565 KB + structure simplifiée
+
+
+================================================================================
+💾 COMMIT GIT RECOMMANDÉ
+================================================================================
+
+git add .
+git commit -m "chore: cleanup project - remove unused files and test pages"
+git push
+
+
+================================================================================
+📚 DOCUMENTATION CONSERVÉE
+================================================================================
+
+✅ GUIDE_AUTO_GENERATION.md - Guide du système d'auto-génération
+✅ GUIDE_BLOCS_STUDIO.md - Guide des blocs Sanity
+✅ QUICK_START.md - Guide de démarrage rapide
+✅ CLEANUP_COMMANDS.md - Ce fichier de référence
+
+================================================================================
