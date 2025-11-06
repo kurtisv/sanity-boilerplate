@@ -30,6 +30,10 @@ import TabsBlock from '@/components/blocks/TabsBlock/TabsBlock'
 import NewsletterBlock from '@/components/blocks/NewsletterBlock/NewsletterBlock'
 import BlogBlock from '@/components/blocks/BlogBlock/BlogBlock'
 import LogoGridBlock from '@/components/blocks/LogoGridBlock/LogoGridBlock'
+import CountdownBlock from '@/components/blocks/CountdownBlock/CountdownBlock'
+import MapBlock from '@/components/blocks/MapBlock/MapBlock'
+import ComparisonTableBlock from '@/components/blocks/ComparisonTableBlock/ComparisonTableBlock'
+import SocialProofBlock from '@/components/blocks/SocialProofBlock/SocialProofBlock'
 
 // Type pour les données de blocs Sanity
 type BlockData = {
@@ -112,6 +116,18 @@ export default function BlockRenderer({ blocks }: BlockRendererProps) {
           
           case 'logoGridBlock':
             return <LogoGridBlock key={uniqueKey} data={block} />
+          
+          case 'countdownBlock':
+            return <CountdownBlock key={uniqueKey} data={block as any} />
+          
+          case 'mapBlock':
+            return <MapBlock key={uniqueKey} data={block as any} />
+          
+          case 'comparisonTableBlock':
+            return <ComparisonTableBlock key={uniqueKey} data={block as any} />
+          
+          case 'socialProofBlock':
+            return <SocialProofBlock key={uniqueKey} data={block as any} />
           
           default:
             if (process.env.NODE_ENV === 'development') {

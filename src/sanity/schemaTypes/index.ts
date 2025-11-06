@@ -35,6 +35,10 @@ import accordionBlock from '../schemas/blocks/accordionBlock'
 import tabsBlock from '../schemas/blocks/tabsBlock'
 import newsletterBlock from '../schemas/blocks/newsletterBlock'
 import logoGridBlock from '../schemas/blocks/logoGridBlock'
+import countdownBlock from '../schemas/blocks/countdownBlock'
+import mapBlock from '../schemas/blocks/mapBlock'
+import comparisonTableBlock from '../schemas/blocks/comparisonTableBlock'
+import socialProofBlock from '../schemas/blocks/socialProofBlock'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -73,5 +77,9 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     tabsBlock,
     newsletterBlock,
     logoGridBlock,
+    countdownBlock,
+    mapBlock,
+    comparisonTableBlock,
+    socialProofBlock,
   ],
 }

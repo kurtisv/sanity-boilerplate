@@ -1,7 +1,34 @@
 #!/usr/bin/env node
-require('dotenv').config()
+const dotenv = require('dotenv')
 const path = require('path')
 const { existsSync } = require('fs')
+
+// Load .env files (try .env.local first, then .env)
+const envLocalPath = path.resolve(process.cwd(), '.env.local')
+const envPath = path.resolve(process.cwd(), '.env')
+
+let result = dotenv.config({ path: envLocalPath })
+let envFile = '.env.local'
+
+if (result.error) {
+  // Try .env if .env.local doesn't exist
+  result = dotenv.config({ path: envPath })
+  envFile = '.env'
+}
+
+if (result.error) {
+  console.log('⚠️  Aucun fichier .env ou .env.local trouvé.')
+  console.log('   Créez .env.local avec votre clé Anthropic:')
+  console.log('   ANTHROPIC_API_KEY=sk-ant-api03-...')
+  console.log('   CLAUDE_MODEL=claude-3-5-sonnet-20241022\n')
+} else {
+  console.log(`✅ Fichier ${envFile} chargé`)
+  if (process.env.ANTHROPIC_API_KEY) {
+    console.log(`✅ ANTHROPIC_API_KEY trouvée (${process.env.ANTHROPIC_API_KEY.substring(0, 20)}...)\n`)
+  } else {
+    console.log(`⚠️  ANTHROPIC_API_KEY non définie dans ${envFile}\n`)
+  }
+}
 
 async function main() {
   const [, , cmd, ...rest] = process.argv

@@ -1,4 +1,14 @@
-async function callClaude(prompt, { model = process.env.CLAUDE_MODEL || 'claude-3-5-sonnet-20241022' } = {}) {
+async function callClaude(prompt, { model = process.env.CLAUDE_MODEL || 'claude-sonnet-4-20250514' } = {}) {
+  // Use Claude Sonnet 4 (latest and most powerful)
+  // Fallback to correct model names if user specifies old versions
+  const modelMap = {
+    'claude-4': 'claude-sonnet-4-20250514',
+    'claude-sonnet-4': 'claude-sonnet-4-20250514',
+    'claude-3-5-sonnet': 'claude-3-5-sonnet-20241022',
+    'claude-3-5-sonnet-20241022': 'claude-3-5-sonnet-20241022',
+    'claude-3-opus': 'claude-3-opus-20240229'
+  }
+  model = modelMap[model] || model
   const key = process.env.ANTHROPIC_API_KEY
   if (!key) {
     return { ok: false, error: 'Missing ANTHROPIC_API_KEY in environment', output: '' }
