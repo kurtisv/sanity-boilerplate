@@ -20,15 +20,34 @@ export default defineType({
       validation: (Rule) => Rule.required(),
       options: {
         list: [
+          // Blocs de base
           { title: '📝 Bloc de texte (textBlock)', value: 'textBlock' },
           { title: '🦸 Bloc héro (heroBlock)', value: 'heroBlock' },
           { title: '🎯 Bloc header (headerBlock)', value: 'headerBlock' },
           { title: '🦶 Bloc footer (footerBlock)', value: 'footerBlock' },
+          
+          // Blocs de contenu
           { title: '⭐ Grille de fonctionnalités (featureGridBlock)', value: 'featureGridBlock' },
           { title: '📞 Bloc contact (contactBlock)', value: 'contactBlock' },
           { title: '🖼️ Galerie d\'images (galleryBlock)', value: 'galleryBlock' },
           { title: '👥 Bloc équipe (teamBlock)', value: 'teamBlock' },
           { title: '📊 Bloc statistiques (statsBlock)', value: 'statsBlock' },
+          
+          // Nouveaux blocs - Blog & Contenu
+          { title: '📰 Bloc blog (blogBlock)', value: 'blogBlock' },
+          { title: '📹 Bloc vidéo (videoBlock)', value: 'videoBlock' },
+          { title: '🎵 Bloc accordéon (accordionBlock)', value: 'accordionBlock' },
+          { title: '📑 Bloc onglets (tabsBlock)', value: 'tabsBlock' },
+          
+          // Nouveaux blocs - Marketing
+          { title: '💰 Bloc tarifs (pricingBlock)', value: 'pricingBlock' },
+          { title: '💬 Bloc témoignages (testimonialsBlock)', value: 'testimonialsBlock' },
+          { title: '🎯 Bloc CTA (ctaBlock)', value: 'ctaBlock' },
+          { title: '📧 Bloc newsletter (newsletterBlock)', value: 'newsletterBlock' },
+          
+          // Nouveaux blocs - Support & Autres
+          { title: '❓ Bloc FAQ (faqBlock)', value: 'faqBlock' },
+          { title: '🏢 Bloc logos (logoCloudBlock)', value: 'logoCloudBlock' },
         ],
       },
     }),

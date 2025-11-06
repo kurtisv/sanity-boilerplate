@@ -64,11 +64,11 @@ const FeatureSection = styled.section<{
 }>`
   position: relative;
   width: 100%;
-  padding: 4rem 0;
-  background-color: ${props => props.$backgroundColor || 'transparent'};
+  padding: 6rem 0;
+  background: ${props => props.$backgroundColor || 'linear-gradient(180deg, #f9fafb 0%, #ffffff 100%)'};
   
   @media (max-width: 768px) {
-    padding: 3rem 0;
+    padding: 4rem 0;
   }
 `
 
@@ -97,25 +97,27 @@ const FeatureHeader = styled.div<{
 const FeatureTitle = styled.h2<{
   $color?: string
 }>`
-  font-size: 2.5rem;
-  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
   line-height: 1.2;
   color: ${props => props.$color || '#1f2937'};
   margin-bottom: 1rem;
-  
-  @media (max-width: 768px) {
-    font-size: 2rem;
-  }
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #1f2937 0%, #4b5563 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 `
 
 const FeatureSubtitle = styled.p<{
   $color?: string
 }>`
-  font-size: 1.125rem;
-  line-height: 1.6;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  line-height: 1.7;
   color: ${props => props.$color || '#6b7280'};
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
+  font-weight: 400;
 `
 
 const FeatureGrid = styled.div<{
@@ -257,39 +259,53 @@ const FeatureCard = styled.div<{
         return `
           ${baseStyles}
           background: #ffffff;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
           
           &:hover {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-            transform: translateY(-4px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px) scale(1.02);
           }
         `
       case 'colored':
         return `
           ${baseStyles}
-          background: linear-gradient(135deg, #f3f4f6 0%, #ffffff 100%);
-          border: 1px solid #e5e7eb;
+          background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+          border: 2px solid #667eea30;
+          box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
           
           &:hover {
-            background: linear-gradient(135deg, #e5e7eb 0%, #f9fafb 100%);
+            background: linear-gradient(135deg, #667eea25 0%, #764ba225 100%);
+            border-color: #667eea50;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
           }
         `
       case 'glass':
         return `
           ${baseStyles}
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.7);
+          backdrop-filter: blur(20px) saturate(180%);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
           
           &:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.85);
+            border-color: rgba(255, 255, 255, 0.5);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.15);
           }
         `
       default:
         return `
           ${baseStyles}
           background: #ffffff;
-          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          
+          &:hover {
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px) scale(1.02);
+          }
         `
     }
   }}

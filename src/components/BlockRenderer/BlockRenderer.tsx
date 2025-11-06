@@ -18,6 +18,18 @@ import GalleryBlock from '@/components/blocks/GalleryBlock'
 import TeamBlock from '@/components/blocks/TeamBlock'
 import StatsBlock from '@/components/blocks/StatsBlock'
 
+// Nouveaux blocs
+import PricingBlock from '@/components/blocks/PricingBlock/PricingBlock'
+import TestimonialsBlock from '@/components/blocks/TestimonialsBlock/TestimonialsBlock'
+import CTABlock from '@/components/blocks/CTABlock/CTABlock'
+import FAQBlock from '@/components/blocks/FAQBlock/FAQBlock'
+import LogoCloudBlock from '@/components/blocks/LogoCloudBlock/LogoCloudBlock'
+import VideoBlock from '@/components/blocks/VideoBlock/VideoBlock'
+import AccordionBlock from '@/components/blocks/AccordionBlock/AccordionBlock'
+import TabsBlock from '@/components/blocks/TabsBlock/TabsBlock'
+import NewsletterBlock from '@/components/blocks/NewsletterBlock/NewsletterBlock'
+import BlogBlock from '@/components/blocks/BlogBlock/BlogBlock'
+
 // Type pour les données de blocs Sanity
 type BlockData = {
   _type: string
@@ -66,6 +78,36 @@ export default function BlockRenderer({ blocks }: BlockRendererProps) {
           
           case 'footerBlock':
             return <FooterBlock key={uniqueKey} {...(block as any)} />
+          
+          case 'pricingBlock':
+            return <PricingBlock key={uniqueKey} {...(block as any)} />
+          
+          case 'testimonialsBlock':
+            return <TestimonialsBlock key={uniqueKey} {...(block as any)} />
+          
+          case 'ctaBlock':
+            return <CTABlock key={uniqueKey} {...(block as any)} />
+          
+          case 'faqBlock':
+            return <FAQBlock key={uniqueKey} {...(block as any)} />
+          
+          case 'logoCloudBlock':
+            return <LogoCloudBlock key={uniqueKey} {...(block as any)} />
+          
+          case 'videoBlock':
+            return <VideoBlock key={uniqueKey} {...(block as any)} />
+          
+          case 'accordionBlock':
+            return <AccordionBlock key={uniqueKey} {...(block as any)} />
+          
+          case 'tabsBlock':
+            return <TabsBlock key={uniqueKey} {...(block as any)} />
+          
+          case 'newsletterBlock':
+            return <NewsletterBlock key={uniqueKey} {...(block as any)} />
+          
+          case 'blogBlock':
+            return <BlogBlock key={uniqueKey} {...(block as any)} />
           
           default:
             if (process.env.NODE_ENV === 'development') {

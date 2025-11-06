@@ -1,0 +1,213 @@
+import { defineType, defineField } from 'sanity'
+import { getThemeFields } from '../shared/themeFields'
+
+export default defineType({
+  name: 'blogBlock',
+  title: 'Blog Block',
+  type: 'object',
+  description: 'Liste d\'articles de blog avec filtres et pagination',
+  fields: [
+    defineField({
+      name: 'title',
+      title: 'Titre de la section',
+      type: 'string',
+      description: 'Titre principal de la section blog',
+      validation: (Rule) => Rule.max(100),
+    }),
+    defineField({
+      name: 'subtitle',
+      title: 'Sous-titre',
+      type: 'text',
+      description: 'Description de la section blog',
+      rows: 3,
+      validation: (Rule) => Rule.max(300),
+    }),
+    defineField({
+      name: 'layout',
+      title: 'Disposition',
+      type: 'string',
+      description: 'Style d\'affichage des articles',
+      options: {
+        list: [
+          { title: 'Grille 2 colonnes', value: 'grid-2' },
+          { title: 'Grille 3 colonnes', value: 'grid-3' },
+          { title: 'Grille 4 colonnes', value: 'grid-4' },
+          { title: 'Liste verticale', value: 'list' },
+          { title: 'Masonry (mosaïque)', value: 'masonry' },
+          { title: 'Carousel', value: 'carousel' },
+          { title: 'Featured + Grid', value: 'featured-grid' },
+        ],
+        layout: 'dropdown',
+      },
+      initialValue: 'grid-3',
+    }),
+    defineField({
+      name: 'source',
+      title: 'Source des articles',
+      type: 'string',
+      description: 'Choisir les articles à afficher',
+      options: {
+        list: [
+          { title: 'Tous les articles', value: 'all' },
+          { title: 'Articles en vedette', value: 'featured' },
+          { title: 'Par catégorie', value: 'category' },
+          { title: 'Par auteur', value: 'author' },
+          { title: 'Sélection manuelle', value: 'manual' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'all',
+    }),
+    defineField({
+      name: 'selectedCategory',
+      title: 'Catégorie sélectionnée',
+      type: 'reference',
+      to: [{ type: 'category' }],
+      hidden: ({ parent }) => parent?.source !== 'category',
+    }),
+    defineField({
+      name: 'selectedAuthor',
+      title: 'Auteur sélectionné',
+      type: 'reference',
+      to: [{ type: 'author' }],
+      hidden: ({ parent }) => parent?.source !== 'author',
+    }),
+    defineField({
+      name: 'selectedPosts',
+      title: 'Articles sélectionnés',
+      type: 'array',
+      of: [{ type: 'reference', to: [{ type: 'blogPost' }] }],
+      hidden: ({ parent }) => parent?.source !== 'manual',
+      validation: (Rule) => Rule.max(12),
+    }),
+    defineField({
+      name: 'postsPerPage',
+      title: 'Articles par page',
+      type: 'number',
+      description: 'Nombre d\'articles à afficher',
+      validation: (Rule) => Rule.min(1).max(24),
+      initialValue: 6,
+    }),
+    defineField({
+      name: 'showFilters',
+      title: 'Afficher les filtres',
+      type: 'boolean',
+      description: 'Permettre le filtrage par catégorie',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'showSearch',
+      title: 'Afficher la recherche',
+      type: 'boolean',
+      description: 'Ajouter une barre de recherche',
+      initialValue: false,
+    }),
+    defineField({
+      name: 'showPagination',
+      title: 'Afficher la pagination',
+      type: 'boolean',
+      description: 'Activer la pagination des résultats',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'cardStyle',
+      title: 'Style des cartes',
+      type: 'string',
+      description: 'Apparence des cartes d\'article',
+      options: {
+        list: [
+          { title: 'Minimal', value: 'minimal' },
+          { title: 'Avec bordure', value: 'bordered' },
+          { title: 'Avec ombre', value: 'shadow' },
+          { title: 'Élevé', value: 'elevated' },
+          { title: 'Avec image pleine', value: 'image-full' },
+          { title: 'Compact', value: 'compact' },
+        ],
+        layout: 'dropdown',
+      },
+      initialValue: 'elevated',
+    }),
+    defineField({
+      name: 'showExcerpt',
+      title: 'Afficher l\'extrait',
+      type: 'boolean',
+      description: 'Afficher l\'extrait de l\'article',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'showAuthor',
+      title: 'Afficher l\'auteur',
+      type: 'boolean',
+      description: 'Afficher le nom et la photo de l\'auteur',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'showCategory',
+      title: 'Afficher la catégorie',
+      type: 'boolean',
+      description: 'Afficher le badge de catégorie',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'showDate',
+      title: 'Afficher la date',
+      type: 'boolean',
+      description: 'Afficher la date de publication',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'showReadingTime',
+      title: 'Afficher le temps de lecture',
+      type: 'boolean',
+      description: 'Afficher le temps de lecture estimé',
+      initialValue: true,
+    }),
+    defineField({
+      name: 'ctaButton',
+      title: 'Bouton d\'action',
+      type: 'object',
+      description: 'Bouton pour voir tous les articles',
+      fields: [
+        {
+          name: 'show',
+          title: 'Afficher le bouton',
+          type: 'boolean',
+          initialValue: false,
+        },
+        {
+          name: 'text',
+          title: 'Texte du bouton',
+          type: 'string',
+          initialValue: 'Voir tous les articles',
+          validation: (Rule) => Rule.max(50),
+          hidden: ({ parent }) => !parent?.show,
+        },
+        {
+          name: 'href',
+          title: 'Lien',
+          type: 'string',
+          initialValue: '/blog',
+          validation: (Rule) => Rule.required(),
+          hidden: ({ parent }) => !parent?.show,
+        },
+      ],
+    }),
+    
+    // Champs de thème unifiés
+    ...getThemeFields(),
+  ],
+  preview: {
+    select: {
+      title: 'title',
+      layout: 'layout',
+      source: 'source',
+      postsPerPage: 'postsPerPage',
+    },
+    prepare({ title, layout, source, postsPerPage }) {
+      return {
+        title: title || 'Liste d\'articles de blog',
+        subtitle: `${layout} • ${source} • ${postsPerPage} articles`,
+      }
+    },
+  },
+})

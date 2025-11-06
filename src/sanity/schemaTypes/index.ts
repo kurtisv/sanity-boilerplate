@@ -3,6 +3,9 @@ import { type SchemaTypeDefinition } from 'sanity'
 // Documents
 import page from '../schemas/page'
 import blockContent from '../schemas/blockContent'
+import blogPost from '../schemas/documents/blogPost'
+import author from '../schemas/documents/author'
+import category from '../schemas/documents/category'
 
 // Settings (Paramètres du site)
 import headerSettings from '../schemas/settings/headerSettings'
@@ -21,13 +24,25 @@ import contactBlock from '../schemas/blocks/contactBlock'
 import galleryBlock from '../schemas/blocks/galleryBlock'
 import teamBlock from '../schemas/blocks/teamBlock'
 import statsBlock from '../schemas/blocks/statsBlock'
-// Ajoutez vos autres blocs ici
+import blogBlock from '../schemas/blocks/blogBlock'
+import pricingBlock from '../schemas/blocks/pricingBlock'
+import testimonialsBlock from '../schemas/blocks/testimonialsBlock'
+import ctaBlock from '../schemas/blocks/ctaBlock'
+import faqBlock from '../schemas/blocks/faqBlock'
+import logoCloudBlock from '../schemas/blocks/logoCloudBlock'
+import videoBlock from '../schemas/blocks/videoBlock'
+import accordionBlock from '../schemas/blocks/accordionBlock'
+import tabsBlock from '../schemas/blocks/tabsBlock'
+import newsletterBlock from '../schemas/blocks/newsletterBlock'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
     // Documents
     page,
     blockContent,
+    blogPost,
+    author,
+    category,
     
     // Settings
     headerSettings,
@@ -46,6 +61,15 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     galleryBlock,
     teamBlock,
     statsBlock,
-    // Ajoutez vos autres blocs ici
+    blogBlock,
+    pricingBlock,
+    testimonialsBlock,
+    ctaBlock,
+    faqBlock,
+    logoCloudBlock,
+    videoBlock,
+    accordionBlock,
+    tabsBlock,
+    newsletterBlock,
   ],
 }
