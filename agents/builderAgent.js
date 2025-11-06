@@ -1,5 +1,8 @@
 const { callClaude } = require('./core/anthropicClient')
 const { applyChanges } = require('./core/fsWorkspace')
+const { loadRules } = require('./core/rules')
+const fs = require('fs')
+const path = require('path')
 
 async function run({ prompt, dryRun = true }) {
   const idea = prompt || 'Créer un bloc logoGridBlock simple avec schéma et composant.'
@@ -69,9 +72,22 @@ function detectBlockFromPrompt(prompt) {
 }
 
 function buildPrompt(userIdea) {
+  // Charger le document de référence
+  const referencePath = path.join(__dirname, '..', 'AGENT_SANITY_REFERENCE.md')
+  let referenceContent = ''
+  try {
+    if (fs.existsSync(referencePath)) {
+      referenceContent = fs.readFileSync(referencePath, 'utf8')
+    }
+  } catch (e) {
+    console.warn('⚠️  Impossible de charger AGENT_SANITY_REFERENCE.md')
+  }
+  
   return `Tu es un expert Sanity + Next.js + TypeScript. Génère un bloc Sanity complet basé sur cette demande:
 
 "${userIdea}"
+
+${referenceContent ? `📘 RÉFÉRENCE SANITY COMPLÈTE:\n\n${referenceContent}\n\n` : ''}
 
 ⚠️ RÈGLES SANITY CRITIQUES - À RESPECTER ABSOLUMENT:
 

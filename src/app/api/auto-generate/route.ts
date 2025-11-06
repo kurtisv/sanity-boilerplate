@@ -35,12 +35,24 @@ export async function POST(request: NextRequest) {
   })
 }
 
+type AgentResult = { ok: boolean } & Record<string, any>
+
 async function generateSite(config: any, writer: any) {
   const startTime = Date.now()
-  const total = config.specialBlocks.length + config.pages.length + 1
+  // Steps: specialBlocks + pages + reviewer + style + tester + publisher + compatibility
+  const total = config.specialBlocks.length + config.pages.length + 5 + 1
   let current = 0
   
-  const results = {
+  const results: {
+    blocks: any[]
+    pages: any[]
+    review?: AgentResult
+    style?: AgentResult
+    tests?: AgentResult
+    publish?: AgentResult
+    compatibility: boolean
+    duration: number
+  } = {
     blocks: [] as any[],
     pages: [] as any[],
     compatibility: false,
@@ -99,7 +111,43 @@ async function generateSite(config: any, writer: any) {
       }
     }
     
-    // Étape 3: Vérification de compatibilité
+    // Étape 3: Revue de conformité des schémas (reviewerAgent)
+    current++
+    writer.write({
+      type: 'progress',
+      progress: { current, total, message: 'Revue de conformité des schémas (reviewer)...' }
+    })
+    const reviewRes = await runReviewer(true)
+    results.review = reviewRes
+
+    // Étape 4: Vérification style/thème (styleAgent)
+    current++
+    writer.write({
+      type: 'progress',
+      progress: { current, total, message: 'Vérification style/thème...' }
+    })
+    const styleRes = await runStyle()
+    results.style = styleRes
+
+    // Étape 5: Tests rapides (testerAgent)
+    current++
+    writer.write({
+      type: 'progress',
+      progress: { current, total, message: 'Tests rapides...' }
+    })
+    const testRes = await runTests()
+    results.tests = testRes
+
+    // Étape 6: Publication + vérification Studio (publisherAgent)
+    current++
+    writer.write({
+      type: 'progress',
+      progress: { current, total, message: 'Publication et vérification dans Sanity...' }
+    })
+    const publishRes = await runPublisher()
+    results.publish = publishRes
+
+    // Étape 7: Vérification de compatibilité
     current++
     writer.write({
       type: 'progress',
@@ -154,28 +202,46 @@ async function generateBlock(blockType: string, config: any) {
 }
 
 async function generatePage(pageName: string, config: any) {
-  // Pour l'instant, on simule la génération de page
-  // TODO: Implémenter la vraie génération avec Claude
-  
-  const pagePrompts: Record<string, string> = {
-    accueil: `Créer une page d'accueil professionnelle pour ${config.siteName} (${config.industry}). Inclure: hero avec ${config.primaryColor}, section présentation, fonctionnalités clés, témoignages, stats, et CTA. Style: ${config.designStyle}.`,
-    
-    services: `Créer une page Services pour ${config.siteName}. Inclure: liste des services avec descriptions, tarifs, avantages, processus, et formulaire de contact. Style: ${config.designStyle}.`,
-    
-    'à propos': `Créer une page À Propos pour ${config.siteName}. Inclure: histoire de l'entreprise, mission/vision/valeurs, équipe, chiffres clés, et timeline. Style: ${config.designStyle}.`,
-    
-    contact: `Créer une page Contact pour ${config.siteName}. Inclure: formulaire complet, coordonnées, carte interactive, horaires, et réseaux sociaux. Style: ${config.designStyle}.`,
-    
-    blog: `Créer une page Blog pour ${config.siteName}. Inclure: liste d'articles, filtres par catégorie, recherche, featured posts, et pagination. Style: ${config.designStyle}.`,
-    
-    tarifs: `Créer une page Tarifs pour ${config.siteName}. Inclure: grille de tarifs, comparaison, FAQ pricing, garanties, et CTA. Style: ${config.designStyle}.`
+  // Utiliser le pageGeneratorAgent pour créer la page dans Sanity
+  const { run } = require('../../../../agents/pageGeneratorAgent')
+  return await run({ pageName, config, dryRun: false })
+}
+
+// --- Agent helpers ----------------------------------------------------------
+async function runReviewer(fix: boolean): Promise<AgentResult> {
+  try {
+    const { run } = require('../../../../agents/reviewerAgent')
+    return await run({ fix })
+  } catch (error: any) {
+    return { ok: false, error: error?.message || String(error) }
   }
-  
-  const prompt = pagePrompts[pageName] || `Créer une page "${pageName}" pour ${config.siteName}. Style: ${config.designStyle}.`
-  
-  // TODO: Implémenter la génération de page avec Claude
-  // Pour l'instant, on retourne un succès simulé
-  return { ok: true, page: pageName, prompt }
+}
+
+async function runStyle(): Promise<AgentResult> {
+  try {
+    const { run } = require('../../../../agents/styleAgent')
+    return await run()
+  } catch (error: any) {
+    return { ok: false, error: error?.message || String(error) }
+  }
+}
+
+async function runTests(): Promise<AgentResult> {
+  try {
+    const { run } = require('../../../../agents/testerAgent')
+    return await run({ quick: true })
+  } catch (error: any) {
+    return { ok: false, error: error?.message || String(error) }
+  }
+}
+
+async function runPublisher(): Promise<AgentResult> {
+  try {
+    const { run } = require('../../../../agents/publisherAgent')
+    return await run()
+  } catch (error: any) {
+    return { ok: false, error: error?.message || String(error) }
+  }
 }
 
 async function runCompatibilityCheck() {

@@ -4,6 +4,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
+import { useSafeProps, useSafeArray } from '../withSafeProps'
 
 // ✅ CONFORME AU SCHÉMA - Interface strictement alignée sur heroBlock.ts
 interface HeroBlockProps {
@@ -327,16 +328,21 @@ const CTAButton = styled.a<{
   }}
 `
 
-export default function HeroBlock({
-  title,
-  subtitle,
-  ctaButtons = [],
-  layout = 'centered',
-  heroSettings,
-  backgroundImage,
-  backgroundSettings,
-  styling
-}: HeroBlockProps) {
+export default function HeroBlock(props: HeroBlockProps) {
+  // ✅ PROTECTION AUTOMATIQUE - Normalise toutes les props
+  const safeProps = useSafeProps(props)
+  const {
+    title,
+    subtitle,
+    layout = 'centered',
+    heroSettings,
+    backgroundImage,
+    backgroundSettings,
+    styling
+  } = safeProps
+  
+  // ✅ PROTECTION ARRAY - ctaButtons est toujours un array
+  const ctaButtons = useSafeArray(props.ctaButtons)
   const backgroundImageUrl = backgroundImage?.asset?._ref 
     ? urlFor(backgroundImage).width(1920).height(1080).url()
     : null
@@ -368,7 +374,7 @@ export default function HeroBlock({
           {title && <HeroTitle>{title}</HeroTitle>}
           {subtitle && <HeroSubtitle>{subtitle}</HeroSubtitle>}
           
-          {ctaButtons.length > 0 && (
+          {ctaButtons && ctaButtons.length > 0 && (
             <CTAContainer>
               {ctaButtons.map((button, index) => (
                 <CTAButton

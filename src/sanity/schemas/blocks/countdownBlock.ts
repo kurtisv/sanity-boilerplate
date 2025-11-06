@@ -1,52 +1,58 @@
-import { defineField, defineType } from 'sanity'
+import { defineType, defineField } from 'sanity'
 
 export default defineType({
   name: 'countdownBlock',
   title: 'Countdown Block',
-  type: 'document',
+  type: 'object',
+  icon: () => '⏰',
   fields: [
     defineField({
       name: 'title',
-      title: 'Block Title',
+      title: 'Title',
       type: 'string',
-      validation: Rule => Rule.required().max(100)
+      validation: Rule => Rule.max(100)
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+      validation: Rule => Rule.max(300)
     }),
     defineField({
       name: 'targetDate',
       title: 'Target Date & Time',
       type: 'datetime',
-      validation: Rule => Rule.required(),
-      description: 'The date and time when the countdown ends'
+      validation: Rule => Rule.required()
     }),
     defineField({
       name: 'labels',
-      title: 'Custom Labels',
+      title: 'Labels',
       type: 'object',
       fields: [
-        defineField({
+        {
           name: 'days',
           title: 'Days Label',
           type: 'string',
           initialValue: 'Days'
-        }),
-        defineField({
+        },
+        {
           name: 'hours',
           title: 'Hours Label',
           type: 'string',
           initialValue: 'Hours'
-        }),
-        defineField({
+        },
+        {
           name: 'minutes',
           title: 'Minutes Label',
           type: 'string',
           initialValue: 'Minutes'
-        }),
-        defineField({
+        },
+        {
           name: 'seconds',
           title: 'Seconds Label',
           type: 'string',
           initialValue: 'Seconds'
-        })
+        }
       ]
     }),
     defineField({
@@ -57,13 +63,13 @@ export default defineType({
         list: [
           { title: 'Default', value: 'default' },
           { title: 'Dark', value: 'dark' },
-          { title: 'Colorful', value: 'colorful' },
+          { title: 'Gradient', value: 'gradient' },
           { title: 'Minimal', value: 'minimal' },
-          { title: 'Neon', value: 'neon' }
-        ]
+          { title: 'Bold', value: 'bold' }
+        ],
+        layout: 'radio'
       },
-      initialValue: 'default',
-      validation: Rule => Rule.required()
+      initialValue: 'default'
     }),
     defineField({
       name: 'size',
@@ -71,133 +77,114 @@ export default defineType({
       type: 'string',
       options: {
         list: [
-          { title: 'Small', value: 'small' },
-          { title: 'Medium', value: 'medium' },
-          { title: 'Large', value: 'large' },
+          { title: 'Small', value: 'sm' },
+          { title: 'Medium', value: 'md' },
+          { title: 'Large', value: 'lg' },
           { title: 'Extra Large', value: 'xl' }
-        ]
+        ],
+        layout: 'radio'
       },
-      initialValue: 'medium',
-      validation: Rule => Rule.required()
+      initialValue: 'md'
     }),
     defineField({
-      name: 'expirationMessage',
+      name: 'primaryColor',
+      title: 'Primary Color',
+      type: 'string',
+      description: 'Hex color code (e.g., #3B82F6)',
+      initialValue: '#3B82F6'
+    }),
+    defineField({
+      name: 'secondaryColor',
+      title: 'Secondary Color',
+      type: 'string',
+      description: 'Hex color code (e.g., #1E40AF)',
+      initialValue: '#1E40AF'
+    }),
+    defineField({
+      name: 'expiredMessage',
       title: 'Message After Expiration',
       type: 'object',
       fields: [
-        defineField({
+        {
           name: 'title',
-          title: 'Title',
+          title: 'Expired Title',
           type: 'string',
+          initialValue: 'Time\'s Up!',
           validation: Rule => Rule.max(100)
-        }),
-        defineField({
+        },
+        {
           name: 'description',
-          title: 'Description',
+          title: 'Expired Description',
           type: 'text',
+          initialValue: 'The countdown has ended.',
           validation: Rule => Rule.max(300)
-        }),
-        defineField({
-          name: 'showButton',
-          title: 'Show Action Button',
-          type: 'boolean',
-          initialValue: false
-        }),
-        defineField({
-          name: 'buttonText',
-          title: 'Button Text',
-          type: 'string',
-          hidden: ({ parent }) => !parent?.showButton
-        }),
-        defineField({
-          name: 'buttonLink',
-          title: 'Button Link',
-          type: 'url',
-          hidden: ({ parent }) => !parent?.showButton
-        })
+        }
       ]
     }),
     defineField({
-      name: 'animations',
-      title: 'Animation Settings',
-      type: 'object',
-      fields: [
-        defineField({
-          name: 'enabled',
-          title: 'Enable Animations',
-          type: 'boolean',
-          initialValue: true
-        }),
-        defineField({
-          name: 'pulseOnUpdate',
-          title: 'Pulse on Number Change',
-          type: 'boolean',
-          initialValue: true,
-          hidden: ({ parent }) => !parent?.enabled
-        }),
-        defineField({
-          name: 'flipAnimation',
-          title: 'Flip Card Animation',
-          type: 'boolean',
-          initialValue: false,
-          hidden: ({ parent }) => !parent?.enabled
-        }),
-        defineField({
-          name: 'glowEffect',
-          title: 'Glow Effect',
-          type: 'boolean',
-          initialValue: false,
-          hidden: ({ parent }) => !parent?.enabled
-        })
-      ]
+      name: 'animation',
+      title: 'Animation Style',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'None', value: 'none' },
+          { title: 'Fade In', value: 'fadeIn' },
+          { title: 'Slide Up', value: 'slideUp' },
+          { title: 'Bounce', value: 'bounce' },
+          { title: 'Pulse', value: 'pulse' },
+          { title: 'Flip', value: 'flip' }
+        ],
+        layout: 'dropdown'
+      },
+      initialValue: 'fadeIn'
     }),
     defineField({
-      name: 'customStyles',
-      title: 'Custom Styles',
-      type: 'object',
-      fields: [
-        defineField({
-          name: 'backgroundColor',
-          title: 'Background Color',
-          type: 'string',
-          description: 'Hex color code (e.g., #FF5733)'
-        }),
-        defineField({
-          name: 'textColor',
-          title: 'Text Color',
-          type: 'string',
-          description: 'Hex color code (e.g., #FFFFFF)'
-        }),
-        defineField({
-          name: 'accentColor',
-          title: 'Accent Color',
-          type: 'string',
-          description: 'Hex color code (e.g., #00BFFF)'
-        })
-      ]
+      name: 'showSeparators',
+      title: 'Show Separators',
+      type: 'boolean',
+      initialValue: true
+    }),
+    defineField({
+      name: 'displayFormat',
+      title: 'Display Format',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Boxes', value: 'boxes' },
+          { title: 'Digital', value: 'digital' },
+          { title: 'Circles', value: 'circles' },
+          { title: 'Simple', value: 'simple' }
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'boxes'
+    }),
+    defineField({
+      name: 'alignment',
+      title: 'Alignment',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Left', value: 'left' },
+          { title: 'Center', value: 'center' },
+          { title: 'Right', value: 'right' }
+        ],
+        layout: 'radio'
+      },
+      initialValue: 'center'
     })
   ],
   preview: {
     select: {
       title: 'title',
       targetDate: 'targetDate',
-      theme: 'theme',
-      size: 'size'
+      theme: 'theme'
     },
-    prepare({ title, targetDate, theme, size }) {
-      const formattedDate = targetDate 
-        ? new Date(targetDate).toLocaleDateString('fr-FR', {
-            day: '2-digit',
-            month: '2-digit', 
-            year: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
-          })
-        : 'No date set'
-      
+    prepare({ title, targetDate, theme }) {
+      const date = targetDate ? new Date(targetDate).toLocaleDateString() : 'No date set'
       return {
         title: title || 'Countdown Block',
-        subtitle: `${formattedDate} • ${theme} theme • ${size} size`
+        subtitle: `${theme || 'default'} theme • Target: ${date}`
       }
     }
   }

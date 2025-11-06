@@ -12,7 +12,15 @@
     "fix:stats-keys": "node scripts/fix-stats-keys.js",
     "agents:run": "node scripts/run-agent.js",
     "agents:interactive": "node scripts/interactive-builder.js",
-    "agents:generate": "node scripts/orchestrator.js"
+    "agents:generate": "node scripts/orchestrator.js",
+    "agents:analyst": "node agents/analystAgent.js",
+    "agents:review": "node agents/reviewerAgent.js",
+    "agents:style": "node agents/styleAgent.js",
+    "agents:test": "node agents/testerAgent.js",
+    "agents:publish": "node agents/publisherAgent.js",
+    "agents:senior": "node agents/seniorAgent.js",
+    "agents:diagnostic": "node agents/diagnosticAgent.js",
+    "agents:fix-pages": "node agents/fixPagesAgent.js"
   },
   "dependencies": {
     "@portabletext/react": "^4.0.3",

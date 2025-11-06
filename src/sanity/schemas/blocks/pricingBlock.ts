@@ -16,8 +16,7 @@ export default defineType({
       name: 'subtitle',
       title: 'Subtitle',
       type: 'text',
-      validation: Rule => Rule.max(200),
-      rows: 3
+      validation: Rule => Rule.max(200)
     }),
     defineField({
       name: 'billingPeriod',
@@ -31,8 +30,13 @@ export default defineType({
         ],
         layout: 'radio'
       },
-      initialValue: 'monthly',
-      validation: Rule => Rule.required()
+      initialValue: 'monthly'
+    }),
+    defineField({
+      name: 'showComparison',
+      title: 'Show Comparison Table',
+      type: 'boolean',
+      initialValue: false
     }),
     defineField({
       name: 'plans',
@@ -41,88 +45,81 @@ export default defineType({
       of: [
         {
           type: 'object',
+          name: 'plan',
+          title: 'Plan',
           fields: [
-            defineField({
+            {
               name: 'name',
               title: 'Plan Name',
               type: 'string',
               validation: Rule => Rule.required().max(50)
-            }),
-            defineField({
+            },
+            {
               name: 'description',
               title: 'Plan Description',
               type: 'text',
-              validation: Rule => Rule.max(150),
-              rows: 2
-            }),
-            defineField({
+              validation: Rule => Rule.max(300)
+            },
+            {
               name: 'monthlyPrice',
               title: 'Monthly Price',
               type: 'number',
               validation: Rule => Rule.required().min(0)
-            }),
-            defineField({
+            },
+            {
               name: 'annualPrice',
               title: 'Annual Price',
               type: 'number',
               validation: Rule => Rule.min(0)
-            }),
-            defineField({
+            },
+            {
               name: 'currency',
               title: 'Currency',
               type: 'string',
               initialValue: 'EUR',
-              validation: Rule => Rule.required().max(3)
-            }),
-            defineField({
+              validation: Rule => Rule.required().max(10)
+            },
+            {
               name: 'isPopular',
               title: 'Popular Plan',
               type: 'boolean',
               initialValue: false
-            }),
-            defineField({
-              name: 'popularBadgeText',
+            },
+            {
+              name: 'popularBadge',
               title: 'Popular Badge Text',
               type: 'string',
-              initialValue: 'Most Popular',
               validation: Rule => Rule.max(30),
               hidden: ({ parent }) => !parent?.isPopular
-            }),
-            defineField({
-              name: 'badgeColor',
-              title: 'Badge Color',
-              type: 'string',
-              description: 'Hex color code (e.g., #3B82F6)',
-              initialValue: '#3B82F6',
-              validation: Rule => Rule.regex(/^#[0-9A-F]{6}$/i, { name: 'hex color' }),
-              hidden: ({ parent }) => !parent?.isPopular
-            }),
-            defineField({
+            },
+            {
               name: 'features',
               title: 'Features',
               type: 'array',
               of: [
                 {
                   type: 'object',
+                  name: 'feature',
+                  title: 'Feature',
                   fields: [
-                    defineField({
+                    {
                       name: 'text',
                       title: 'Feature Text',
                       type: 'string',
                       validation: Rule => Rule.required().max(100)
-                    }),
-                    defineField({
+                    },
+                    {
                       name: 'included',
                       title: 'Included',
                       type: 'boolean',
                       initialValue: true
-                    }),
-                    defineField({
+                    },
+                    {
                       name: 'highlight',
                       title: 'Highlight Feature',
                       type: 'boolean',
                       initialValue: false
-                    })
+                    }
                   ],
                   preview: {
                     select: {
@@ -131,37 +128,32 @@ export default defineType({
                       highlight: 'highlight'
                     },
                     prepare({ title, included, highlight }) {
-                      const status = included ? '✅' : '❌'
-                      const highlightIcon = highlight ? '⭐' : ''
                       return {
                         title: title || 'Feature',
-                        subtitle: `${status} ${highlightIcon}`.trim()
+                        subtitle: `${included ? '✅' : '❌'} ${highlight ? '⭐' : ''}`
                       }
                     }
                   }
                 }
-              ],
-              validation: Rule => Rule.required().min(1)
-            }),
-            defineField({
+              ]
+            },
+            {
               name: 'ctaButton',
               title: 'CTA Button',
               type: 'object',
               fields: [
-                defineField({
+                {
                   name: 'text',
                   title: 'Button Text',
                   type: 'string',
-                  initialValue: 'Get Started',
                   validation: Rule => Rule.required().max(30)
-                }),
-                defineField({
+                },
+                {
                   name: 'url',
                   title: 'Button URL',
-                  type: 'url',
-                  validation: Rule => Rule.required()
-                }),
-                defineField({
+                  type: 'url'
+                },
+                {
                   name: 'style',
                   title: 'Button Style',
                   type: 'string',
@@ -174,17 +166,9 @@ export default defineType({
                     layout: 'radio'
                   },
                   initialValue: 'primary'
-                })
-              ],
-              validation: Rule => Rule.required()
-            }),
-            defineField({
-              name: 'order',
-              title: 'Display Order',
-              type: 'number',
-              initialValue: 1,
-              validation: Rule => Rule.required().min(1)
-            })
+                }
+              ]
+            }
           ],
           preview: {
             select: {
@@ -194,22 +178,15 @@ export default defineType({
               isPopular: 'isPopular'
             },
             prepare({ name, monthlyPrice, currency, isPopular }) {
-              const popularIcon = isPopular ? '⭐' : ''
               return {
-                title: name || 'Pricing Plan',
-                subtitle: `${monthlyPrice || 0}${currency || 'EUR'}/month ${popularIcon}`.trim()
+                title: name || 'Plan',
+                subtitle: `${monthlyPrice || 0}${currency || 'EUR'}/month ${isPopular ? '⭐' : ''}`
               }
             }
           }
         }
       ],
-      validation: Rule => Rule.required().min(1).max(6)
-    }),
-    defineField({
-      name: 'showComparison',
-      title: 'Show Feature Comparison',
-      type: 'boolean',
-      initialValue: false
+      validation: Rule => Rule.required().min(1).max(4)
     }),
     defineField({
       name: 'comparisonFeatures',
@@ -218,74 +195,62 @@ export default defineType({
       of: [
         {
           type: 'object',
+          name: 'comparisonFeature',
+          title: 'Comparison Feature',
           fields: [
-            defineField({
+            {
+              name: 'name',
+              title: 'Feature Name',
+              type: 'string',
+              validation: Rule => Rule.required().max(100)
+            },
+            {
               name: 'category',
               title: 'Category',
               type: 'string',
-              validation: Rule => Rule.required().max(50)
-            }),
-            defineField({
-              name: 'features',
-              title: 'Features',
-              type: 'array',
-              of: [{ type: 'string' }],
-              validation: Rule => Rule.required().min(1)
-            })
+              validation: Rule => Rule.max(50)
+            },
+            {
+              name: 'description',
+              title: 'Description',
+              type: 'text',
+              validation: Rule => Rule.max(200)
+            }
           ],
           preview: {
             select: {
-              title: 'category',
-              features: 'features'
-            },
-            prepare({ title, features }) {
-              return {
-                title: title || 'Feature Category',
-                subtitle: `${features?.length || 0} features`
-              }
+              title: 'name',
+              subtitle: 'category'
             }
           }
         }
       ],
-      hidden: ({ parent }) => !parent?.showComparison,
-      validation: Rule => Rule.custom((value, context) => {
-        const parent = context.parent as any
-        if (parent?.showComparison && (!value || value.length === 0)) {
-          return 'Comparison features are required when comparison is enabled'
-        }
-        return true
-      })
+      hidden: ({ parent }) => !parent?.showComparison
     }),
     defineField({
       name: 'backgroundColor',
       title: 'Background Color',
       type: 'string',
-      options: {
-        list: [
-          { title: 'White', value: 'white' },
-          { title: 'Light Gray', value: 'gray-50' },
-          { title: 'Dark', value: 'gray-900' }
-        ],
-        layout: 'radio'
-      },
-      initialValue: 'white'
+      description: 'Hex color code (e.g., #ffffff)',
+      validation: Rule => Rule.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/)
     }),
     defineField({
-      name: 'centerAlign',
-      title: 'Center Align Content',
-      type: 'boolean',
-      initialValue: true
+      name: 'disclaimer',
+      title: 'Disclaimer Text',
+      type: 'text',
+      validation: Rule => Rule.max(500)
     })
   ],
   preview: {
     select: {
       title: 'title',
-      plansCount: 'plans.length'
+      plans: 'plans'
     },
-    prepare({ title, plansCount }) {
+    prepare({ title, plans }) {
+      const planCount = plans?.length || 0
       return {
         title: title || 'Pricing Block',
-        subtitle: `${plansCount || 0} pricing plans`
+        subtitle: `${planCount} plan${planCount !== 1 ? 's' : ''}`
       }
     }
   }

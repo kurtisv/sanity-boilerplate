@@ -15,7 +15,7 @@ export default defineType({
     defineField({
       name: 'subtitle',
       title: 'Subtitle',
-      type: 'text',
+      type: 'string',
       validation: Rule => Rule.max(200)
     }),
     defineField({
@@ -49,11 +49,12 @@ export default defineType({
             {
               name: 'logo',
               title: 'Logo',
-              type: 'image'
+              type: 'image',
+              validation: Rule => Rule.required()
             },
             {
-              name: 'clientName',
-              title: 'Client Name',
+              name: 'companyName',
+              title: 'Company Name',
               type: 'string',
               validation: Rule => Rule.required().max(50)
             },
@@ -65,7 +66,7 @@ export default defineType({
           ],
           preview: {
             select: {
-              title: 'clientName',
+              title: 'companyName',
               media: 'logo'
             }
           }
@@ -85,7 +86,6 @@ export default defineType({
               name: 'number',
               title: 'Number',
               type: 'string',
-              description: 'e.g., "100+", "5M", "99%"',
               validation: Rule => Rule.required().max(20)
             },
             {
@@ -95,28 +95,33 @@ export default defineType({
               validation: Rule => Rule.required().max(50)
             },
             {
+              name: 'suffix',
+              title: 'Suffix (e.g., +, %, M)',
+              type: 'string',
+              validation: Rule => Rule.max(5)
+            },
+            {
               name: 'description',
               title: 'Description',
               type: 'text',
-              validation: Rule => Rule.max(100)
-            },
-            {
-              name: 'iconEmoji',
-              title: 'Icon Emoji',
-              type: 'string',
-              description: 'Single emoji',
-              validation: Rule => Rule.max(2)
+              validation: Rule => Rule.max(150)
             }
           ],
           preview: {
             select: {
-              title: 'number',
-              subtitle: 'label'
+              title: 'label',
+              subtitle: 'number'
+            },
+            prepare({ title, subtitle }) {
+              return {
+                title: title || 'Statistic',
+                subtitle: subtitle ? `${subtitle}` : 'No number'
+              }
             }
           }
         }
       ],
-      validation: Rule => Rule.max(6)
+      validation: Rule => Rule.max(4)
     }),
     defineField({
       name: 'testimonials',
@@ -130,7 +135,7 @@ export default defineType({
               name: 'quote',
               title: 'Quote',
               type: 'text',
-              validation: Rule => Rule.required().max(250)
+              validation: Rule => Rule.required().max(200)
             },
             {
               name: 'authorName',
@@ -139,25 +144,25 @@ export default defineType({
               validation: Rule => Rule.required().max(50)
             },
             {
-              name: 'authorPosition',
-              title: 'Author Position',
+              name: 'authorTitle',
+              title: 'Author Title',
               type: 'string',
               validation: Rule => Rule.max(50)
             },
             {
-              name: 'authorCompany',
-              title: 'Author Company',
+              name: 'company',
+              title: 'Company',
               type: 'string',
               validation: Rule => Rule.max(50)
             },
             {
-              name: 'authorImage',
-              title: 'Author Photo',
+              name: 'avatar',
+              title: 'Avatar',
               type: 'image'
             },
             {
               name: 'rating',
-              title: 'Star Rating',
+              title: 'Rating (1-5)',
               type: 'number',
               validation: Rule => Rule.min(1).max(5)
             }
@@ -165,45 +170,69 @@ export default defineType({
           preview: {
             select: {
               title: 'authorName',
-              subtitle: 'authorCompany',
-              media: 'authorImage'
+              subtitle: 'company',
+              media: 'avatar'
+            },
+            prepare({ title, subtitle }) {
+              return {
+                title: title || 'Anonymous',
+                subtitle: subtitle || 'No company'
+              }
             }
           }
         }
       ],
-      validation: Rule => Rule.max(8)
+      validation: Rule => Rule.max(6)
     }),
     defineField({
       name: 'backgroundColor',
       title: 'Background Color',
       type: 'string',
-      description: 'Hex color code (e.g., #f9fafb)',
-      validation: Rule => Rule.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).error('Must be a valid hex color')
+      description: 'Hex color code (e.g., #ffffff)',
+      validation: Rule => Rule.regex(/^#[0-9A-F]{6}$/i, 'Must be a valid hex color')
     }),
     defineField({
-      name: 'textColor',
-      title: 'Text Color',
+      name: 'textAlign',
+      title: 'Text Alignment',
       type: 'string',
       options: {
         list: [
-          { title: 'Dark', value: 'dark' },
-          { title: 'Light', value: 'light' }
-        ]
+          { title: 'Left', value: 'left' },
+          { title: 'Center', value: 'center' },
+          { title: 'Right', value: 'right' }
+        ],
+        layout: 'radio'
       },
-      initialValue: 'dark'
+      initialValue: 'center'
+    }),
+    defineField({
+      name: 'showLogos',
+      title: 'Show Client Logos',
+      type: 'boolean',
+      initialValue: true
+    }),
+    defineField({
+      name: 'showStats',
+      title: 'Show Statistics',
+      type: 'boolean',
+      initialValue: true
+    }),
+    defineField({
+      name: 'showTestimonials',
+      title: 'Show Testimonials',
+      type: 'boolean',
+      initialValue: true
     })
   ],
   preview: {
     select: {
       title: 'title',
-      layout: 'layout',
-      statsCount: 'keyStats.length',
-      testimonialsCount: 'testimonials.length'
+      layout: 'layout'
     },
-    prepare({ title, layout, statsCount = 0, testimonialsCount = 0 }) {
+    prepare({ title, layout }) {
       return {
         title: title || 'Social Proof Block',
-        subtitle: `${layout} • ${statsCount} stats • ${testimonialsCount} testimonials`
+        subtitle: layout ? `Layout: ${layout}` : 'Social proof section'
       }
     }
   }
