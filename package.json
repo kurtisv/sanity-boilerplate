@@ -10,7 +10,9 @@
     "demo:setup": "node scripts/setup-demo.js",
     "demo:reset": "node scripts/import-demo.js --force",
     "fix:stats-keys": "node scripts/fix-stats-keys.js",
-    "agents:run": "node scripts/run-agent.js"
+    "agents:run": "node scripts/run-agent.js",
+    "agents:interactive": "node scripts/interactive-builder.js",
+    "agents:generate": "node scripts/orchestrator.js"
   },
   "dependencies": {
     "@portabletext/react": "^4.0.3",
