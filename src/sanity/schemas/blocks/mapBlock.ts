@@ -1,11 +1,10 @@
 import { defineType, defineField } from 'sanity'
-import { MapIcon } from '@sanity/icons'
 
 export default defineType({
   name: 'mapBlock',
   title: 'Bloc Carte Interactive',
   type: 'document',
-  icon: MapIcon,
+  icon: () => '🗺️',
   fields: [
     defineField({
       name: 'title',
@@ -192,7 +191,7 @@ export default defineType({
       return {
         title: title || 'Carte sans titre',
         subtitle: `${address} • ${markerCount} marqueur${markerCount > 1 ? 's' : ''}`,
-        media: MapIcon
+        media: () => '🗺️'
       }
     }
   }

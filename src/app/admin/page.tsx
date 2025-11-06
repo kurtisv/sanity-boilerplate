@@ -26,24 +26,7 @@ export default function AdminDashboard() {
 
   const pageTemplates: PageTemplate[] = [
     // Essentielles
-    { name: 'home', title: 'Accueil', icon: '🏠', description: 'Page d\'accueil principale', api: 'import-home', category: 'essential' },
-    { name: 'about', title: 'À Propos', icon: '👥', description: 'Présentation de l\'équipe', api: 'setup-about', category: 'essential' },
-    { name: 'contact', title: 'Contact', icon: '📞', description: 'Formulaire de contact complet', api: 'setup-contact', category: 'essential' },
-    { name: 'services', title: 'Services', icon: '🛠️', description: 'Nos prestations', api: 'setup-services', category: 'essential' },
-    
-    // Marketing
-    { name: 'pricing', title: 'Tarifs', icon: '💰', description: 'Plans tarifaires', api: 'setup-pricing', category: 'marketing' },
-    { name: 'demo', title: 'Démo', icon: '🚀', description: 'Démonstration complète', api: 'import-demo', category: 'marketing' },
-    { name: 'showcase', title: 'Vitrine', icon: '✨', description: 'Présentation des capacités', api: 'setup-studio-showcase', category: 'marketing' },
-    { name: 'portfolio', title: 'Portfolio', icon: '🎨', description: 'Réalisations clients', api: 'setup-portfolio', category: 'marketing' },
-    
-    // Contenu
-    { name: 'blog', title: 'Blog', icon: '📝', description: 'Articles et actualités', api: 'setup-blog', category: 'content' },
-    { name: 'faq', title: 'FAQ', icon: '❓', description: 'Questions fréquentes', api: 'setup-faq', category: 'content' },
-    { name: 'careers', title: 'Carrières', icon: '💼', description: 'Offres d\'emploi', api: 'setup-careers', category: 'content' },
-    
-    // Légal
-    { name: 'legal', title: 'Mentions Légales', icon: '⚖️', description: 'Informations légales', api: 'setup-legal', category: 'legal' },
+    { name: 'demo', title: 'Page Démo', icon: '🚀', description: 'Démonstration complète des blocs', api: 'import-demo', category: 'essential' },
   ]
 
   const categories = {
@@ -216,38 +199,6 @@ export default function AdminDashboard() {
     }
   }
 
-  // Configurer Header/Footer
-  const setupHeaderFooter = async (type: 'header' | 'footer') => {
-    setLoading(true)
-
-    try {
-      const response = await fetch(`/api/setup-${type}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      })
-
-      const data = await response.json()
-
-      if (data.success) {
-        setStatus({
-          type: 'success',
-          message: `✅ ${type === 'header' ? 'Header' : 'Footer'} configuré avec succès !`,
-        })
-      } else {
-        setStatus({
-          type: 'error',
-          message: `❌ Erreur: ${data.error}`,
-        })
-      }
-    } catch (error) {
-      setStatus({
-        type: 'error',
-        message: `❌ Erreur: ${error instanceof Error ? error.message : 'Erreur inconnue'}`,
-      })
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const apis = pageTemplates
 
@@ -639,87 +590,6 @@ export default function AdminDashboard() {
         {/* Onglet Paramètres */}
         {activeTab === 'settings' && (
           <div>
-            {/* Header & Footer */}
-            <div style={{
-              background: 'var(--color-white)',
-              borderRadius: 'var(--border-radius-2xl)',
-              padding: 'var(--spacing-8)',
-              marginBottom: 'var(--spacing-8)',
-              boxShadow: 'var(--shadow-xl)',
-            }}>
-              <h2 style={{ fontSize: 'var(--font-size-2xl)', fontWeight: 'var(--font-weight-bold)', marginBottom: 'var(--spacing-6)', color: 'var(--color-gray-900)' }}>
-                🎨 Header & Footer
-              </h2>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'var(--spacing-6)' }}>
-                <div style={{
-                  background: 'linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%)',
-                  border: '2px solid var(--color-gray-200)',
-                  borderRadius: 'var(--border-radius-xl)',
-                  padding: 'var(--spacing-6)',
-                }}>
-                  <div style={{ fontSize: '3rem', marginBottom: 'var(--spacing-4)' }}>🎯</div>
-                  <h3 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 'var(--font-weight-bold)', marginBottom: 'var(--spacing-2)', color: 'var(--color-gray-900)' }}>
-                    Header
-                  </h3>
-                  <p style={{ color: 'var(--color-gray-600)', fontSize: 'var(--font-size-sm)', marginBottom: 'var(--spacing-4)', lineHeight: 'var(--line-height-relaxed)' }}>
-                    Navigation principale avec logo et menu
-                  </p>
-                  <button
-                    onClick={() => setupHeaderFooter('header')}
-                    disabled={loading}
-                    style={{
-                      width: '100%',
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      color: 'white',
-                      border: 'none',
-                      padding: 'var(--spacing-3)',
-                      borderRadius: 'var(--border-radius-lg)',
-                      fontSize: 'var(--font-size-sm)',
-                      fontWeight: 'var(--font-weight-semibold)',
-                      cursor: loading ? 'not-allowed' : 'pointer',
-                      opacity: loading ? 0.6 : 1,
-                      boxShadow: '0 4px 10px rgba(102, 126, 234, 0.4)',
-                    }}
-                  >
-                    Configurer Header
-                  </button>
-                </div>
-                <div style={{
-                  background: 'linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%)',
-                  border: '2px solid var(--color-gray-200)',
-                  borderRadius: 'var(--border-radius-xl)',
-                  padding: 'var(--spacing-6)',
-                }}>
-                  <div style={{ fontSize: '3rem', marginBottom: 'var(--spacing-4)' }}>🦶</div>
-                  <h3 style={{ fontSize: 'var(--font-size-xl)', fontWeight: 'var(--font-weight-bold)', marginBottom: 'var(--spacing-2)', color: 'var(--color-gray-900)' }}>
-                    Footer
-                  </h3>
-                  <p style={{ color: 'var(--color-gray-600)', fontSize: 'var(--font-size-sm)', marginBottom: 'var(--spacing-4)', lineHeight: 'var(--line-height-relaxed)' }}>
-                    Pied de page avec liens et réseaux sociaux
-                  </p>
-                  <button
-                    onClick={() => setupHeaderFooter('footer')}
-                    disabled={loading}
-                    style={{
-                      width: '100%',
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      color: 'white',
-                      border: 'none',
-                      padding: 'var(--spacing-3)',
-                      borderRadius: 'var(--border-radius-lg)',
-                      fontSize: 'var(--font-size-sm)',
-                      fontWeight: 'var(--font-weight-semibold)',
-                      cursor: loading ? 'not-allowed' : 'pointer',
-                      opacity: loading ? 0.6 : 1,
-                      boxShadow: '0 4px 10px rgba(102, 126, 234, 0.4)',
-                    }}
-                  >
-                    Configurer Footer
-                  </button>
-                </div>
-              </div>
-            </div>
-
             {/* Liens Utiles */}
             <div style={{
               background: 'var(--color-white)',
@@ -733,7 +603,7 @@ export default function AdminDashboard() {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 'var(--spacing-4)' }}>
                 {[
                   { href: '/studio', label: '🎨 Sanity Studio', gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' },
-                  { href: '/admin/pages', label: '📄 Générer Pages', gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
+                  { href: '/admin/auto-generate', label: '🤖 Auto-Génération', gradient: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' },
                   { href: '/demo', label: '🚀 Voir la Démo', gradient: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' },
                   { href: '/admin/cleanup', label: '🧹 Nettoyage', gradient: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)' },
                 ].map((link) => (

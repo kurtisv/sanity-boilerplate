@@ -8,9 +8,6 @@ function createProgressStream() {
   const encoder = new TextEncoder()
   
   return new TransformStream({
-    start(controller) {
-      this.controller = controller
-    },
     transform(chunk, controller) {
       controller.enqueue(encoder.encode(`data: ${JSON.stringify(chunk)}\n\n`))
     }

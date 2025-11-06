@@ -126,8 +126,8 @@ export const ROUTES = {
   ADMIN: '/admin',
   API: {
     REVALIDATE: '/api/revalidate',
-    SETUP_HOME: '/api/setup-home-page',
-    SETUP_SITE: '/api/setup-site-settings',
+    AUTO_GENERATE: '/api/auto-generate',
+    IMPORT_DEMO: '/api/import-demo',
   },
 } as const
 

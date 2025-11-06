@@ -21,14 +21,15 @@ export default function StudioShowcaseAdminPage() {
   // Vérifier le statut de la page studio
   const checkStudioStatus = async () => {
     try {
-      const response = await fetch('/api/setup-studio-showcase')
+      const response = await fetch('/api/studio-pages')
       const data = await response.json()
+      const showcasePage = data.pages?.find((p: any) => p.slug === 'studio-showcase')
       setStudioStatus({
-        exists: data.exists,
-        page: data.page ? {
-          id: data.page.id,
-          title: data.page.title,
-          blocksCount: data.page.blocksCount
+        exists: !!showcasePage,
+        page: showcasePage ? {
+          id: showcasePage.id,
+          title: showcasePage.title,
+          blocksCount: showcasePage.blocks?.length || 0
         } : undefined
       })
     } catch (error) {
@@ -42,7 +43,14 @@ export default function StudioShowcaseAdminPage() {
     setStatus(null)
 
     try {
-      const response = await fetch('/api/setup-studio-showcase', {
+      setStatus({
+        type: 'info',
+        message: '⚠️ API setup-studio-showcase supprimée. Utilisez /admin/auto-generate pour créer des pages.'
+      })
+      setLoading(false)
+      return
+
+      const response = await fetch('/api/studio-pages', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
