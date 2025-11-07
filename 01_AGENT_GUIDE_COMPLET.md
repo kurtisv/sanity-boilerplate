@@ -630,7 +630,115 @@ npm run agents:run -- diagnostic --fix-schemas --dry-run=false
 
 ---
 
-## 🔟 CHECKLIST AVANT GÉNÉRATION
+## 🔟 SYSTÈME D'AGENTS COORDONNÉS
+
+### Architecture en Cascade
+
+Le système utilise 7 agents qui se passent le relais via un protocole de **handover** :
+
+```
+analystAgent → builderAgent → designAgent → compatAgent → diagnosticAgent → publisherAgent → cleanupAgent
+```
+
+### 1️⃣ analystAgent
+**Rôle:** Analyse la requête et planifie la génération du site complet
+
+**Tâches:**
+- Analyser le prompt utilisateur
+- Déterminer les blocs et pages à créer
+- Définir le plan de génération
+- Identifier les dépendances nécessaires
+
+**Output:** Handover avec plan complet pour builderAgent
+
+### 2️⃣ builderAgent
+**Rôle:** Génère les schémas Sanity et composants React valides
+
+**Tâches:**
+- Lire le plan du analystAgent
+- Créer les schémas Sanity conformes
+- Créer les composants React en styled-components
+- Appeler `updateSiteHeadAndFooter()` pour synchroniser header/footer
+
+**Output:** Handover avec fichiers créés pour designAgent
+
+### 3️⃣ designAgent
+**Rôle:** Améliore le design et l'expérience utilisateur
+
+**Tâches:**
+- Analyser le code généré
+- Appliquer styled-components avec thèmes (modern-minimal, corporate, creative, luxury)
+- Ajouter transitions, hiérarchie visuelle et responsive
+- Optimiser la lisibilité et la cohérence UI/UX
+
+**Output:** Handover avec 3 variantes de design pour compatAgent
+
+### 4️⃣ compatAgent
+**Rôle:** Teste la conformité technique et la qualité du projet
+
+**Tâches:**
+- Exécuter `tsc --noEmit` pour vérifier les types
+- Lancer eslint
+- Faire sanity check
+- Effectuer build Next.js (selon dryRun)
+- **Bloquer la suite si un test échoue**
+
+**Output:** Handover (ready ou blocked) pour diagnosticAgent
+
+### 5️⃣ diagnosticAgent
+**Rôle:** Diagnostique et corrige automatiquement les schémas avant publication
+
+**Tâches:**
+- Analyser les schémas dans `src/sanity/schemas/blocks`
+- Identifier les erreurs critiques
+- Appeler `diagnosticFixAgent.run({dryRun:false})` pour correction
+- Relancer sanity check et confirmer conformité
+
+**Output:** Handover (ready ou blocked) pour publisherAgent
+
+### 6️⃣ publisherAgent
+**Rôle:** Publie les pages et blocs uniquement après validation complète
+
+**Tâches:**
+- Vérifier que `diagnosticAgent.handover.status === 'ready'`
+- Créer ou mettre à jour les documents Sanity
+- Afficher le résumé final des publications
+
+**Output:** Résultat de publication pour cleanupAgent
+
+### 7️⃣ cleanupAgent
+**Rôle:** Nettoie le projet après publication
+
+**Trigger:** `publisherAgent.ok === true`
+
+**Tâches:**
+- Supprimer fichiers vides
+- Supprimer exports non utilisés
+- Supprimer tests orphelins
+- Vérifier build post-cleanup
+
+**Output:** Rapport de nettoyage
+
+### Protocole de Handover
+
+Chaque agent transmet un objet `handover` au suivant :
+
+```typescript
+{
+  status: 'ready' | 'blocked',
+  nextAgent: 'string',
+  context: {
+    // Données spécifiques
+  },
+  blockedReason: 'string' | null
+}
+```
+
+**Règle:** Si `status === 'blocked'`, l'agent suivant annule son exécution.
+
+---
+
+## 1️⃣1️⃣ CHECKLIST AVANT GÉNÉRATION
 
 ### Pour les Schémas Sanity :
 

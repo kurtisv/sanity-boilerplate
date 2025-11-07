@@ -44,6 +44,7 @@ export default defineType({
       title: 'Statistiques',
       type: 'array',
       description: 'Liste des statistiques à afficher',
+      initialValue: [],
       of: [
         {
           type: 'object',

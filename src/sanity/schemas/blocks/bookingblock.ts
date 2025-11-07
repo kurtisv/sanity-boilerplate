@@ -17,7 +17,7 @@ export default defineType({
       name: 'subtitle',
       title: 'Subtitle',
       type: 'string',
-      validation: Rule => Rule.max(200)
+      validation: Rule => Rule.max(300)
     }),
     defineField({
       name: 'description',
@@ -29,6 +29,7 @@ export default defineType({
       name: 'services',
       title: 'Available Services',
       type: 'array',
+      initialValue: [],
       of: [
         {
           type: 'object',
@@ -55,7 +56,7 @@ export default defineType({
               name: 'description',
               title: 'Service Description',
               type: 'text',
-              validation: Rule => Rule.max(200)
+              validation: Rule => Rule.max(300)
             }
           ]
         }

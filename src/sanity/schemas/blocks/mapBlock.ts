@@ -84,6 +84,7 @@ export default defineType({
       name: 'markers',
       title: 'Marqueurs',
       type: 'array',
+      initialValue: [],
       of: [
         {
           type: 'object',

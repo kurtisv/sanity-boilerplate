@@ -76,6 +76,7 @@ export default defineType({
       name: 'selectedPosts',
       title: 'Articles sélectionnés',
       type: 'array',
+      initialValue: [],
       of: [{ type: 'reference', to: [{ type: 'blogPost' }] }],
       hidden: ({ parent }) => parent?.source !== 'manual',
       validation: (Rule) => Rule.max(12),
@@ -179,7 +180,7 @@ export default defineType({
           title: 'Texte du bouton',
           type: 'string',
           initialValue: 'Voir tous les articles',
-          validation: (Rule) => Rule.max(50),
+          validation: (Rule) => Rule.max(500),
           hidden: ({ parent }) => !parent?.show,
         },
         {

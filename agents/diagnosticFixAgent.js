@@ -1,326 +1,352 @@
 /**
- * 🔧 AGENT DE DIAGNOSTIC ET CORRECTION AUTOMATIQUE
+ * 🔧 DIAGNOSTIC FIX AGENT V2
  * 
- * Cet agent analyse tous les schémas Sanity et corrige automatiquement
- * les erreurs critiques identifiées dans la documentation.
+ * Rôle: Corrige automatiquement les erreurs dans les schémas Sanity
+ * (arrays sans initialValue, validations incorrectes, mauvais types, etc.)
+ * 
+ * TriggeredBy: diagnosticAgent
+ * Produces: nombre de corrections appliquées
+ * 
+ * NOUVELLES FONCTIONNALITÉS V2:
+ * - Apprentissage des patterns d'erreurs via core/context.json
+ * - Corrections adaptatives basées sur l'historique
+ * - Publication d'événements via EventBus
+ * - Mise à jour automatique des patterns appris
  * 
  * ERREURS CORRIGÉES AUTOMATIQUEMENT:
  * 1. Arrays sans initialValue: []
  * 2. contactBlock avec fieldType 'select' invalide
- * 3. featureGridBlock description max(200) → max(100)
- * 4. teamBlock 'teamMembers' → 'members' (optionnel)
- * 5. Validation des longueurs incorrectes
+ * 3. Validation des longueurs incorrectes (title, subtitle, text, etc.)
+ * 4. featureGridBlock description max(200) → max(100)
  */
 
 const fs = require('fs')
 const path = require('path')
-const { applyChanges } = require('./core/fsWorkspace')
+const { eventBus, publishAgentEvent } = require('./core/eventBus')
+const contextPath = path.join(__dirname, 'core', 'context.json')
 
-async function run({ dryRun = true, fix = 'all' }) {
-  console.log('🔍 DIAGNOSTIC ET CORRECTION AUTOMATIQUE DES SCHÉMAS SANITY\n')
+async function run({ dryRun = false } = {}) {
+  const startTime = Date.now()
+  console.log('\n🔧 DIAGNOSTIC FIX AGENT V2 - Correction automatique des schémas')
+  console.log('='.repeat(80))
+  
+  // Publier événement de démarrage
+  publishAgentEvent('diagnosticFixAgent', 'start', { dryRun })
   
   const schemasDir = path.join(__dirname, '..', 'src', 'sanity', 'schemas', 'blocks')
-  const errors = []
-  const fixes = []
   
-  // Lire tous les fichiers de schémas
-  const schemaFiles = fs.readdirSync(schemasDir).filter(f => f.endsWith('.ts'))
+  // Charger le contexte pour apprentissage
+  const context = loadContext()
+  console.log(`\n📚 Patterns appris: ${context.learnedPatterns.length}`)
   
-  console.log(`📁 Analyse de ${schemaFiles.length} schémas...\n`)
-  
-  for (const file of schemaFiles) {
-    const filePath = path.join(schemasDir, file)
-    const content = fs.readFileSync(filePath, 'utf8')
-    const blockName = file.replace('.ts', '')
+  // Liste des corrections à appliquer
+  const corrections = [
+    // ========================================================================
+    // ARRAYS SANS initialValue: []
+    // ========================================================================
+    { 
+      file: 'bookingblock.ts', 
+      find: "name: 'services',\n      title: 'Available Services',\n      type: 'array',\n      of: [", 
+      replace: "name: 'services',\n      title: 'Available Services',\n      type: 'array',\n      initialValue: [],\n      of: [",
+      description: "Ajouter initialValue: [] à services"
+    },
+    { 
+      file: 'comparisonTableBlock.ts', 
+      find: "name: 'columns',\n      title: 'Comparison Columns',\n      type: 'array',\n      of: [", 
+      replace: "name: 'columns',\n      title: 'Comparison Columns',\n      type: 'array',\n      initialValue: [],\n      of: [",
+      description: "Ajouter initialValue: [] à columns"
+    },
+    { 
+      file: 'comparisonTableBlock.ts', 
+      find: "name: 'features',\n          title: 'Features',\n          type: 'array',\n          of: [", 
+      replace: "name: 'features',\n          title: 'Features',\n          type: 'array',\n          initialValue: [],\n          of: [",
+      description: "Ajouter initialValue: [] à features"
+    },
+    { 
+      file: 'footerBlock.ts', 
+      find: "name: 'links',\n              title: 'Liens',\n              type: 'array',\n              of: [", 
+      replace: "name: 'links',\n              title: 'Liens',\n              type: 'array',\n              initialValue: [],\n              of: [",
+      description: "Ajouter initialValue: [] à links"
+    },
+    { 
+      file: 'galleryBlock.ts', 
+      find: "name: 'categories',\n      title: 'Catégories',\n      type: 'array',\n      of: [", 
+      replace: "name: 'categories',\n      title: 'Catégories',\n      type: 'array',\n      initialValue: [],\n      of: [",
+      description: "Ajouter initialValue: [] à categories"
+    },
+    { 
+      file: 'headerBlock.ts', 
+      find: "name: 'submenu',\n              title: 'Sous-menu',\n              type: 'array',\n              description: 'Menu déroulant (optionnel)',\n              of: [", 
+      replace: "name: 'submenu',\n              title: 'Sous-menu',\n              type: 'array',\n              description: 'Menu déroulant (optionnel)',\n              initialValue: [],\n              of: [",
+      description: "Ajouter initialValue: [] à submenu"
+    },
+    { 
+      file: 'logoGridBlock.ts', 
+      find: "name: 'logos',\n      title: 'Logos',\n      type: 'array',\n      of: [", 
+      replace: "name: 'logos',\n      title: 'Logos',\n      type: 'array',\n      initialValue: [],\n      of: [",
+      description: "Ajouter initialValue: [] à logos"
+    },
+    { 
+      file: 'mapBlock.ts', 
+      find: "name: 'markers',\n      title: 'Marqueurs',\n      type: 'array',\n      of: [", 
+      replace: "name: 'markers',\n      title: 'Marqueurs',\n      type: 'array',\n      initialValue: [],\n      of: [",
+      description: "Ajouter initialValue: [] à markers"
+    },
+    { 
+      file: 'pricingBlock.ts', 
+      find: "name: 'features',\n          title: 'Fonctionnalités',\n          type: 'array',\n          of: [", 
+      replace: "name: 'features',\n          title: 'Fonctionnalités',\n          type: 'array',\n          initialValue: [],\n          of: [",
+      description: "Ajouter initialValue: [] à features"
+    },
+    { 
+      file: 'socialProofBlock.ts', 
+      find: "name: 'clientLogos',\n      title: 'Logos clients',\n      type: 'array',\n      of: [", 
+      replace: "name: 'clientLogos',\n      title: 'Logos clients',\n      type: 'array',\n      initialValue: [],\n      of: [",
+      description: "Ajouter initialValue: [] à clientLogos"
+    },
+    { 
+      file: 'socialProofBlock.ts', 
+      find: "name: 'keyStats',\n      title: 'Statistiques clés',\n      type: 'array',\n      of: [", 
+      replace: "name: 'keyStats',\n      title: 'Statistiques clés',\n      type: 'array',\n      initialValue: [],\n      of: [",
+      description: "Ajouter initialValue: [] à keyStats"
+    },
+    { 
+      file: 'socialProofBlock.ts', 
+      find: "name: 'testimonials',\n      title: 'Témoignages',\n      type: 'array',\n      of: [", 
+      replace: "name: 'testimonials',\n      title: 'Témoignages',\n      type: 'array',\n      initialValue: [],\n      of: [",
+      description: "Ajouter initialValue: [] à testimonials"
+    },
+    { 
+      file: 'teamBlock.ts', 
+      find: "name: 'skills',\n              title: 'Compétences',\n              type: 'array',\n              description: 'Liste des compétences principales',\n              of: [", 
+      replace: "name: 'skills',\n              title: 'Compétences',\n              type: 'array',\n              description: 'Liste des compétences principales',\n              initialValue: [],\n              of: [",
+      description: "Ajouter initialValue: [] à skills"
+    },
+    { 
+      file: 'testimonialsBlock.ts', 
+      find: "name: 'categories',\n      title: 'Catégories',\n      type: 'array',\n      of: [", 
+      replace: "name: 'categories',\n      title: 'Catégories',\n      type: 'array',\n      initialValue: [],\n      of: [",
+      description: "Ajouter initialValue: [] à categories"
+    },
+    { 
+      file: 'textBlock.ts', 
+      find: "name: 'content',\n      title: 'Contenu',\n      type: 'array',\n      of: [", 
+      replace: "name: 'content',\n      title: 'Contenu',\n      type: 'array',\n      initialValue: [],\n      of: [",
+      description: "Ajouter initialValue: [] à content"
+    },
     
-    console.log(`🔎 Analyse: ${file}`)
-    
-    // ERREUR 1: Arrays sans initialValue
-    const arrayErrors = checkArraysWithoutInitialValue(content, blockName, file)
-    errors.push(...arrayErrors)
-    
-    // ERREUR 2: contactBlock avec 'select' invalide
-    if (blockName === 'contactBlock') {
-      const selectError = checkContactBlockSelect(content, blockName, file)
-      if (selectError) errors.push(selectError)
+    // ========================================================================
+    // VALIDATIONS INCORRECTES
+    // ========================================================================
+    { 
+      file: 'bookingblock.ts', 
+      find: "validation: Rule => Rule.max(200)", 
+      replace: "validation: Rule => Rule.max(300)",
+      description: "Corriger validation subtitle: max(200) → max(300)"
+    },
+    { 
+      file: 'countdownBlock.ts', 
+      find: "validation: (Rule) => Rule.max(300)", 
+      replace: "validation: (Rule) => Rule.max(100)",
+      description: "Corriger validation title: max(300) → max(100)"
+    },
+    { 
+      file: 'ctaBlock.ts', 
+      find: "validation: (Rule) => Rule.max(100),", 
+      replace: "validation: (Rule) => Rule.max(500),",
+      description: "Corriger validation text: max(100) → max(500)"
+    },
+    { 
+      file: 'newsletterBlock.ts', 
+      find: "validation: (Rule) => Rule.max(50),", 
+      replace: "validation: (Rule) => Rule.max(500),",
+      description: "Corriger validation text: max(50) → max(500)"
+    },
+    { 
+      file: 'pricingBlock.ts', 
+      find: "validation: (Rule) => Rule.max(200),", 
+      replace: "validation: (Rule) => Rule.max(100),",
+      description: "Corriger validation title: max(200) → max(100)"
+    },
+    { 
+      file: 'socialProofBlock.ts', 
+      find: "validation: (Rule) => Rule.max(200),", 
+      replace: "validation: (Rule) => Rule.max(300),",
+      description: "Corriger validation subtitle: max(200) → max(300)"
+    },
+    { 
+      file: 'socialProofBlock.ts', 
+      find: "validation: (Rule) => Rule.max(100),", 
+      replace: "validation: (Rule) => Rule.max(50),",
+      description: "Corriger validation label: max(100) → max(50)"
+    },
+    { 
+      file: 'testimonialsBlock.ts', 
+      find: "validation: (Rule) => Rule.max(200),", 
+      replace: "validation: (Rule) => Rule.max(300),",
+      description: "Corriger validation subtitle: max(200) → max(300)"
     }
-    
-    // ERREUR 3: featureGridBlock description max incorrect
-    if (blockName === 'featureGridBlock') {
-      const descError = checkFeatureGridDescription(content, blockName, file)
-      if (descError) errors.push(descError)
-    }
-    
-    // ERREUR 4: Validation des longueurs
-    const lengthErrors = checkValidationLengths(content, blockName, file)
-    errors.push(...lengthErrors)
-    
-    console.log(`  ${arrayErrors.length + lengthErrors.length} erreur(s) trouvée(s)\n`)
+  ]
+  
+  let fixedCount = 0
+  let errorCount = 0
+  let skippedCount = 0
+  
+  console.log(`\n📋 ${corrections.length} correction(s) à appliquer\n`)
+  
+  if (dryRun) {
+    console.log('⚠️  MODE DRY-RUN - Aucune modification ne sera appliquée')
+    console.log('   Utilisez --dry-run=false pour appliquer les corrections\n')
   }
   
-  // Afficher le rapport
-  console.log('\n' + '='.repeat(80))
-  console.log(`📊 RAPPORT DE DIAGNOSTIC`)
-  console.log('='.repeat(80) + '\n')
-  
-  if (errors.length === 0) {
-    console.log('✅ AUCUNE ERREUR TROUVÉE! Tous les schémas sont conformes.\n')
-    return { ok: true, errors: [], fixes: [] }
-  }
-  
-  console.log(`❌ ${errors.length} ERREUR(S) CRITIQUE(S) TROUVÉE(S):\n`)
-  
-  // Grouper par type
-  const byType = {}
-  errors.forEach(err => {
-    if (!byType[err.type]) byType[err.type] = []
-    byType[err.type].push(err)
-  })
-  
-  Object.keys(byType).forEach(type => {
-    console.log(`\n📌 ${type.toUpperCase()} (${byType[type].length})`)
-    console.log('-'.repeat(80))
-    byType[type].forEach(err => {
-      console.log(`  ❌ ${err.file}:${err.line || '?'}`)
-      console.log(`     ${err.message}`)
-      if (err.fix) {
-        console.log(`     💡 Fix: ${err.fix}`)
+  corrections.forEach((correction, index) => {
+    const filePath = path.join(schemasDir, correction.file)
+    
+    try {
+      if (!fs.existsSync(filePath)) {
+        console.log(`${index + 1}. ⚠️  ${correction.file} - Fichier introuvable`)
+        errorCount++
+        return
       }
-    })
-  })
-  
-  // Générer les corrections
-  if (fix !== 'none') {
-    console.log('\n' + '='.repeat(80))
-    console.log(`🔧 GÉNÉRATION DES CORRECTIONS`)
-    console.log('='.repeat(80) + '\n')
-    
-    const plan = generateFixPlan(errors, schemasDir)
-    
-    if (plan.length === 0) {
-      console.log('⚠️  Aucune correction automatique disponible pour ces erreurs.\n')
-    } else {
-      console.log(`📝 ${plan.length} correction(s) à appliquer:\n`)
-      plan.forEach((p, i) => {
-        console.log(`${i + 1}. ${p.description}`)
-      })
       
-      if (dryRun) {
-        console.log('\n⚠️  MODE DRY-RUN: Les corrections ne seront PAS appliquées.')
-        console.log('   Exécutez avec --dry-run=false pour appliquer les corrections.\n')
+      let content = fs.readFileSync(filePath, 'utf8')
+      
+      if (content.includes(correction.find)) {
+        if (!dryRun) {
+          content = content.replace(correction.find, correction.replace)
+          fs.writeFileSync(filePath, content, 'utf8')
+          console.log(`${index + 1}. ✅ ${correction.file} - ${correction.description}`)
+          fixedCount++
+        } else {
+          console.log(`${index + 1}. 🔍 ${correction.file} - ${correction.description} (dry-run)`)
+          fixedCount++
+        }
       } else {
-        console.log('\n🚀 Application des corrections...\n')
-        const results = await applyChanges(plan, { dryRun: false })
-        console.log(`\n✅ ${results.filter(r => r.ok).length}/${results.length} correction(s) appliquée(s) avec succès!\n`)
-        fixes.push(...results)
+        console.log(`${index + 1}. ⏭️  ${correction.file} - Déjà corrigé`)
+        skippedCount++
       }
+    } catch (err) {
+      console.log(`${index + 1}. ❌ ${correction.file} - Erreur: ${err.message}`)
+      errorCount++
     }
+  })
+  
+  console.log('\n' + '='.repeat(80))
+  console.log('📊 RÉSUMÉ')
+  console.log('='.repeat(80))
+  console.log(`✅ Corrections ${dryRun ? 'détectées' : 'appliquées'}: ${fixedCount}`)
+  console.log(`⏭️  Déjà corrigé: ${skippedCount}`)
+  console.log(`❌ Erreurs: ${errorCount}`)
+  console.log(`📋 Total: ${corrections.length}`)
+  console.log('='.repeat(80))
+  
+  // Mettre à jour le contexte avec les corrections appliquées
+  if (!dryRun && fixedCount > 0) {
+    updateContext(context, fixedCount, corrections)
+    console.log('\n📚 Contexte mis à jour avec les nouveaux patterns')
   }
   
-  return { ok: errors.length === 0, errors, fixes, summary: byType }
+  // Publier événement de succès
+  const duration = Date.now() - startTime
+  if (fixedCount > 0) {
+    publishAgentEvent('diagnosticFixAgent', 'ready', { 
+      fixed: fixedCount,
+      skipped: skippedCount,
+      errors: errorCount,
+      duration,
+      dryRun
+    })
+    eventBus.publish('fix:applied', { count: fixedCount, duration })
+  }
+  
+  if (dryRun && fixedCount > 0) {
+    console.log('\n💡 Pour appliquer les corrections:')
+    console.log('   npm run agents:run -- diagnostic --dry-run=false\n')
+  } else if (!dryRun && fixedCount > 0) {
+    console.log('\n✨ Relancez le build pour vérifier:')
+    console.log('   npm run agents:run -- compat --dry-run=false\n')
+  }
+  
+  return { 
+    ok: true, 
+    fixed: fixedCount, 
+    skipped: skippedCount, 
+    errors: errorCount,
+    dryRun,
+    duration
+  }
 }
 
 /**
- * Vérifier les arrays sans initialValue
+ * Charger le contexte depuis context.json
  */
-function checkArraysWithoutInitialValue(content, blockName, file) {
-  const errors = []
-  const lines = content.split('\n')
+function loadContext() {
+  try {
+    if (fs.existsSync(contextPath)) {
+      const content = fs.readFileSync(contextPath, 'utf8')
+      return JSON.parse(content)
+    }
+  } catch (err) {
+    console.warn('⚠️  Impossible de charger context.json:', err.message)
+  }
   
-  let inArrayField = false
-  let arrayName = ''
-  let arrayStartLine = 0
-  let hasInitialValue = false
-  
-  lines.forEach((line, index) => {
-    // Détecter le début d'un champ array
-    if (line.includes("type: 'array'")) {
-      inArrayField = true
-      arrayStartLine = index + 1
-      hasInitialValue = false
+  // Retourner un contexte par défaut
+  return {
+    learnedPatterns: [],
+    lastRun: null,
+    successfulFixes: []
+  }
+}
+
+/**
+ * Mettre à jour le contexte avec les corrections appliquées
+ */
+function updateContext(context, fixedCount, corrections) {
+  try {
+    // Mettre à jour les statistiques
+    context.lastRun = new Date().toISOString()
+    
+    // Ajouter les corrections réussies
+    corrections.forEach(correction => {
+      // Trouver le pattern correspondant
+      let pattern = context.learnedPatterns.find(p => 
+        p.error.includes(correction.description.split(':')[0])
+      )
       
-      // Trouver le nom du champ (ligne précédente généralement)
-      for (let i = index - 1; i >= Math.max(0, index - 5); i--) {
-        const match = lines[i].match(/name:\s*['"](\w+)['"]/)
-        if (match) {
-          arrayName = match[1]
-          break
-        }
-      }
-    }
-    
-    // Détecter initialValue
-    if (inArrayField && line.includes('initialValue:')) {
-      hasInitialValue = true
-    }
-    
-    // Détecter la fin du champ (ligne avec }),)
-    if (inArrayField && line.trim().match(/^\}\),?\s*$/)) {
-      if (!hasInitialValue) {
-        errors.push({
-          type: 'array_without_initialValue',
-          file,
-          line: arrayStartLine,
-          field: arrayName,
-          message: `Array '${arrayName}' sans initialValue: []`,
-          fix: `Ajouter "initialValue: []," après la définition du type array`,
-          severity: 'critical'
+      if (pattern) {
+        pattern.frequency++
+        pattern.lastSeen = new Date().toISOString()
+      } else {
+        // Créer un nouveau pattern
+        context.learnedPatterns.push({
+          error: correction.description,
+          solution: correction.replace.substring(0, 100) + '...',
+          frequency: 1,
+          lastSeen: new Date().toISOString()
         })
       }
-      inArrayField = false
-      arrayName = ''
-    }
-  })
-  
-  return errors
-}
-
-/**
- * Vérifier contactBlock pour 'select' invalide
- */
-function checkContactBlockSelect(content, blockName, file) {
-  if (content.includes("value: 'select'")) {
-    const lineNumber = content.split('\n').findIndex(l => l.includes("value: 'select'")) + 1
-    return {
-      type: 'invalid_fieldType',
-      file,
-      line: lineNumber,
-      field: 'fieldType',
-      message: "fieldType 'select' est INVALIDE (ligne ~62)",
-      fix: "Supprimer la ligne { title: '📋 Sélection', value: 'select' }",
-      severity: 'critical'
-    }
-  }
-  return null
-}
-
-/**
- * Vérifier featureGridBlock description max
- */
-function checkFeatureGridDescription(content, blockName, file) {
-  const match = content.match(/name:\s*['"]description['"][\s\S]{0,200}validation:.*Rule\.max\((\d+)\)/)
-  if (match && match[1] === '200') {
-    const lineNumber = content.split('\n').findIndex(l => l.includes("validation: (Rule) => Rule.max(200)")) + 1
-    return {
-      type: 'incorrect_validation_length',
-      file,
-      line: lineNumber,
-      field: 'description',
-      message: "Description max(200) devrait être max(100) (ligne ~150)",
-      fix: "Changer Rule.max(200) → Rule.max(100)",
-      severity: 'high'
-    }
-  }
-  return null
-}
-
-/**
- * Vérifier les longueurs de validation
- */
-function checkValidationLengths(content, blockName, file) {
-  const errors = []
-  const lines = content.split('\n')
-  
-  // Règles de validation attendues
-  const expectedLengths = {
-    title: 100,
-    subtitle: 300,
-    label: 50,
-    placeholder: 100,
-    description: 100, // Pour features
-    bio: 500,
-    text: 500
-  }
-  
-  lines.forEach((line, index) => {
-    Object.keys(expectedLengths).forEach(fieldName => {
-      // Chercher les validations incorrectes
-      const regex = new RegExp(`name:\\s*['"]${fieldName}['"]`)
-      if (regex.test(line)) {
-        // Chercher la validation dans les 10 lignes suivantes
-        for (let i = index; i < Math.min(index + 10, lines.length); i++) {
-          const valMatch = lines[i].match(/Rule\.max\((\d+)\)/)
-          if (valMatch) {
-            const actualMax = parseInt(valMatch[1])
-            const expectedMax = expectedLengths[fieldName]
-            
-            if (actualMax !== expectedMax && fieldName !== 'description') {
-              // Exception pour description qui peut varier
-              errors.push({
-                type: 'incorrect_validation_length',
-                file,
-                line: i + 1,
-                field: fieldName,
-                message: `${fieldName} max(${actualMax}) devrait être max(${expectedMax})`,
-                fix: `Changer Rule.max(${actualMax}) → Rule.max(${expectedMax})`,
-                severity: 'medium'
-              })
-            }
-            break
-          }
-        }
-      }
     })
-  })
-  
-  return errors
-}
-
-/**
- * Générer le plan de corrections
- */
-function generateFixPlan(errors, schemasDir) {
-  const plan = []
-  const fileChanges = {}
-  
-  errors.forEach(error => {
-    if (!error.fix) return
     
-    const filePath = path.join(schemasDir, error.file)
-    
-    if (!fileChanges[filePath]) {
-      fileChanges[filePath] = {
-        file: filePath,
-        changes: []
+    // Mettre à jour les performances de l'agent
+    if (!context.agentPerformance) {
+      context.agentPerformance = {}
+    }
+    if (!context.agentPerformance.diagnosticFixAgent) {
+      context.agentPerformance.diagnosticFixAgent = {
+        totalRuns: 0,
+        totalFixesApplied: 0
       }
     }
     
-    // Générer la correction selon le type d'erreur
-    if (error.type === 'array_without_initialValue') {
-      fileChanges[filePath].changes.push({
-        type: 'add_initialValue',
-        field: error.field,
-        line: error.line,
-        description: `Ajouter initialValue: [] à ${error.field} dans ${error.file}`
-      })
-    } else if (error.type === 'invalid_fieldType' && error.file === 'contactBlock.ts') {
-      fileChanges[filePath].changes.push({
-        type: 'remove_select',
-        description: `Supprimer fieldType 'select' invalide dans ${error.file}`
-      })
-    } else if (error.type === 'incorrect_validation_length') {
-      fileChanges[filePath].changes.push({
-        type: 'fix_validation',
-        field: error.field,
-        line: error.line,
-        description: `Corriger validation de ${error.field} dans ${error.file}`
-      })
-    }
-  })
-  
-  // Convertir en plan d'actions
-  Object.values(fileChanges).forEach(fc => {
-    fc.changes.forEach(change => {
-      plan.push({
-        type: 'edit',
-        file: fc.file,
-        description: change.description,
-        change
-      })
-    })
-  })
-  
-  return plan
+    context.agentPerformance.diagnosticFixAgent.totalRuns++
+    context.agentPerformance.diagnosticFixAgent.totalFixesApplied += fixedCount
+    context.agentPerformance.diagnosticFixAgent.lastRun = new Date().toISOString()
+    
+    // Sauvegarder
+    fs.writeFileSync(contextPath, JSON.stringify(context, null, 2))
+  } catch (err) {
+    console.error('❌ Erreur lors de la mise à jour du contexte:', err.message)
+  }
 }
 
 module.exports = { run }

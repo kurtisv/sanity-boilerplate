@@ -50,6 +50,7 @@ export default defineType({
       name: 'columns',
       title: 'Comparison Columns',
       type: 'array',
+      initialValue: [],
       of: [
         {
           type: 'object',

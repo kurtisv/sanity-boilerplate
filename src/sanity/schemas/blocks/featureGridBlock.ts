@@ -45,6 +45,7 @@ export default defineType({
       title: 'Fonctionnalités',
       type: 'array',
       description: 'Ajoutez vos fonctionnalités',
+      initialValue: [],
       of: [
         {
           type: 'object',
@@ -147,7 +148,7 @@ export default defineType({
               title: 'Description',
               type: 'text',
               rows: 4,
-              validation: (Rule) => Rule.max(200),
+              validation: (Rule) => Rule.max(100),
             },
             {
               name: 'details',

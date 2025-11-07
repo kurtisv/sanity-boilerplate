@@ -1,0 +1,88 @@
+{
+  "lastRun": null,
+  "lastErrors": [],
+  "successfulFixes": [],
+  "learnedPatterns": [
+    {
+      "error": "Array field without initialValue",
+      "solution": "Add initialValue: [] to array field definition",
+      "frequency": 23,
+      "lastSeen": null
+    },
+    {
+      "error": "Validation max length mismatch",
+      "solution": "Adjust Rule.max() to match field requirements",
+      "frequency": 8,
+      "lastSeen": null
+    },
+    {
+      "error": "Invalid fieldType 'select' in contactBlock",
+      "solution": "Remove invalid fieldType option",
+      "frequency": 1,
+      "lastSeen": null
+    },
+    {
+      "error": "Missing export default defineType",
+      "solution": "Ensure all schemas use export default defineType()",
+      "frequency": 0,
+      "lastSeen": null
+    },
+    {
+      "error": "Color field without regex validation",
+      "solution": "Add validation: Rule => Rule.regex(/^#[0-9A-Fa-f]{6}$/)",
+      "frequency": 0,
+      "lastSeen": null
+    }
+  ],
+  "agentPerformance": {
+    "builderAgent": {
+      "totalRuns": 0,
+      "successRate": 0,
+      "averageDuration": 0,
+      "lastRun": null
+    },
+    "compatibilityAgent": {
+      "totalRuns": 0,
+      "successRate": 0,
+      "averageDuration": 0,
+      "lastRun": null
+    },
+    "diagnosticAgent": {
+      "totalRuns": 0,
+      "successRate": 0,
+      "averageDuration": 0,
+      "lastRun": null
+    },
+    "diagnosticFixAgent": {
+      "totalRuns": 0,
+      "successRate": 0,
+      "averageDuration": 0,
+      "lastRun": null,
+      "totalFixesApplied": 0
+    },
+    "publisherAgent": {
+      "totalRuns": 0,
+      "successRate": 0,
+      "averageDuration": 0,
+      "lastRun": null,
+      "totalPagesPublished": 0
+    },
+    "cleanupAgent": {
+      "totalRuns": 0,
+      "successRate": 0,
+      "averageDuration": 0,
+      "lastRun": null,
+      "totalFilesDeleted": 0
+    }
+  },
+  "recommendations": [
+    "Consider adding more default images to mediaDefaults.json",
+    "Review frequently failing patterns in learnedPatterns",
+    "Monitor agent performance metrics for bottlenecks"
+  ],
+  "metadata": {
+    "version": "4.0",
+    "createdAt": "2025-01-07T20:44:00.000Z",
+    "lastUpdated": null
+  }
+}

@@ -180,15 +180,15 @@ export default defineType({
               title: 'Category',
               type: 'string',
               options: {
-                list: ({ document }) => {
-                  const categories = document?.categories || []
-                  return categories.map((cat: any) => ({
-                    title: cat.name,
-                    value: cat.slug?.current
-                  }))
-                }
+                list: [
+                  { title: 'Tous', value: 'all' },
+                  { title: 'Nature', value: 'nature' },
+                  { title: 'Architecture', value: 'architecture' },
+                  { title: 'Personnes', value: 'people' },
+                  { title: 'Événements', value: 'events' }
+                ]
               },
-              hidden: ({ document }) => !document?.enableFilters
+              hidden: ({ document }: { document: any }) => !document?.enableFilters
             })
           ],
           preview: {

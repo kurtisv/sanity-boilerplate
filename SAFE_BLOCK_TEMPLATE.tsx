@@ -18,7 +18,7 @@
 
 import React from 'react'
 import styled from 'styled-components'
-import { useSafeProps, useSafeArray, useSafeObject } from './withSafeProps'
+import { useSafeProps, useSafeArray, useSafeObject } from './src/components/blocks/withSafeProps'
 
 // ============================================================================
 // TYPES & INTERFACES
@@ -54,19 +54,19 @@ interface SafeBlockProps {
 
 const BlockContainer = styled.section`
   padding: 4rem 2rem;
-  background-color: ${props => props.theme?.colors?.background || '#ffffff'};
+  background-color: ${(props: any) => props.theme?.colors?.background || '#ffffff'};
 `
 
 const BlockTitle = styled.h2`
   font-size: 2.5rem;
   font-weight: 700;
   margin-bottom: 1rem;
-  color: ${props => props.theme?.colors?.text || '#1a202c'};
+  color: ${(props: any) => props.theme?.colors?.text || '#1a202c'};
 `
 
 const BlockSubtitle = styled.p`
   font-size: 1.25rem;
-  color: ${props => props.theme?.colors?.textSecondary || '#718096'};
+  color: ${(props: any) => props.theme?.colors?.textSecondary || '#718096'};
   margin-bottom: 2rem;
 `
 

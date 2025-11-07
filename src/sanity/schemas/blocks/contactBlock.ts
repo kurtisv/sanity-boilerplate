@@ -59,7 +59,6 @@ export default defineType({
                   { title: '📝 Sujet', value: 'subject' },
                   { title: '💬 Message', value: 'message' },
                   { title: '📄 Zone de texte', value: 'textarea' },
-                  { title: '📋 Sélection', value: 'select' },
                   { title: '🌐 URL', value: 'url' },
                   { title: '⚙️ Champ personnalisé', value: 'custom' },
                 ],

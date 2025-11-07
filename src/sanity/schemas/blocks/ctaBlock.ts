@@ -219,7 +219,7 @@ export default defineType({
           title: 'Texte',
           type: 'string',
           description: 'Ex: Offre limitée, Plus que 3 places disponibles',
-          validation: (Rule) => Rule.max(100),
+          validation: (Rule) => Rule.max(500),
           hidden: ({ parent }) => !parent?.enabled,
         },
         {

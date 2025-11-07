@@ -56,6 +56,7 @@ export default defineType({
       title: 'Membres de l\'équipe',
       type: 'array',
       description: 'Liste des membres de l\'équipe',
+      initialValue: [],
       of: [
         {
           type: 'object',
@@ -99,6 +100,7 @@ export default defineType({
               title: 'Compétences',
               type: 'array',
               description: 'Liste des compétences principales',
+              initialValue: [],
               of: [{ type: 'string' }],
               options: {
                 layout: 'tags',
@@ -175,6 +177,7 @@ export default defineType({
       title: 'Témoignages',
       type: 'array',
       description: 'Liste des témoignages clients',
+      initialValue: [],
       of: [
         {
           type: 'object',

@@ -15,6 +15,7 @@ export default defineType({
       name: 'logos',
       title: 'Logos',
       type: 'array',
+      initialValue: [],
       of: [
         {
           type: 'object',

@@ -1,11 +1,12 @@
 export default function LogoGridBlock({ data }: { data: any }) {
   const { title, logos = [], layout = 'grid-4' } = data
   
-  const gridCols = {
+  const gridColsMap: Record<string, string> = {
     'grid-3': 'grid-cols-3',
     'grid-4': 'grid-cols-4',
     'grid-6': 'grid-cols-6'
-  }[layout] || 'grid-cols-4'
+  }
+  const gridCols = gridColsMap[layout] || 'grid-cols-4'
 
   return (
     <section className="py-12">

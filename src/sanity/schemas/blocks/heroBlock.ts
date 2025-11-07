@@ -28,6 +28,7 @@ export default defineType({
       title: 'Boutons d\'action',
       type: 'array',
       description: 'Boutons CTA du hero (maximum 3)',
+      initialValue: [],
       of: [
         {
           type: 'object',

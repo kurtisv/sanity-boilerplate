@@ -88,7 +88,7 @@ export default defineType({
               name: 'label',
               title: 'Label',
               type: 'string',
-              validation: (Rule) => Rule.max(50),
+              validation: (Rule) => Rule.max(500),
             },
             {
               name: 'placeholder',
@@ -145,7 +145,7 @@ export default defineType({
           title: 'Texte pendant l\'envoi',
           type: 'string',
           initialValue: 'Inscription...',
-          validation: (Rule) => Rule.max(50),
+          validation: (Rule) => Rule.max(500),
         },
         {
           name: 'variant',
@@ -260,7 +260,7 @@ export default defineType({
           title: 'Texte du lien',
           type: 'string',
           initialValue: 'Politique de confidentialité',
-          validation: (Rule) => Rule.max(50),
+          validation: (Rule) => Rule.max(500),
           hidden: ({ parent }) => !parent?.enabled,
         },
         {
