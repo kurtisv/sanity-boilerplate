@@ -10,7 +10,7 @@ export default defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
-      validation: Rule => Rule.max(100)
+      validation: Rule => Rule.required().max(100)
     }),
     defineField({
       name: 'description',
@@ -26,33 +26,33 @@ export default defineType({
     }),
     defineField({
       name: 'labels',
-      title: 'Labels',
+      title: 'Time Unit Labels',
       type: 'object',
       fields: [
-        {
+        defineField({
           name: 'days',
           title: 'Days Label',
           type: 'string',
           initialValue: 'Days'
-        },
-        {
+        }),
+        defineField({
           name: 'hours',
           title: 'Hours Label',
           type: 'string',
           initialValue: 'Hours'
-        },
-        {
+        }),
+        defineField({
           name: 'minutes',
           title: 'Minutes Label',
           type: 'string',
           initialValue: 'Minutes'
-        },
-        {
+        }),
+        defineField({
           name: 'seconds',
           title: 'Seconds Label',
           type: 'string',
           initialValue: 'Seconds'
-        }
+        })
       ]
     }),
     defineField({
@@ -65,7 +65,7 @@ export default defineType({
           { title: 'Dark', value: 'dark' },
           { title: 'Gradient', value: 'gradient' },
           { title: 'Minimal', value: 'minimal' },
-          { title: 'Bold', value: 'bold' }
+          { title: 'Neon', value: 'neon' }
         ],
         layout: 'radio'
       },
@@ -87,39 +87,22 @@ export default defineType({
       initialValue: 'md'
     }),
     defineField({
-      name: 'primaryColor',
-      title: 'Primary Color',
+      name: 'backgroundColor',
+      title: 'Background Color',
       type: 'string',
-      description: 'Hex color code (e.g., #3B82F6)',
-      initialValue: '#3B82F6'
+      description: 'Hex color code (e.g., #ffffff)'
     }),
     defineField({
-      name: 'secondaryColor',
-      title: 'Secondary Color',
+      name: 'textColor',
+      title: 'Text Color',
       type: 'string',
-      description: 'Hex color code (e.g., #1E40AF)',
-      initialValue: '#1E40AF'
+      description: 'Hex color code (e.g., #000000)'
     }),
     defineField({
-      name: 'expiredMessage',
-      title: 'Message After Expiration',
-      type: 'object',
-      fields: [
-        {
-          name: 'title',
-          title: 'Expired Title',
-          type: 'string',
-          initialValue: 'Time\'s Up!',
-          validation: Rule => Rule.max(100)
-        },
-        {
-          name: 'description',
-          title: 'Expired Description',
-          type: 'text',
-          initialValue: 'The countdown has ended.',
-          validation: Rule => Rule.max(300)
-        }
-      ]
+      name: 'accentColor',
+      title: 'Accent Color',
+      type: 'string',
+      description: 'Hex color code for numbers and highlights (e.g., #ff6b6b)'
     }),
     defineField({
       name: 'animation',
@@ -128,50 +111,56 @@ export default defineType({
       options: {
         list: [
           { title: 'None', value: 'none' },
-          { title: 'Fade In', value: 'fadeIn' },
-          { title: 'Slide Up', value: 'slideUp' },
+          { title: 'Fade', value: 'fade' },
+          { title: 'Scale', value: 'scale' },
+          { title: 'Slide', value: 'slide' },
           { title: 'Bounce', value: 'bounce' },
-          { title: 'Pulse', value: 'pulse' },
           { title: 'Flip', value: 'flip' }
         ],
         layout: 'dropdown'
       },
-      initialValue: 'fadeIn'
+      initialValue: 'fade'
     }),
     defineField({
       name: 'showSeparators',
-      title: 'Show Separators',
+      title: 'Show Separators (:)',
       type: 'boolean',
       initialValue: true
     }),
     defineField({
-      name: 'displayFormat',
-      title: 'Display Format',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Boxes', value: 'boxes' },
-          { title: 'Digital', value: 'digital' },
-          { title: 'Circles', value: 'circles' },
-          { title: 'Simple', value: 'simple' }
-        ],
-        layout: 'radio'
-      },
-      initialValue: 'boxes'
+      name: 'expiredMessage',
+      title: 'Expired Message',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'title',
+          title: 'Title',
+          type: 'string',
+          initialValue: 'Time\'s Up!'
+        }),
+        defineField({
+          name: 'description',
+          title: 'Description',
+          type: 'text',
+          initialValue: 'The countdown has ended.'
+        }),
+        defineField({
+          name: 'buttonText',
+          title: 'Button Text',
+          type: 'string'
+        }),
+        defineField({
+          name: 'buttonUrl',
+          title: 'Button URL',
+          type: 'url'
+        })
+      ]
     }),
     defineField({
-      name: 'alignment',
-      title: 'Alignment',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'Left', value: 'left' },
-          { title: 'Center', value: 'center' },
-          { title: 'Right', value: 'right' }
-        ],
-        layout: 'radio'
-      },
-      initialValue: 'center'
+      name: 'centerAlign',
+      title: 'Center Align',
+      type: 'boolean',
+      initialValue: true
     })
   ],
   preview: {

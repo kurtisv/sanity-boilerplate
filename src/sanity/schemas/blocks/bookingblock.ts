@@ -16,53 +16,50 @@ export default defineType({
     defineField({
       name: 'subtitle',
       title: 'Subtitle',
-      type: 'text',
-      rows: 2,
+      type: 'string',
       validation: Rule => Rule.max(200)
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+      validation: Rule => Rule.max(300)
     }),
     defineField({
       name: 'services',
       title: 'Available Services',
       type: 'array',
-      of: [{
-        type: 'object',
-        fields: [
-          {
-            name: 'name',
-            title: 'Service Name',
-            type: 'string',
-            validation: Rule => Rule.required().max(100)
-          },
-          {
-            name: 'duration',
-            title: 'Duration (minutes)',
-            type: 'number',
-            validation: Rule => Rule.required().min(15).max(480)
-          },
-          {
-            name: 'price',
-            title: 'Price',
-            type: 'string',
-            validation: Rule => Rule.max(20)
-          },
-          {
-            name: 'description',
-            title: 'Description',
-            type: 'text',
-            rows: 2,
-            validation: Rule => Rule.max(300)
-          }
-        ],
-        preview: {
-          select: { title: 'name', subtitle: 'duration' },
-          prepare({ title, subtitle }) {
-            return {
-              title: title || 'Service',
-              subtitle: subtitle ? `${subtitle} min` : ''
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'name',
+              title: 'Service Name',
+              type: 'string',
+              validation: Rule => Rule.required().max(100)
+            },
+            {
+              name: 'duration',
+              title: 'Duration (minutes)',
+              type: 'number',
+              validation: Rule => Rule.required().min(15).max(480)
+            },
+            {
+              name: 'price',
+              title: 'Price',
+              type: 'string',
+              validation: Rule => Rule.max(20)
+            },
+            {
+              name: 'description',
+              title: 'Service Description',
+              type: 'text',
+              validation: Rule => Rule.max(200)
             }
-          }
+          ]
         }
-      }],
+      ],
       validation: Rule => Rule.required().min(1)
     }),
     defineField({
@@ -72,7 +69,7 @@ export default defineType({
       fields: [
         {
           name: 'type',
-          title: 'Integration Type',
+          title: 'Calendar Type',
           type: 'string',
           options: {
             list: [
@@ -82,8 +79,7 @@ export default defineType({
             ],
             layout: 'radio'
           },
-          initialValue: 'custom',
-          validation: Rule => Rule.required()
+          initialValue: 'custom'
         },
         {
           name: 'calendlyUrl',
@@ -100,112 +96,49 @@ export default defineType({
       ]
     }),
     defineField({
-      name: 'workingHours',
-      title: 'Working Hours',
-      type: 'object',
-      fields: [
+      name: 'businessHours',
+      title: 'Business Hours',
+      type: 'array',
+      of: [
         {
-          name: 'monday',
-          title: 'Monday',
           type: 'object',
           fields: [
-            { name: 'enabled', title: 'Open', type: 'boolean', initialValue: true },
-            { name: 'start', title: 'Start Time', type: 'string', initialValue: '09:00' },
-            { name: 'end', title: 'End Time', type: 'string', initialValue: '17:00' }
+            {
+              name: 'day',
+              title: 'Day',
+              type: 'string',
+              options: {
+                list: [
+                  { title: 'Monday', value: 'monday' },
+                  { title: 'Tuesday', value: 'tuesday' },
+                  { title: 'Wednesday', value: 'wednesday' },
+                  { title: 'Thursday', value: 'thursday' },
+                  { title: 'Friday', value: 'friday' },
+                  { title: 'Saturday', value: 'saturday' },
+                  { title: 'Sunday', value: 'sunday' }
+                ]
+              },
+              validation: Rule => Rule.required()
+            },
+            {
+              name: 'isOpen',
+              title: 'Open',
+              type: 'boolean',
+              initialValue: true
+            },
+            {
+              name: 'openTime',
+              title: 'Opening Time',
+              type: 'string',
+              validation: Rule => Rule.required()
+            },
+            {
+              name: 'closeTime',
+              title: 'Closing Time',
+              type: 'string',
+              validation: Rule => Rule.required()
+            }
           ]
-        },
-        {
-          name: 'tuesday',
-          title: 'Tuesday',
-          type: 'object',
-          fields: [
-            { name: 'enabled', title: 'Open', type: 'boolean', initialValue: true },
-            { name: 'start', title: 'Start Time', type: 'string', initialValue: '09:00' },
-            { name: 'end', title: 'End Time', type: 'string', initialValue: '17:00' }
-          ]
-        },
-        {
-          name: 'wednesday',
-          title: 'Wednesday',
-          type: 'object',
-          fields: [
-            { name: 'enabled', title: 'Open', type: 'boolean', initialValue: true },
-            { name: 'start', title: 'Start Time', type: 'string', initialValue: '09:00' },
-            { name: 'end', title: 'End Time', type: 'string', initialValue: '17:00' }
-          ]
-        },
-        {
-          name: 'thursday',
-          title: 'Thursday',
-          type: 'object',
-          fields: [
-            { name: 'enabled', title: 'Open', type: 'boolean', initialValue: true },
-            { name: 'start', title: 'Start Time', type: 'string', initialValue: '09:00' },
-            { name: 'end', title: 'End Time', type: 'string', initialValue: '17:00' }
-          ]
-        },
-        {
-          name: 'friday',
-          title: 'Friday',
-          type: 'object',
-          fields: [
-            { name: 'enabled', title: 'Open', type: 'boolean', initialValue: true },
-            { name: 'start', title: 'Start Time', type: 'string', initialValue: '09:00' },
-            { name: 'end', title: 'End Time', type: 'string', initialValue: '17:00' }
-          ]
-        },
-        {
-          name: 'saturday',
-          title: 'Saturday',
-          type: 'object',
-          fields: [
-            { name: 'enabled', title: 'Open', type: 'boolean', initialValue: false },
-            { name: 'start', title: 'Start Time', type: 'string', initialValue: '09:00' },
-            { name: 'end', title: 'End Time', type: 'string', initialValue: '17:00' }
-          ]
-        },
-        {
-          name: 'sunday',
-          title: 'Sunday',
-          type: 'object',
-          fields: [
-            { name: 'enabled', title: 'Open', type: 'boolean', initialValue: false },
-            { name: 'start', title: 'Start Time', type: 'string', initialValue: '09:00' },
-            { name: 'end', title: 'End Time', type: 'string', initialValue: '17:00' }
-          ]
-        }
-      ]
-    }),
-    defineField({
-      name: 'emailSettings',
-      title: 'Email Settings',
-      type: 'object',
-      fields: [
-        {
-          name: 'confirmationEnabled',
-          title: 'Send Confirmation Email',
-          type: 'boolean',
-          initialValue: true
-        },
-        {
-          name: 'adminEmail',
-          title: 'Admin Email',
-          type: 'email',
-          validation: Rule => Rule.required()
-        },
-        {
-          name: 'confirmationSubject',
-          title: 'Confirmation Email Subject',
-          type: 'string',
-          initialValue: 'Booking Confirmation',
-          validation: Rule => Rule.max(100)
-        },
-        {
-          name: 'confirmationMessage',
-          title: 'Confirmation Email Message',
-          type: 'text',
-          rows: 4,
-          validation: Rule => Rule.max(500)
         }
       ]
     }),
@@ -221,67 +154,85 @@ export default defineType({
           initialValue: true
         },
         {
-          name: 'enableNotes',
-          title: 'Enable Notes Field',
+          name: 'allowNotes',
+          title: 'Allow Notes Field',
           type: 'boolean',
           initialValue: true
         },
         {
-          name: 'timeSlotInterval',
-          title: 'Time Slot Interval (minutes)',
-          type: 'number',
-          initialValue: 30,
-          validation: Rule => Rule.min(15).max(120)
+          name: 'confirmationMessage',
+          title: 'Confirmation Message',
+          type: 'text',
+          initialValue: 'Thank you! Your booking request has been received.',
+          validation: Rule => Rule.max(300)
+        }
+      ]
+    }),
+    defineField({
+      name: 'emailSettings',
+      title: 'Email Settings',
+      type: 'object',
+      fields: [
+        {
+          name: 'notificationEmail',
+          title: 'Notification Email',
+          type: 'email',
+          validation: Rule => Rule.required()
         },
         {
-          name: 'advanceBookingDays',
-          title: 'Advance Booking Days',
-          type: 'number',
-          initialValue: 30,
-          validation: Rule => Rule.min(1).max(365)
+          name: 'emailSubject',
+          title: 'Email Subject',
+          type: 'string',
+          initialValue: 'New Booking Request',
+          validation: Rule => Rule.max(100)
+        },
+        {
+          name: 'autoReply',
+          title: 'Send Auto-Reply',
+          type: 'boolean',
+          initialValue: true
         }
       ]
     }),
     defineField({
       name: 'styling',
-      title: 'Styling',
+      title: 'Styling Options',
       type: 'object',
       fields: [
         {
           name: 'backgroundColor',
           title: 'Background Color',
           type: 'string',
-          description: 'Hex color code (e.g., #ffffff)'
+          description: 'Hex color code (e.g., #ffffff)',
+          validation: Rule => Rule.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/)
         },
         {
-          name: 'primaryColor',
-          title: 'Primary Color',
+          name: 'textColor',
+          title: 'Text Color',
           type: 'string',
-          description: 'Hex color code (e.g., #3b82f6)'
+          description: 'Hex color code (e.g., #000000)',
+          validation: Rule => Rule.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/)
         },
         {
-          name: 'layout',
-          title: 'Layout',
+          name: 'buttonColor',
+          title: 'Button Color',
           type: 'string',
-          options: {
-            list: [
-              { title: 'Single Column', value: 'single' },
-              { title: 'Two Columns', value: 'two-column' },
-              { title: 'Sidebar', value: 'sidebar' }
-            ],
-            layout: 'radio'
-          },
-          initialValue: 'single'
+          description: 'Hex color code (e.g., #3B82F6)',
+          validation: Rule => Rule.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/)
         }
       ]
     })
   ],
   preview: {
-    select: { title: 'title', subtitle: 'subtitle' },
-    prepare({ title, subtitle }) {
+    select: {
+      title: 'title',
+      serviceCount: 'services'
+    },
+    prepare({ title, serviceCount }) {
+      const count = Array.isArray(serviceCount) ? serviceCount.length : 0
       return {
         title: title || 'Booking Block',
-        subtitle: subtitle || 'Online booking system'
+        subtitle: `${count} service${count !== 1 ? 's' : ''} available`
       }
     }
   }

@@ -2,6 +2,24 @@
 
 Système d'agents autonomes pour automatiser la création, validation et nettoyage de blocs Sanity.
 
+## ⚠️ LECTURE OBLIGATOIRE AVANT TOUTE GÉNÉRATION
+
+**TOUS les agents DOIVENT lire ces 5 documents dans l'ordre avant de générer du code :**
+
+1. **01_AGENT_GUIDE_COMPLET.md** - Guide principal avec toutes les règles
+2. **02_ERREURS_ET_CORRECTIONS.md** - Catalogue complet des erreurs à éviter
+3. **03_SANITY_SCHEMAS_GUIDE.md** - Référence complète pour les schémas Sanity
+4. **04_PROTECTION_SYSTEME.md** - Système de protection contre null/undefined
+5. **05_QUICK_REFERENCE.md** - Référence rapide pour vérification
+
+**Ces documents garantissent :**
+- ✅ Aucune erreur de type Sanity
+- ✅ Aucune erreur null/undefined
+- ✅ Aucune erreur de validation
+- ✅ Code 100% conforme
+
+---
+
 ## 📋 Table des matières
 
 - [Installation](#installation)

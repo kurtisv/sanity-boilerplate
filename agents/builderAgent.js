@@ -72,12 +72,39 @@ function detectBlockFromPrompt(prompt) {
 }
 
 function buildPrompt(userIdea) {
-  // Charger le document de référence
-  const referencePath = path.join(__dirname, '..', 'AGENT_SANITY_REFERENCE.md')
-  let referenceContent = ''
-  try {
-    if (fs.existsSync(referencePath)) {
-      referenceContent = fs.readFileSync(referencePath, 'utf8')
+  // Charger les 5 documents de référence consolidés
+  const docs = [
+    '01_AGENT_GUIDE_COMPLET.md',
+    '02_ERREURS_ET_CORRECTIONS.md',
+    '03_SANITY_SCHEMAS_GUIDE.md',
+    '04_PROTECTION_SYSTEME.md',
+    '05_QUICK_REFERENCE.md'
+  ]
+  
+  let referenceContent = '# 📚 DOCUMENTATION OBLIGATOIRE POUR LES AGENTS\n\n'
+  referenceContent += '**LIRE CES 5 DOCUMENTS AVANT TOUTE GÉNÉRATION:**\n\n'
+  
+  for (const doc of docs) {
+    const docPath = path.join(__dirname, '..', doc)
+    try {
+      if (fs.existsSync(docPath)) {
+        const content = fs.readFileSync(docPath, 'utf8')
+        referenceContent += `\n\n---\n\n# ${doc}\n\n${content}\n\n`
+        console.log(`✅ Chargé: ${doc}`)
+      } else {
+        console.log(`⚠️  Document manquant: ${doc}`)
+      }
+    } catch (err) {
+      console.log(`❌ Erreur lecture ${doc}:`, err.message)
+    }
+  }
+  
+  // Fallback: charger l'ancien document si les nouveaux n'existent pas
+  if (!referenceContent.includes('01_AGENT_GUIDE_COMPLET')) {
+    const referencePath = path.join(__dirname, '..', 'AGENT_SANITY_REFERENCE.md')
+    try {
+      if (fs.existsSync(referencePath)) {
+        referenceContent = fs.readFileSync(referencePath, 'utf8')
     }
   } catch (e) {
     console.warn('⚠️  Impossible de charger AGENT_SANITY_REFERENCE.md')

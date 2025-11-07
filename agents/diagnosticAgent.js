@@ -1,9 +1,21 @@
 const { loadEnv } = require('./core/env')
 const { createClient } = require('@sanity/client')
+const diagnosticFixAgent = require('./diagnosticFixAgent')
 
-async function run() {
+async function run({ fixSchemas = false, dryRun = true } = {}) {
   console.log('🔍 DIAGNOSTIC COMPLET DU SYSTÈME SANITY\n')
   console.log('=' .repeat(60))
+  
+  // ÉTAPE 0: Diagnostic et correction des schémas (si demandé)
+  if (fixSchemas) {
+    console.log('\n📋 ÉTAPE 0: Diagnostic et correction des schémas')
+    console.log('-'.repeat(60))
+    const fixResult = await diagnosticFixAgent.run({ dryRun, fix: 'all' })
+    if (!fixResult.ok) {
+      console.log(`\n⚠️  ${fixResult.errors.length} erreur(s) trouvée(s) dans les schémas`)
+      console.log('   Exécutez avec --fix-schemas pour voir les détails\n')
+    }
+  }
   
   // 1. Vérification des variables d'environnement
   console.log('\n📋 ÉTAPE 1: Variables d\'environnement')
@@ -150,6 +162,9 @@ async function run() {
   console.log('   2. Rafraîchissez le Studio (Ctrl+R)')
   console.log('   3. Vérifiez la structure dans structure.ts')
   console.log('   4. Consultez l\'onglet "Vision" dans Studio pour requêter manuellement')
+  
+  console.log('\n💡 Pour diagnostiquer et corriger les schémas Sanity:')
+  console.log('   npm run agents:run -- diagnostic --fix-schemas --dry-run=false')
   
   return { ok: true }
 }

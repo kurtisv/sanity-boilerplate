@@ -8,7 +8,7 @@ export default defineType({
   fields: [
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'Block Title',
       type: 'string',
       validation: Rule => Rule.max(100)
     }),
@@ -22,7 +22,6 @@ export default defineType({
       name: 'layout',
       title: 'Layout',
       type: 'string',
-      initialValue: 'grid',
       options: {
         list: [
           { title: 'Grid', value: 'grid' },
@@ -30,42 +29,39 @@ export default defineType({
           { title: 'List', value: 'list' }
         ],
         layout: 'radio'
-      }
-    }),
-    defineField({
-      name: 'gridColumns',
-      title: 'Grid Columns',
-      type: 'string',
-      initialValue: '3',
-      options: {
-        list: [
-          { title: '1 Column', value: '1' },
-          { title: '2 Columns', value: '2' },
-          { title: '3 Columns', value: '3' },
-          { title: '4 Columns', value: '4' }
-        ]
       },
-      hidden: ({ parent }) => parent?.layout !== 'grid'
+      initialValue: 'grid'
     }),
     defineField({
-      name: 'enableFiltering',
-      title: 'Enable Filtering',
+      name: 'showFilters',
+      title: 'Show Category Filters',
       type: 'boolean',
       initialValue: false
     }),
     defineField({
-      name: 'filterOptions',
-      title: 'Filter Options',
+      name: 'categories',
+      title: 'Testimonial Categories',
       type: 'array',
-      of: [{ type: 'string' }],
-      hidden: ({ parent }) => !parent?.enableFiltering,
-      description: 'Tags for filtering testimonials (e.g., "service", "industry", "product")'
-    }),
-    defineField({
-      name: 'showRatings',
-      title: 'Show Star Ratings',
-      type: 'boolean',
-      initialValue: true
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'name',
+              title: 'Category Name',
+              type: 'string',
+              validation: Rule => Rule.required().max(50)
+            },
+            {
+              name: 'slug',
+              title: 'Slug',
+              type: 'string',
+              validation: Rule => Rule.required().max(50)
+            }
+          ]
+        }
+      ],
+      hidden: ({ parent }) => !parent?.showFilters
     }),
     defineField({
       name: 'testimonials',
@@ -74,8 +70,6 @@ export default defineType({
       of: [
         {
           type: 'object',
-          name: 'testimonial',
-          title: 'Testimonial',
           fields: [
             {
               name: 'quote',
@@ -90,16 +84,8 @@ export default defineType({
               validation: Rule => Rule.required().max(100)
             },
             {
-              name: 'authorPhoto',
-              title: 'Author Photo',
-              type: 'image',
-              options: {
-                hotspot: true
-              }
-            },
-            {
               name: 'position',
-              title: 'Position/Title',
+              title: 'Position',
               type: 'string',
               validation: Rule => Rule.max(100)
             },
@@ -110,52 +96,44 @@ export default defineType({
               validation: Rule => Rule.max(100)
             },
             {
-              name: 'companyLogo',
-              title: 'Company Logo',
-              type: 'image'
+              name: 'photo',
+              title: 'Author Photo',
+              type: 'image',
+              options: {
+                hotspot: true
+              }
             },
             {
               name: 'rating',
-              title: 'Star Rating',
+              title: 'Rating (1-5 stars)',
               type: 'number',
-              validation: Rule => Rule.min(1).max(5),
+              validation: Rule => Rule.required().min(1).max(5),
               initialValue: 5
+            },
+            {
+              name: 'category',
+              title: 'Category',
+              type: 'string',
+              validation: Rule => Rule.max(50)
             },
             {
               name: 'featured',
               title: 'Featured Testimonial',
               type: 'boolean',
-              initialValue: false,
-              description: 'Featured testimonials appear prominently'
-            },
-            {
-              name: 'tags',
-              title: 'Tags',
-              type: 'array',
-              of: [{ type: 'string' }],
-              description: 'Tags for filtering (must match filter options above)'
-            },
-            {
-              name: 'date',
-              title: 'Testimonial Date',
-              type: 'date'
+              initialValue: false
             }
           ],
           preview: {
             select: {
               title: 'author',
               subtitle: 'company',
-              media: 'authorPhoto',
-              quote: 'quote',
-              rating: 'rating'
+              media: 'photo'
             },
-            prepare({ title, subtitle, media, quote, rating }) {
-              const stars = '⭐'.repeat(rating || 5)
+            prepare({ title, subtitle, media }) {
               return {
-                title: title || 'Anonymous',
-                subtitle: `${subtitle || 'Unknown Company'} - ${stars}`,
-                media,
-                description: quote ? `"${quote.substring(0, 100)}..."` : undefined
+                title: title || 'Unnamed Author',
+                subtitle: subtitle || 'No company',
+                media
               }
             }
           }
@@ -164,45 +142,37 @@ export default defineType({
       validation: Rule => Rule.min(1)
     }),
     defineField({
+      name: 'showAllButton',
+      title: 'Show "View All" Button',
+      type: 'boolean',
+      initialValue: false
+    }),
+    defineField({
+      name: 'maxVisible',
+      title: 'Max Visible Testimonials',
+      type: 'number',
+      validation: Rule => Rule.min(1).max(20),
+      initialValue: 6,
+      description: 'Number of testimonials to show initially'
+    }),
+    defineField({
       name: 'backgroundColor',
       title: 'Background Color',
       type: 'string',
-      initialValue: 'white',
-      options: {
-        list: [
-          { title: 'White', value: 'white' },
-          { title: 'Gray 50', value: 'gray-50' },
-          { title: 'Gray 100', value: 'gray-100' },
-          { title: 'Blue 50', value: 'blue-50' },
-          { title: 'Indigo 50', value: 'indigo-50' }
-        ]
-      }
-    }),
-    defineField({
-      name: 'padding',
-      title: 'Section Padding',
-      type: 'string',
-      initialValue: 'normal',
-      options: {
-        list: [
-          { title: 'Small', value: 'small' },
-          { title: 'Normal', value: 'normal' },
-          { title: 'Large', value: 'large' }
-        ]
-      }
+      description: 'Hex color code (e.g., #f8f9fa)',
+      validation: Rule => Rule.regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).error('Must be a valid hex color')
     })
   ],
   preview: {
     select: {
       title: 'title',
-      testimonials: 'testimonials',
-      layout: 'layout'
+      testimonialCount: 'testimonials'
     },
-    prepare({ title, testimonials, layout }) {
-      const count = testimonials?.length || 0
+    prepare({ title, testimonialCount }) {
+      const count = testimonialCount?.length || 0
       return {
         title: title || 'Testimonials Block',
-        subtitle: `${count} testimonial${count !== 1 ? 's' : ''} - ${layout || 'grid'} layout`
+        subtitle: `${count} testimonial${count !== 1 ? 's' : ''}`
       }
     }
   }
