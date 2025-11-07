@@ -506,7 +506,7 @@ function generateLogoGridComponent() {
  * 
  * @param {string} blockName - Nom du bloc
  * @param {string} schemaContent - Contenu du schéma
- * @returns {array} Liste des images injectées
+ * @returns {array} Liste des images injectées avec chemins locaux
  */
 function injectDefaultImages(blockName, schemaContent) {
   const images = []
@@ -516,14 +516,27 @@ function injectDefaultImages(blockName, schemaContent) {
   const usage = mediaDefaults.usage[blockName] || mediaDefaults.usage[`${blockType}Block`]
   
   if (!usage) {
+    console.log(`  ℹ️  Aucune image par défaut pour ${blockName}`)
     return images
   }
   
-  // Récupérer les images correspondantes
+  // Récupérer les images correspondantes depuis public/images
   usage.forEach(imageId => {
     const image = mediaDefaults.images.find(img => img.id === imageId)
     if (image) {
-      images.push(image)
+      // Vérifier que le fichier existe
+      const imagePath = path.join(__dirname, '..', 'public', 'images', image.filename)
+      if (fs.existsSync(imagePath)) {
+        images.push({
+          ...image,
+          localPath: imagePath,
+          publicUrl: image.url,
+          available: true
+        })
+        console.log(`  ✅ Image trouvée: ${image.filename}`)
+      } else {
+        console.log(`  ⚠️  Image manquante: ${image.filename}`)
+      }
     }
   })
   

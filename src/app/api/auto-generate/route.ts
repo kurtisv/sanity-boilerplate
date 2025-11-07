@@ -1,3 +1,10 @@
+/**
+ * 🤖 API AUTO-GENERATE
+ * 
+ * Orchestre tous les agents pour générer un site complet
+ * Utilise le seniorAgent comme orchestrateur principal
+ */
+
 import { NextRequest } from 'next/server'
 
 export const runtime = 'nodejs'
@@ -39,122 +46,138 @@ type AgentResult = { ok: boolean } & Record<string, any>
 
 async function generateSite(config: any, writer: any) {
   const startTime = Date.now()
-  // Steps: specialBlocks + pages + reviewer + style + tester + publisher + compatibility
-  const total = config.specialBlocks.length + config.pages.length + 5 + 1
+  
+  // Calculer le nombre total d'étapes
+  const pagesCount = config.pages?.length || 0
+  const total = pagesCount + 6 // pages + 6 étapes du pipeline
   let current = 0
   
   const results: {
-    blocks: any[]
     pages: any[]
-    review?: AgentResult
-    style?: AgentResult
-    tests?: AgentResult
-    publish?: AgentResult
+    pipeline?: any
     compatibility: boolean
     duration: number
+    contextId?: string
   } = {
-    blocks: [] as any[],
-    pages: [] as any[],
+    pages: [],
     compatibility: false,
     duration: 0
   }
   
   try {
-    // Étape 1: Générer les blocs spéciaux
-    if (config.specialBlocks.length > 0) {
-      writer.write({
-        type: 'progress',
-        progress: { current, total, message: 'Génération des blocs spéciaux...' }
-      })
-      
-      for (const blockType of config.specialBlocks) {
-        current++
-        writer.write({
-          type: 'progress',
-          progress: { current, total, message: `Génération du ${blockType}Block...` }
-        })
-        
-        try {
-          const result = await generateBlock(blockType, config)
-          results.blocks.push({ block: blockType, success: true, result })
-        } catch (error: any) {
-          results.blocks.push({ block: blockType, success: false, error: error.message })
-        }
-        
-        // Pause pour éviter rate limiting
-        await new Promise(resolve => setTimeout(resolve, 2000))
-      }
+    // Étape 1: Analyser le projet (analystAgent)
+    current++
+    writer.write({
+      type: 'progress',
+      progress: { current, total, message: '🔍 Analyse du projet...' }
+    })
+    
+    const { run: analyzeRun } = require('../../../../agents/analystAgent')
+    const analysisResult = await analyzeRun({ 
+      prompt: buildPromptFromConfig(config),
+      config,
+      dryRun: false 
+    })
+    
+    if (!analysisResult.ok) {
+      throw new Error('Erreur lors de l\'analyse du projet')
     }
     
+    results.contextId = analysisResult.contextId
+    
     // Étape 2: Générer les pages
-    if (config.pages.length > 0) {
+    if (config.pages && config.pages.length > 0) {
       writer.write({
         type: 'progress',
-        progress: { current, total, message: 'Génération des pages...' }
+        progress: { current, total, message: '📝 Génération des pages...' }
       })
+      
+      const { run: pageGenRun } = require('../../../../agents/pageGeneratorAgent')
       
       for (const pageName of config.pages) {
         current++
         writer.write({
           type: 'progress',
-          progress: { current, total, message: `Génération de la page "${pageName}"...` }
+          progress: { current, total, message: `📄 Création de "${pageName}"...` }
         })
         
         try {
-          const result = await generatePage(pageName, config)
-          results.pages.push({ page: pageName, success: true, result })
+          const result = await pageGenRun({ 
+            pageName, 
+            config: {
+              siteName: config.siteName,
+              primaryColor: config.primaryColor,
+              designStyle: config.designStyle
+            },
+            handover: analysisResult.handover,
+            dryRun: false 
+          })
+          results.pages.push({ page: pageName, success: result.ok, result })
         } catch (error: any) {
           results.pages.push({ page: pageName, success: false, error: error.message })
         }
         
-        await new Promise(resolve => setTimeout(resolve, 2000))
+        await new Promise(resolve => setTimeout(resolve, 1000))
       }
     }
     
-    // Étape 3: Revue de conformité des schémas (reviewerAgent)
+    // Étape 3: Validation structurelle (reviewerAgent)
     current++
     writer.write({
       type: 'progress',
-      progress: { current, total, message: 'Revue de conformité des schémas (reviewer)...' }
+      progress: { current, total, message: '🔍 Validation structurelle...' }
     })
     const reviewRes = await runReviewer(true)
-    results.review = reviewRes
 
-    // Étape 4: Vérification style/thème (styleAgent)
+    // Étape 4: Validation design (styleAgent)
     current++
     writer.write({
       type: 'progress',
-      progress: { current, total, message: 'Vérification style/thème...' }
+      progress: { current, total, message: '🎨 Validation du design...' }
     })
     const styleRes = await runStyle()
-    results.style = styleRes
 
-    // Étape 5: Tests rapides (testerAgent)
+    // Étape 5: Tests de compatibilité (compatibilityAgent)
     current++
     writer.write({
       type: 'progress',
-      progress: { current, total, message: 'Tests rapides...' }
+      progress: { current, total, message: '🧪 Tests de compatibilité...' }
     })
-    const testRes = await runTests()
-    results.tests = testRes
+    const compatRes = await runCompatibility()
+    results.compatibility = compatRes.ok
 
-    // Étape 6: Publication + vérification Studio (publisherAgent)
+    // Étape 6: Diagnostic et auto-correction (diagnosticAgent)
     current++
     writer.write({
       type: 'progress',
-      progress: { current, total, message: 'Publication et vérification dans Sanity...' }
+      progress: { current, total, message: '🔧 Diagnostic et corrections...' }
+    })
+    const diagnosticRes = await runDiagnostic()
+
+    // Étape 7: Publication (publisherAgent)
+    current++
+    writer.write({
+      type: 'progress',
+      progress: { current, total, message: '🚀 Publication dans Sanity...' }
     })
     const publishRes = await runPublisher()
-    results.publish = publishRes
 
-    // Étape 7: Vérification de compatibilité
+    // Étape 8: Nettoyage (cleanupAgent)
     current++
     writer.write({
       type: 'progress',
-      progress: { current, total, message: 'Vérification de compatibilité...' }
+      progress: { current, total, message: '🧹 Nettoyage final...' }
     })
+    const cleanupRes = await runCleanup()
     
-    results.compatibility = await runCompatibilityCheck()
+    results.pipeline = {
+      review: reviewRes,
+      style: styleRes,
+      compatibility: compatRes,
+      diagnostic: diagnosticRes,
+      publish: publishRes,
+      cleanup: cleanupRes
+    }
     
     // Terminé
     results.duration = Math.round((Date.now() - startTime) / 1000)
@@ -174,37 +197,29 @@ async function generateSite(config: any, writer: any) {
   }
 }
 
-async function generateBlock(blockType: string, config: any) {
-  const blockPrompts: Record<string, string> = {
-    booking: `Créer un BookingBlock pour réservation en ligne. Inclure: formulaire avec nom, email, téléphone, date/heure, service sélectionné, notes, intégration calendrier (Calendly/Google Calendar), confirmation par email, et gestion des créneaux disponibles.`,
-    
-    map: `Créer un MapBlock pour carte interactive. Inclure: adresse, coordonnées GPS, zoom, style de carte, marqueurs personnalisables, directions, et hauteur configurable.`,
-    
-    gallery: `Créer un GalleryBlock avancé. Inclure: images avec légendes, layouts (grid/masonry/carousel), lightbox, filtres par catégorie, lazy loading, et support vidéo.`,
-    
-    testimonials: `Créer un TestimonialsBlock complet. Inclure: citation, auteur, photo, entreprise, note 1-5 étoiles, layouts (grid/carousel/list), filtrage, et featured testimonials.`,
-    
-    pricing: `Créer un PricingBlock professionnel. Inclure: plans avec nom/prix/description, liste de fonctionnalités, badge "populaire", boutons CTA, période (mensuel/annuel), et comparaison.`,
-    
-    countdown: `Créer un CountdownBlock dynamique. Inclure: date cible, timer temps réel, labels personnalisables, thèmes, tailles, message après expiration, et animations.`,
-    
-    comparison: `Créer un ComparisonTableBlock. Inclure: colonnes de produits/services, lignes de fonctionnalités, valeurs (texte/booléen/icônes), CTA par colonne, highlight recommandé, et responsive.`,
-    
-    socialProof: `Créer un SocialProofBlock. Inclure: logos clients, statistiques clés, témoignages courts, layouts variés, styles (minimal/cards/carousel), et animations.`
+/**
+ * Construire un prompt détaillé depuis la configuration
+ */
+function buildPromptFromConfig(config: any): string {
+  const parts = []
+  
+  parts.push(`Créer un site ${config.projectType || 'professionnel'}`)
+  parts.push(`Nom: ${config.siteName}`)
+  parts.push(`Description: ${config.siteDescription}`)
+  parts.push(`Secteur: ${config.industry}`)
+  
+  if (config.targetAudience) {
+    parts.push(`Public cible: ${config.targetAudience}`)
   }
   
-  const prompt = blockPrompts[blockType]
-  if (!prompt) throw new Error(`Bloc inconnu: ${blockType}`)
+  if (config.keyFeatures) {
+    parts.push(`Fonctionnalités: ${config.keyFeatures}`)
+  }
   
-  // Appeler le Builder Agent
-  const { run } = require('../../../../agents/builderAgent')
-  return await run({ prompt, dryRun: false })
-}
-
-async function generatePage(pageName: string, config: any) {
-  // Utiliser le pageGeneratorAgent pour créer la page dans Sanity
-  const { run } = require('../../../../agents/pageGeneratorAgent')
-  return await run({ pageName, config, dryRun: false })
+  parts.push(`Style: ${config.designStyle}`)
+  parts.push(`Pages: ${config.pages.join(', ')}`)
+  
+  return parts.join('. ')
 }
 
 // --- Agent helpers ----------------------------------------------------------
@@ -226,10 +241,19 @@ async function runStyle(): Promise<AgentResult> {
   }
 }
 
-async function runTests(): Promise<AgentResult> {
+async function runCompatibility(): Promise<AgentResult> {
   try {
-    const { run } = require('../../../../agents/testerAgent')
-    return await run({ quick: true })
+    const { run } = require('../../../../agents/compatibilityAgent')
+    return await run({ dryRun: false })
+  } catch (error: any) {
+    return { ok: false, error: error?.message || String(error) }
+  }
+}
+
+async function runDiagnostic(): Promise<AgentResult> {
+  try {
+    const { run } = require('../../../../agents/diagnosticAgent')
+    return await run({ dryRun: false })
   } catch (error: any) {
     return { ok: false, error: error?.message || String(error) }
   }
@@ -244,13 +268,11 @@ async function runPublisher(): Promise<AgentResult> {
   }
 }
 
-async function runCompatibilityCheck() {
+async function runCleanup(): Promise<AgentResult> {
   try {
-    const { run } = require('../../../../agents/compatibilityAgent')
-    const result = await run({ dryRun: false })
-    return result.ok
-  } catch (error) {
-    console.error('Erreur lors de la vérification de compatibilité:', error)
-    return false
+    const { run } = require('../../../../agents/cleanupAgent')
+    return await run({ dryRun: false })
+  } catch (error: any) {
+    return { ok: false, error: error?.message || String(error) }
   }
 }

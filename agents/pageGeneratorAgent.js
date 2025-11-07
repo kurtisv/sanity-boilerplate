@@ -1,16 +1,42 @@
-const { loadEnv } = require('./core/env')
-const { createClient } = require('@sanity/client')
-
 /**
- * Agent de génération de pages Sanity
- * Crée des pages complètes avec des blocs dans Sanity Studio
+ * 📝 PAGE GENERATOR AGENT
+ * 
+ * Rôle: Génère des pages Sanity complètes avec blocs et images
+ * 
+ * Fonctionnalités:
+ * - Création de pages selon templates
+ * - Injection automatique d'images depuis public/images
+ * - Initialisation correcte des arrays
+ * - Intégration avec analystAgent
+ * - Handover et manifest
+ * - EventBus
  */
 
-async function run({ pageName, config, dryRun = false }) {
-  console.log(`📄 pageGeneratorAgent: génération de la page "${pageName}"`)
+const { loadEnv } = require('./core/env')
+const { createClient } = require('@sanity/client')
+const { createHandover, getOrCreateContextId } = require('./core/contracts')
+const { eventBus, publishAgentEvent } = require('./core/eventBus')
+const { updateManifest, addPage, addFile } = require('./core/artifacts')
+const mediaDefaults = require('./core/mediaDefaults.json')
+const fs = require('fs')
+const path = require('path')
+
+async function run({ pageName, config, handover = null, dryRun = false }) {
+  const startTime = Date.now()
+  console.log('\n📝 PAGE GENERATOR AGENT - Génération de pages')
+  console.log('='.repeat(80))
+  
+  // Obtenir ou créer contextId
+  const contextId = getOrCreateContextId(handover)
+  
+  // Publier événement de démarrage
+  publishAgentEvent('pageGeneratorAgent', 'start', { contextId, pageName })
+  
+  console.log(`\n📄 Génération de la page: "${pageName}"`)
   
   const env = loadEnv()
   if (!env.ok) {
+    publishAgentEvent('pageGeneratorAgent', 'error', { contextId, error: 'Missing env vars' })
     return { ok: false, error: 'Variables d\'environnement manquantes', missing: env.missing }
   }
   
@@ -30,15 +56,46 @@ async function run({ pageName, config, dryRun = false }) {
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
   
+  console.log(`  Slug: ${slug}`)
+  
   // Définir les blocs selon le type de page
   const pageBlocks = generatePageBlocks(pageName, config)
   
+  // Injecter les images automatiquement
+  console.log('\n🖼️  Injection des images...')
+  const injectedImages = injectImagesIntoBlocks(pageBlocks)
+  console.log(`  ✅ ${injectedImages.length} image(s) injectée(s)`)
+  
   if (dryRun) {
-    console.log('  [DRY RUN] Page qui serait créée:')
+    console.log('\n  [DRY RUN] Page qui serait créée:')
     console.log(`  - Titre: ${pageName}`)
     console.log(`  - Slug: ${slug}`)
     console.log(`  - Blocs: ${pageBlocks.length}`)
-    return { ok: true, dryRun: true, pageName, slug, blocksCount: pageBlocks.length }
+    console.log(`  - Images: ${injectedImages.length}`)
+    
+    const duration = Date.now() - startTime
+    const nextHandover = createHandover(contextId, 'ready', 'reviewerAgent', 'pagegen', {
+      files: [],
+      report: {
+        pageName,
+        slug,
+        blocksCount: pageBlocks.length,
+        imagesInjected: injectedImages.length,
+        dryRun: true
+      },
+      duration
+    })
+    
+    return { 
+      ok: true, 
+      dryRun: true, 
+      pageName, 
+      slug, 
+      blocksCount: pageBlocks.length,
+      imagesInjected: injectedImages.length,
+      handover: nextHandover,
+      contextId
+    }
   }
   
   try {
@@ -55,13 +112,41 @@ async function run({ pageName, config, dryRun = false }) {
         })
         .commit()
       
+      // Ajouter au manifest
+      addPage(contextId, slug, existing._id)
+      
+      const duration = Date.now() - startTime
+      const nextHandover = createHandover(contextId, 'ready', 'reviewerAgent', 'pagegen', {
+        files: [],
+        report: {
+          action: 'updated',
+          pageName,
+          slug,
+          id: existing._id,
+          blocksCount: pageBlocks.length,
+          imagesInjected: injectedImages.length
+        },
+        manifest: {
+          pages: [{ slug, id: existing._id }],
+          blocks: pageBlocks.map(b => b._type),
+          media: injectedImages
+        },
+        duration
+      })
+      
+      saveHandover(contextId, nextHandover)
+      publishAgentEvent('pageGeneratorAgent', 'ready', { contextId, action: 'updated', slug, duration })
+      
       return { 
         ok: true, 
         action: 'updated',
         pageName, 
         slug, 
         id: existing._id,
-        blocksCount: pageBlocks.length 
+        blocksCount: pageBlocks.length,
+        imagesInjected: injectedImages.length,
+        handover: nextHandover,
+        contextId
       }
     }
     
@@ -79,18 +164,71 @@ async function run({ pageName, config, dryRun = false }) {
     const result = await client.create(pageDoc)
     console.log(`  ✅ Page créée: ${result._id}`)
     
+    // Ajouter au manifest
+    addPage(contextId, slug, result._id)
+    
+    const duration = Date.now() - startTime
+    const nextHandover = createHandover(contextId, 'ready', 'reviewerAgent', 'pagegen', {
+      files: [],
+      report: {
+        action: 'created',
+        pageName,
+        slug,
+        id: result._id,
+        blocksCount: pageBlocks.length,
+        imagesInjected: injectedImages.length
+      },
+      manifest: {
+        pages: [{ slug, id: result._id }],
+        blocks: pageBlocks.map(b => b._type),
+        media: injectedImages
+      },
+      duration
+    })
+    
+    saveHandover(contextId, nextHandover)
+    publishAgentEvent('pageGeneratorAgent', 'ready', { contextId, action: 'created', slug, duration })
+    
+    console.log('\n' + '='.repeat(80))
+    console.log('✅ PAGE GÉNÉRÉE AVEC SUCCÈS')
+    console.log('='.repeat(80))
+    console.log(`Page: ${pageName}`)
+    console.log(`Slug: ${slug}`)
+    console.log(`ID: ${result._id}`)
+    console.log(`Blocs: ${pageBlocks.length}`)
+    console.log(`Images: ${injectedImages.length}`)
+    console.log(`Durée: ${duration}ms`)
+    console.log('='.repeat(80))
+    
     return { 
       ok: true, 
       action: 'created',
       pageName, 
       slug, 
       id: result._id,
-      blocksCount: pageBlocks.length 
+      blocksCount: pageBlocks.length,
+      imagesInjected: injectedImages.length,
+      handover: nextHandover,
+      contextId
     }
     
   } catch (error) {
+    const duration = Date.now() - startTime
     console.error(`  ❌ Erreur lors de la création de la page:`, error.message)
-    return { ok: false, error: error.message }
+    
+    publishAgentEvent('pageGeneratorAgent', 'error', { contextId, error: error.message })
+    
+    const errorHandover = createHandover(contextId, 'blocked', 'reviewerAgent', 'pagegen', {
+      errors: [error.message],
+      duration
+    })
+    
+    return { 
+      ok: false, 
+      error: error.message,
+      handover: errorHandover,
+      contextId
+    }
   }
 }
 
@@ -341,17 +479,172 @@ function generatePageBlocks(pageName, config) {
   ]
 }
 
+/**
+ * Injecter les images automatiquement dans les blocs
+ * 
+ * @param {array} blocks - Liste des blocs
+ * @returns {array} Liste des images injectées
+ */
+function injectImagesIntoBlocks(blocks) {
+  const injectedImages = []
+  
+  blocks.forEach(block => {
+    const blockType = block._type
+    
+    // Trouver les images correspondantes dans mediaDefaults
+    const usage = mediaDefaults.usage[blockType]
+    if (!usage || usage.length === 0) {
+      return
+    }
+    
+    // Récupérer les images
+    const images = usage.map(imageId => {
+      return mediaDefaults.images.find(img => img.id === imageId)
+    }).filter(Boolean)
+    
+    if (images.length === 0) {
+      return
+    }
+    
+    // Injecter selon le type de bloc
+    switch (blockType) {
+      case 'heroBlock':
+        if (!block.backgroundSettings) {
+          block.backgroundSettings = {}
+        }
+        block.backgroundSettings.backgroundType = 'image'
+        block.backgroundSettings.backgroundImage = {
+          asset: {
+            _type: 'reference',
+            _ref: 'image-' + images[0].id
+          },
+          alt: images[0].alt
+        }
+        injectedImages.push(images[0])
+        console.log(`    ✅ ${blockType}: ${images[0].filename}`)
+        break
+        
+      case 'featureGridBlock':
+        if (block.features && Array.isArray(block.features)) {
+          block.features.forEach((feature, index) => {
+            if (images[index % images.length]) {
+              feature.image = {
+                asset: {
+                  _type: 'reference',
+                  _ref: 'image-' + images[index % images.length].id
+                },
+                alt: images[index % images.length].alt
+              }
+              if (!injectedImages.find(img => img.id === images[index % images.length].id)) {
+                injectedImages.push(images[index % images.length])
+              }
+            }
+          })
+          console.log(`    ✅ ${blockType}: ${Math.min(block.features.length, images.length)} image(s)`)
+        }
+        break
+        
+      case 'teamBlock':
+        if (block.teamMembers && Array.isArray(block.teamMembers)) {
+          block.teamMembers.forEach((member, index) => {
+            if (images[index % images.length]) {
+              member.image = {
+                asset: {
+                  _type: 'reference',
+                  _ref: 'image-' + images[index % images.length].id
+                },
+                alt: images[index % images.length].alt
+              }
+              if (!injectedImages.find(img => img.id === images[index % images.length].id)) {
+                injectedImages.push(images[index % images.length])
+              }
+            }
+          })
+          console.log(`    ✅ ${blockType}: ${Math.min(block.teamMembers.length, images.length)} image(s)`)
+        }
+        break
+        
+      case 'galleryBlock':
+        if (!block.images) {
+          block.images = []
+        }
+        images.forEach(img => {
+          block.images.push({
+            _key: `img-${Date.now()}-${Math.random()}`,
+            asset: {
+              _type: 'reference',
+              _ref: 'image-' + img.id
+            },
+            alt: img.alt
+          })
+          if (!injectedImages.find(i => i.id === img.id)) {
+            injectedImages.push(img)
+          }
+        })
+        console.log(`    ✅ ${blockType}: ${images.length} image(s)`)
+        break
+        
+      default:
+        // Pour les autres blocs, essayer d'injecter une image générique
+        if (images[0]) {
+          block.image = {
+            asset: {
+              _type: 'reference',
+              _ref: 'image-' + images[0].id
+            },
+            alt: images[0].alt
+          }
+          injectedImages.push(images[0])
+          console.log(`    ✅ ${blockType}: ${images[0].filename}`)
+        }
+    }
+  })
+  
+  return injectedImages
+}
+
+/**
+ * Sauvegarder le handover
+ * 
+ * @param {string} contextId - UUID du contexte
+ * @param {object} handover - Handover à sauvegarder
+ */
+function saveHandover(contextId, handover) {
+  const outDir = path.join(__dirname, '..', 'out', contextId)
+  if (!fs.existsSync(outDir)) {
+    fs.mkdirSync(outDir, { recursive: true })
+  }
+  
+  const handoverPath = path.join(outDir, 'pagegen-handover.json')
+  fs.writeFileSync(handoverPath, JSON.stringify(handover, null, 2))
+  console.log(`\n📦 Handover sauvegardé: ${handoverPath}`)
+}
+
 if (require.main === module) {
   const pageName = process.argv[2] || 'Test Page'
+  const dryRun = !process.argv.includes('--dry-run=false')
   const config = {
     siteName: 'Mon Site',
     primaryColor: '#3b82f6',
     designStyle: 'modern'
   }
   
-  run({ pageName, config, dryRun: false })
-    .then(res => console.log('\n📄 Result:', JSON.stringify(res, null, 2)))
-    .catch(err => console.error('❌ Error:', err))
+  run({ pageName, config, dryRun })
+    .then(res => {
+      console.log('\n📄 Result:', JSON.stringify({
+        ok: res.ok,
+        action: res.action,
+        pageName: res.pageName,
+        slug: res.slug,
+        blocksCount: res.blocksCount,
+        imagesInjected: res.imagesInjected
+      }, null, 2))
+      process.exit(res.ok ? 0 : 1)
+    })
+    .catch(err => {
+      console.error('❌ Error:', err)
+      process.exit(1)
+    })
 }
 
 module.exports = { run }
