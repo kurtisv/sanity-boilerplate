@@ -1,15 +1,18 @@
 /**
  * 📝 PAGE GENERATOR AGENT
  * 
- * Rôle: Génère des pages Sanity complètes avec blocs et images
+ * Rôle: Génère des pages Sanity complètes avec blocs
  * 
  * Fonctionnalités:
- * - Création de pages selon templates
- * - Injection automatique d'images depuis public/images
+ * - Création de pages selon templates (Accueil, Contact, Services, etc.)
+ * - Génération automatique de slugs
  * - Initialisation correcte des arrays
  * - Intégration avec analystAgent
  * - Handover et manifest
  * - EventBus
+ * 
+ * Note: Les images doivent être ajoutées manuellement par les clients
+ * via le Studio Sanity pour plus de flexibilité.
  */
 
 const { loadEnv } = require('./core/env')
@@ -17,7 +20,6 @@ const { createClient } = require('@sanity/client')
 const { createHandover, getOrCreateContextId } = require('./core/contracts')
 const { eventBus, publishAgentEvent } = require('./core/eventBus')
 const { updateManifest, addPage, addFile } = require('./core/artifacts')
-const mediaDefaults = require('./core/mediaDefaults.json')
 const fs = require('fs')
 const path = require('path')
 
@@ -61,10 +63,8 @@ async function run({ pageName, config, handover = null, dryRun = false }) {
   // Définir les blocs selon le type de page
   const pageBlocks = generatePageBlocks(pageName, config)
   
-  // Injecter les images automatiquement
-  console.log('\n🖼️  Injection des images...')
-  const injectedImages = injectImagesIntoBlocks(pageBlocks)
-  console.log(`  ✅ ${injectedImages.length} image(s) injectée(s)`)
+  // Les images seront ajoutées manuellement par les clients dans le Studio
+  const injectedImages = []
   
   if (dryRun) {
     console.log('\n  [DRY RUN] Page qui serait créée:')
@@ -150,19 +150,22 @@ async function run({ pageName, config, handover = null, dryRun = false }) {
       }
     }
     
-    // Créer la nouvelle page
+    // Créer la nouvelle page directement en version publiée
+    // En utilisant un ID sans le préfixe 'drafts.', la page sera visible immédiatement
+    const pageId = `page-${slug}-${Date.now()}`
     const pageDoc = {
+      _id: pageId,
       _type: 'page',
       title: pageName,
-      slug: { current: slug },
+      slug: { current: slug, _type: 'slug' },
       seoTitle: `${pageName} - ${config.siteName || 'Site'}`,
       seoDescription: `Page ${pageName} de ${config.siteName || 'notre site'}`,
       pageBuilder: pageBlocks,
       publishedAt: new Date().toISOString()
     }
     
-    const result = await client.create(pageDoc)
-    console.log(`  ✅ Page créée: ${result._id}`)
+    const result = await client.createOrReplace(pageDoc)
+    console.log(`  ✅ Page créée et publiée: ${result._id}`)
     
     // Ajouter au manifest
     addPage(contextId, slug, result._id)
@@ -480,128 +483,11 @@ function generatePageBlocks(pageName, config) {
 }
 
 /**
- * Injecter les images automatiquement dans les blocs
- * 
- * @param {array} blocks - Liste des blocs
- * @returns {array} Liste des images injectées
+ * Note: L'injection automatique d'images a été désactivée.
+ * Les clients ajouteront leurs propres images via le Studio Sanity.
+ * Cette approche offre plus de flexibilité et évite les problèmes
+ * de références vers des assets inexistants.
  */
-function injectImagesIntoBlocks(blocks) {
-  const injectedImages = []
-  
-  blocks.forEach(block => {
-    const blockType = block._type
-    
-    // Trouver les images correspondantes dans mediaDefaults
-    const usage = mediaDefaults.usage[blockType]
-    if (!usage || usage.length === 0) {
-      return
-    }
-    
-    // Récupérer les images
-    const images = usage.map(imageId => {
-      return mediaDefaults.images.find(img => img.id === imageId)
-    }).filter(Boolean)
-    
-    if (images.length === 0) {
-      return
-    }
-    
-    // Injecter selon le type de bloc
-    switch (blockType) {
-      case 'heroBlock':
-        if (!block.backgroundSettings) {
-          block.backgroundSettings = {}
-        }
-        block.backgroundSettings.backgroundType = 'image'
-        block.backgroundSettings.backgroundImage = {
-          asset: {
-            _type: 'reference',
-            _ref: 'image-' + images[0].id
-          },
-          alt: images[0].alt
-        }
-        injectedImages.push(images[0])
-        console.log(`    ✅ ${blockType}: ${images[0].filename}`)
-        break
-        
-      case 'featureGridBlock':
-        if (block.features && Array.isArray(block.features)) {
-          block.features.forEach((feature, index) => {
-            if (images[index % images.length]) {
-              feature.image = {
-                asset: {
-                  _type: 'reference',
-                  _ref: 'image-' + images[index % images.length].id
-                },
-                alt: images[index % images.length].alt
-              }
-              if (!injectedImages.find(img => img.id === images[index % images.length].id)) {
-                injectedImages.push(images[index % images.length])
-              }
-            }
-          })
-          console.log(`    ✅ ${blockType}: ${Math.min(block.features.length, images.length)} image(s)`)
-        }
-        break
-        
-      case 'teamBlock':
-        if (block.teamMembers && Array.isArray(block.teamMembers)) {
-          block.teamMembers.forEach((member, index) => {
-            if (images[index % images.length]) {
-              member.image = {
-                asset: {
-                  _type: 'reference',
-                  _ref: 'image-' + images[index % images.length].id
-                },
-                alt: images[index % images.length].alt
-              }
-              if (!injectedImages.find(img => img.id === images[index % images.length].id)) {
-                injectedImages.push(images[index % images.length])
-              }
-            }
-          })
-          console.log(`    ✅ ${blockType}: ${Math.min(block.teamMembers.length, images.length)} image(s)`)
-        }
-        break
-        
-      case 'galleryBlock':
-        if (!block.images) {
-          block.images = []
-        }
-        images.forEach(img => {
-          block.images.push({
-            _key: `img-${Date.now()}-${Math.random()}`,
-            asset: {
-              _type: 'reference',
-              _ref: 'image-' + img.id
-            },
-            alt: img.alt
-          })
-          if (!injectedImages.find(i => i.id === img.id)) {
-            injectedImages.push(img)
-          }
-        })
-        console.log(`    ✅ ${blockType}: ${images.length} image(s)`)
-        break
-        
-      default:
-        // Pour les autres blocs, essayer d'injecter une image générique
-        if (images[0]) {
-          block.image = {
-            asset: {
-              _type: 'reference',
-              _ref: 'image-' + images[0].id
-            },
-            alt: images[0].alt
-          }
-          injectedImages.push(images[0])
-          console.log(`    ✅ ${blockType}: ${images[0].filename}`)
-        }
-    }
-  })
-  
-  return injectedImages
-}
 
 /**
  * Sauvegarder le handover
