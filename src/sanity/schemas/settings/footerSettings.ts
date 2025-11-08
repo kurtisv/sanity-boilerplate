@@ -131,6 +131,20 @@ export default defineType({
       description: 'Couleur du texte du footer (code HEX)',
       initialValue: '#ffffff',
     }),
+    defineField({
+      name: 'generatedByAgents',
+      title: 'Généré par les agents',
+      type: 'boolean',
+      description: 'Indique si ce footer a été généré automatiquement',
+      readOnly: true,
+    }),
+    defineField({
+      name: 'generatedAt',
+      title: 'Date de génération',
+      type: 'datetime',
+      description: 'Date de génération automatique',
+      readOnly: true,
+    }),
   ],
   preview: {
     prepare() {

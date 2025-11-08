@@ -12,6 +12,7 @@ import {structureTool} from 'sanity/structure'
 import {apiVersion, dataset, projectId} from './src/sanity/env'
 import {schema} from './src/sanity/schemaTypes'
 import {structure} from './src/sanity/structure'
+import {StudioLayout} from './src/sanity/plugins/studioLayout'
 
 export default defineConfig({
   basePath: '/studio',
@@ -25,4 +26,9 @@ export default defineConfig({
     // https://www.sanity.io/docs/the-vision-plugin
     visionTool({defaultApiVersion: apiVersion}),
   ],
+  studio: {
+    components: {
+      layout: StudioLayout
+    }
+  }
 })

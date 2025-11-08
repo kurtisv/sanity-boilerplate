@@ -146,6 +146,30 @@ export default defineType({
       type: 'datetime',
       group: 'advanced',
     }),
+    defineField({
+      name: 'generatedByAgents',
+      title: 'Généré par les agents',
+      type: 'boolean',
+      description: 'Indique si cette page a été générée automatiquement par le système d\'agents',
+      readOnly: true,
+      group: 'advanced',
+    }),
+    defineField({
+      name: 'generatedAt',
+      title: 'Date de génération',
+      type: 'datetime',
+      description: 'Date de génération automatique par les agents',
+      readOnly: true,
+      group: 'advanced',
+    }),
+    defineField({
+      name: 'generationContext',
+      title: 'Contexte de génération',
+      type: 'string',
+      description: 'ID du contexte de génération (pour traçabilité)',
+      readOnly: true,
+      group: 'advanced',
+    }),
   ],
   preview: {
     select: {
