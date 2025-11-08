@@ -60,55 +60,37 @@ const DEFAULT_PAGES = [
 
 /**
  * Template du header par défaut
+ * Note: Le menu est construit dynamiquement à partir des pages publiées
+ * Pas besoin de définir navigationMenu ici
  */
 const HEADER_TEMPLATE = {
   _type: 'headerSettings',
   _id: 'headerSettings',
-  title: 'Navigation principale',
-  logo: {
-    text: 'Mon Site'
+  logoType: 'text',
+  logoText: 'Mon Site',
+  navigationMenu: [], // Vide - construit dynamiquement depuis les pages
+  cta: {
+    text: '🎨 Studio',
+    link: '/studio'
   },
-  menuItems: [
-    { _key: 'menu-home', label: 'Accueil', url: '/', _type: 'menuItem' },
-    { _key: 'menu-services', label: 'Services', url: '/services', _type: 'menuItem' },
-    { _key: 'menu-about', label: 'À propos', url: '/about', _type: 'menuItem' },
-    { _key: 'menu-blog', label: 'Blog', url: '/blog', _type: 'menuItem' },
-    { _key: 'menu-contact', label: 'Contact', url: '/contact', _type: 'menuItem' }
-  ],
+  backgroundColor: '#ffffff',
+  textColor: '#2d3748',
   generatedByAgents: true,
   generatedAt: new Date().toISOString()
 }
 
 /**
  * Template du footer par défaut
+ * Note: La colonne "Pages" est construite dynamiquement à partir des pages publiées
  */
 const FOOTER_TEMPLATE = {
   _type: 'footerSettings',
   _id: 'footerSettings',
-  title: 'Bas de page',
-  columns: [
-    {
-      _key: 'col-1',
-      title: 'Navigation',
-      links: [
-        { _key: 'link-home', label: 'Accueil', url: '/' },
-        { _key: 'link-services', label: 'Services', url: '/services' },
-        { _key: 'link-about', label: 'À propos', url: '/about' }
-      ]
-    },
-    {
-      _key: 'col-2',
-      title: 'Légal',
-      links: [
-        { _key: 'link-legal', label: 'Mentions légales', url: '/mentions-legales' },
-        { _key: 'link-privacy', label: 'Politique de confidentialité', url: '/confidentialite' }
-      ]
-    }
-  ],
-  contactInfo: {
-    email: 'contact@site.com',
-    phone: '+1 (000) 000-0000'
-  },
+  text: 'Site généré automatiquement par le système d\'agents intelligents.',
+  columns: [], // Vide - la colonne "Pages" est construite dynamiquement
+  copyrightText: 'Tous droits réservés.',
+  backgroundColor: '#f8fafc',
+  textColor: '#4a5568',
   generatedByAgents: true,
   generatedAt: new Date().toISOString()
 }

@@ -14,6 +14,12 @@ type MenuItem = {
   }[]
 }
 
+type PublishedPage = {
+  _id: string
+  title: string
+  slug: string
+}
+
 type HeaderProps = {
   logoType?: 'image' | 'text'
   logo?: {
@@ -23,6 +29,7 @@ type HeaderProps = {
   }
   logoText?: string
   navigationMenu?: MenuItem[]
+  publishedPages?: PublishedPage[]
   headerCta?: {
     text: string
     link: string
@@ -36,6 +43,7 @@ export default function Header({
   logo,
   logoText = 'Sanity Boilerplate',
   navigationMenu = [],
+  publishedPages = [],
   headerCta = { text: '🎨 Studio', link: '/studio' },
   headerBackgroundColor = '#ffffff',
   headerTextColor = '#2d3748',
@@ -72,6 +80,18 @@ export default function Header({
     setActiveSubmenu(activeSubmenu === index ? null : index)
   }
 
+  // Construire le menu dynamiquement à partir des pages publiées
+  // Si publishedPages est fourni, on l'utilise, sinon on utilise navigationMenu
+  const dynamicMenu: MenuItem[] = publishedPages && publishedPages.length > 0
+    ? publishedPages.map(page => ({
+        title: page.title,
+        link: page.slug === 'home' ? '/' : `/${page.slug}`
+      }))
+    : navigationMenu
+
+  // Toujours ajouter le lien Studio à la fin
+  const finalMenu = [...dynamicMenu]
+
   return (
     <S.HeaderContainer $bgColor={headerBackgroundColor} $textColor={headerTextColor} $scrolled={scrolled}>
       <S.HeaderContent>
@@ -95,9 +115,9 @@ export default function Header({
         )}
 
         {/* Desktop Navigation */}
-        {navigationMenu && navigationMenu.length > 0 && (
+        {finalMenu && finalMenu.length > 0 && (
           <S.DesktopNavigation role="navigation" aria-label="Navigation principale">
-            {navigationMenu.map((item, index) => (
+            {finalMenu.map((item, index) => (
               <S.NavItem key={index}>
                 <S.NavLink href={item.link}>
                   {item.title}
@@ -178,7 +198,7 @@ export default function Header({
         </S.MobileMenuHeader>
 
         <S.MobileNavigation>
-          {navigationMenu?.map((item, index) => (
+          {finalMenu?.map((item, index) => (
             <S.MobileNavItem key={index}>
               <S.MobileNavLinkWrapper>
                 <S.MobileNavLink

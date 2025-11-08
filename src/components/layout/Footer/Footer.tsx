@@ -12,6 +12,12 @@ type FooterColumn = {
   }[]
 }
 
+type PublishedPage = {
+  _id: string
+  title: string
+  slug: string
+}
+
 type SocialLinks = {
   facebook?: string
   twitter?: string
@@ -23,6 +29,7 @@ type SocialLinks = {
 type FooterProps = {
   footerText?: string
   footerColumns?: FooterColumn[]
+  publishedPages?: PublishedPage[]
   copyrightText?: string
   socialLinks?: SocialLinks
   footerBackgroundColor?: string
@@ -32,12 +39,28 @@ type FooterProps = {
 export default function Footer({
   footerText = "Solution professionnelle Next.js + Sanity CMS prête à l'emploi pour créer des sites web modernes et performants.",
   footerColumns = [],
+  publishedPages = [],
   copyrightText = "Sanity Boilerplate. Conçu pour les développeurs modernes.",
   socialLinks,
   footerBackgroundColor = '#f8fafc',
   footerTextColor = '#4a5568',
 }: FooterProps) {
   const currentYear = new Date().getFullYear()
+  
+  // Construire les colonnes dynamiquement à partir des pages publiées
+  // Si publishedPages est fourni, créer une colonne "Pages" automatiquement
+  const dynamicColumns: FooterColumn[] = publishedPages && publishedPages.length > 0
+    ? [
+        {
+          title: 'Pages',
+          links: publishedPages.map(page => ({
+            title: page.title,
+            link: page.slug === 'home' ? '/' : `/${page.slug}`
+          }))
+        },
+        ...footerColumns
+      ]
+    : footerColumns
   
   return (
     <S.FooterContainer $bgColor={footerBackgroundColor} $textColor={footerTextColor}>
@@ -115,7 +138,7 @@ export default function Footer({
           </S.FooterTextSection>
           
           {/* Colonnes */}
-          {footerColumns?.map((column, index) => (
+          {dynamicColumns?.map((column, index) => (
             <S.FooterColumn key={index}>
               <S.ColumnTitle>{column.title}</S.ColumnTitle>
               <S.FooterLinksList>

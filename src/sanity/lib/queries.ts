@@ -275,6 +275,15 @@ export const pageSlugsQuery = groq`
   }
 `
 
+// Récupérer toutes les pages publiées pour la navigation
+export const publishedPagesQuery = groq`
+  *[_type == "page" && defined(slug.current)] | order(_createdAt asc) {
+    _id,
+    title,
+    "slug": slug.current
+  }
+`
+
 // Requête supprimée - utiliser headerSettingsQuery et footerSettingsQuery directement
 
 // Récupérer les paramètres du header (legacy - pour compatibilité)

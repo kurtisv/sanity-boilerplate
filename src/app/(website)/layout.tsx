@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "../../styles/brand.css";
 import "../globals.css";
 import { client } from '@/sanity/lib/client'
-import { headerSettingsQuery, footerSettingsQuery } from '@/sanity/lib/queries'
+import { headerSettingsQuery, footerSettingsQuery, publishedPagesQuery } from '@/sanity/lib/queries'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import DemoNavigation from '@/components/DemoNavigation'
@@ -76,60 +76,21 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Récupérer les paramètres du header et footer
-  let headerSettings = await client.fetch(headerSettingsQuery)
-  let footerSettings = await client.fetch(footerSettingsQuery)
+  // Récupérer les paramètres du header et footer depuis Sanity
+  // Ces paramètres sont générés automatiquement par le système d'agents lors de la première initialisation
+  const headerSettings = await client.fetch(headerSettingsQuery)
+  const footerSettings = await client.fetch(footerSettingsQuery)
   
-  // Si les paramètres n'existent pas, utiliser des valeurs par défaut
-  if (!headerSettings) {
-    console.log('⚠️ Paramètres header manquants - utilisation des valeurs par défaut')
-    headerSettings = {
-      logoType: 'text',
-      logoText: 'Sanity Boilerplate',
-      navigationMenu: [
-        { title: 'Accueil', link: '/' },
-        { title: 'Démonstration', link: '/demo' },
-        { title: 'Studio', link: '/studio' }
-      ],
-      cta: { text: '🎨 Studio', link: '/studio' },
-      backgroundColor: '#ffffff',
-      textColor: '#2d3748'
-    }
+  // Récupérer toutes les pages publiées pour construire la navigation dynamiquement
+  const publishedPages = await client.fetch(publishedPagesQuery)
+  
+  // Si les paramètres n'existent pas, rediriger vers le Studio pour initialisation
+  if (!headerSettings || !footerSettings) {
+    console.log('⚠️ Site non initialisé - Header/Footer manquants')
+    console.log('👉 Ouvrez le Studio pour générer automatiquement le site: http://localhost:3000/studio')
   }
   
-  if (!footerSettings) {
-    console.log('⚠️ Paramètres footer manquants - utilisation des valeurs par défaut')
-    footerSettings = {
-      text: 'Solution professionnelle Next.js + Sanity CMS prête à l\'emploi pour créer des sites web modernes et performants.',
-      columns: [
-        {
-          title: 'Navigation',
-          links: [
-            { title: 'Accueil', link: '/' },
-            { title: 'Démonstration', link: '/demo' },
-            { title: 'Studio Sanity', link: '/studio' },
-            { title: 'Administration', link: '/admin/home' }
-          ]
-        },
-        {
-          title: 'Technologies',
-          links: [
-            { title: 'Next.js 16', link: 'https://nextjs.org' },
-            { title: 'Sanity CMS', link: 'https://sanity.io' },
-            { title: 'TypeScript', link: 'https://typescriptlang.org' },
-            { title: 'CSS Modules', link: '#' }
-          ]
-        }
-      ],
-      copyrightText: 'Sanity Boilerplate. Conçu pour les développeurs modernes.',
-      backgroundColor: '#f8fafc',
-      textColor: '#4a5568'
-    }
-  }
-  
-  // Debug
-  console.log('🔍 Header Settings:', headerSettings ? '✅ Configuré' : '❌ Manquant')
-  console.log('🔍 Footer Settings:', footerSettings ? '✅ Configuré' : '❌ Manquant')
+  console.log(`📄 Pages publiées: ${publishedPages?.length || 0}`)
   
   return (
     <ThemeProvider defaultTheme="auto" storageKey="site-theme">
@@ -138,6 +99,7 @@ export default async function RootLayout({
         logo={headerSettings?.logo}
         logoText={headerSettings?.logoText}
         navigationMenu={headerSettings?.navigationMenu}
+        publishedPages={publishedPages}
         headerCta={headerSettings?.cta}
         headerBackgroundColor={headerSettings?.backgroundColor}
         headerTextColor={headerSettings?.textColor}
@@ -147,6 +109,7 @@ export default async function RootLayout({
       <Footer
         footerText={footerSettings?.text}
         footerColumns={footerSettings?.columns}
+        publishedPages={publishedPages}
         copyrightText={footerSettings?.copyrightText}
         socialLinks={footerSettings?.socialLinks}
         footerBackgroundColor={footerSettings?.backgroundColor}
